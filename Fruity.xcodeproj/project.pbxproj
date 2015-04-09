@@ -14,6 +14,10 @@
 		ABC4287C1AD2335D00BDA15D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ABC4287B1AD2335D00BDA15D /* Images.xcassets */; };
 		ABC4287F1AD2335D00BDA15D /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = ABC4287D1AD2335D00BDA15D /* LaunchScreen.xib */; };
 		ABC4288B1AD2335D00BDA15D /* FruityTests.m in Sources */ = {isa = PBXBuildFile; fileRef = ABC4288A1AD2335D00BDA15D /* FruityTests.m */; };
+		ABC428A01AD6E49100BDA15D /* AddDeleteFruitsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ABC4289F1AD6E49100BDA15D /* AddDeleteFruitsViewController.m */; };
+		ABC428B11AD6FBCC00BDA15D /* calendar.png in Resources */ = {isa = PBXBuildFile; fileRef = ABC428AE1AD6FBCC00BDA15D /* calendar.png */; };
+		ABC428B21AD6FBCC00BDA15D /* close.png in Resources */ = {isa = PBXBuildFile; fileRef = ABC428AF1AD6FBCC00BDA15D /* close.png */; };
+		ABC428B31AD6FBCC00BDA15D /* settings.png in Resources */ = {isa = PBXBuildFile; fileRef = ABC428B01AD6FBCC00BDA15D /* settings.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +44,11 @@
 		ABC428841AD2335D00BDA15D /* FruityTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FruityTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABC428891AD2335D00BDA15D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ABC4288A1AD2335D00BDA15D /* FruityTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FruityTests.m; sourceTree = "<group>"; };
+		ABC4289E1AD6E49100BDA15D /* AddDeleteFruitsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddDeleteFruitsViewController.h; sourceTree = "<group>"; };
+		ABC4289F1AD6E49100BDA15D /* AddDeleteFruitsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddDeleteFruitsViewController.m; sourceTree = "<group>"; };
+		ABC428AE1AD6FBCC00BDA15D /* calendar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = calendar.png; sourceTree = "<group>"; };
+		ABC428AF1AD6FBCC00BDA15D /* close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = close.png; sourceTree = "<group>"; };
+		ABC428B01AD6FBCC00BDA15D /* settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +72,7 @@
 		ABC428621AD2335D00BDA15D = {
 			isa = PBXGroup;
 			children = (
+				ABC428AD1AD6FBCC00BDA15D /* images */,
 				ABC4286D1AD2335D00BDA15D /* Fruity */,
 				ABC428871AD2335D00BDA15D /* FruityTests */,
 				ABC4286C1AD2335D00BDA15D /* Products */,
@@ -86,6 +96,8 @@
 				ABC428751AD2335D00BDA15D /* ViewController.h */,
 				ABC428761AD2335D00BDA15D /* ViewController.m */,
 				ABC428781AD2335D00BDA15D /* Main.storyboard */,
+				ABC4289E1AD6E49100BDA15D /* AddDeleteFruitsViewController.h */,
+				ABC4289F1AD6E49100BDA15D /* AddDeleteFruitsViewController.m */,
 				ABC4287B1AD2335D00BDA15D /* Images.xcassets */,
 				ABC4287D1AD2335D00BDA15D /* LaunchScreen.xib */,
 				ABC4286E1AD2335D00BDA15D /* Supporting Files */,
@@ -117,6 +129,16 @@
 				ABC428891AD2335D00BDA15D /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		ABC428AD1AD6FBCC00BDA15D /* images */ = {
+			isa = PBXGroup;
+			children = (
+				ABC428AE1AD6FBCC00BDA15D /* calendar.png */,
+				ABC428AF1AD6FBCC00BDA15D /* close.png */,
+				ABC428B01AD6FBCC00BDA15D /* settings.png */,
+			);
+			path = images;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -199,8 +221,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ABC428B31AD6FBCC00BDA15D /* settings.png in Resources */,
 				ABC4287A1AD2335D00BDA15D /* Main.storyboard in Resources */,
+				ABC428B11AD6FBCC00BDA15D /* calendar.png in Resources */,
 				ABC4287F1AD2335D00BDA15D /* LaunchScreen.xib in Resources */,
+				ABC428B21AD6FBCC00BDA15D /* close.png in Resources */,
 				ABC4287C1AD2335D00BDA15D /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -221,6 +246,7 @@
 			files = (
 				ABC428771AD2335D00BDA15D /* ViewController.m in Sources */,
 				ABC428741AD2335D00BDA15D /* AppDelegate.m in Sources */,
+				ABC428A01AD6E49100BDA15D /* AddDeleteFruitsViewController.m in Sources */,
 				ABC428711AD2335D00BDA15D /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -346,6 +372,7 @@
 				INFOPLIST_FILE = Fruity/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -356,6 +383,7 @@
 				INFOPLIST_FILE = Fruity/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -412,6 +440,7 @@
 				ABC428901AD2335D00BDA15D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		ABC428911AD2335D00BDA15D /* Build configuration list for PBXNativeTarget "FruityTests" */ = {
 			isa = XCConfigurationList;
@@ -420,6 +449,7 @@
 				ABC428931AD2335D00BDA15D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
