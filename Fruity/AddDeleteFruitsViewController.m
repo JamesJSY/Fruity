@@ -10,6 +10,8 @@
 #import "FruitItemBasicInfo.h"
 #import "FruitTouchButton.h"
 #import "FruitItemDBHelper.h"
+#import "SegueGoToRight.h"
+#import "UnwindSegueGoToRight.h"
 
 @interface AddDeleteFruitsViewController ()
 
@@ -82,7 +84,7 @@
 }
 
 -(void)goToSettingsView:(UIButton*)settingsButton {
-    
+    [self performSegueWithIdentifier:@"MovingToSettingsView" sender:settingsButton];
 }
 
 -(void)goToCalendarView:(UIButton*)calendarButton {
@@ -335,12 +337,22 @@
     self.fruitsInHandView.contentSize = CGSizeMake(self.screenRect.size.width, self.fruitsInHand.count / itemsPerRow * pixelsWidthForDisplayingItem + 90);
 }
 
+// We need to over-ride this method from UIViewController to provide a custom segue for unwinding
+- (UIStoryboardSegue *)segueForUnwindingToViewController:(UIViewController *)toViewController fromViewController:(UIViewController *)fromViewController identifier:(NSString *)identifier {
+    // Instantiate a new CustomUnwindSegue
+    UnwindSegueGoToRight *segue = [[UnwindSegueGoToRight alloc] initWithIdentifier:identifier source:fromViewController destination:toViewController];
+    return segue;
+}
+
+- (IBAction)unwindFromSettingsView:(UIStoryboardSegue *)segue {
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
-/*
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -348,6 +360,6 @@
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
 }
-*/
+
 
 @end

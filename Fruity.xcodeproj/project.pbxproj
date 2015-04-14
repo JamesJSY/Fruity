@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		ABAF88271AD9CB86008FE837 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = ABC428C11AD7136700BDA15D /* libsqlite3.dylib */; };
+		ABAF88291AD9F9C0008FE837 /* AvenirLTStd-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = ABAF88281AD9F9C0008FE837 /* AvenirLTStd-Light.otf */; };
+		ABAF882C1ADC7E65008FE837 /* SegueGoToRight.m in Sources */ = {isa = PBXBuildFile; fileRef = ABAF882B1ADC7E65008FE837 /* SegueGoToRight.m */; };
+		ABAF882F1ADC89E1008FE837 /* UnwindSegueGoToRight.m in Sources */ = {isa = PBXBuildFile; fileRef = ABAF882E1ADC89E1008FE837 /* UnwindSegueGoToRight.m */; };
 		ABC428711AD2335D00BDA15D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = ABC428701AD2335D00BDA15D /* main.m */; };
 		ABC428741AD2335D00BDA15D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = ABC428731AD2335D00BDA15D /* AppDelegate.m */; };
 		ABC4287A1AD2335D00BDA15D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ABC428781AD2335D00BDA15D /* Main.storyboard */; };
@@ -15,7 +19,6 @@
 		ABC428A01AD6E49100BDA15D /* AddDeleteFruitsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ABC4289F1AD6E49100BDA15D /* AddDeleteFruitsViewController.m */; };
 		ABC428BD1AD710FC00BDA15D /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = ABC428BC1AD710FC00BDA15D /* LaunchScreen.xib */; };
 		ABC428C01AD712E800BDA15D /* DBManager.m in Sources */ = {isa = PBXBuildFile; fileRef = ABC428BF1AD712E800BDA15D /* DBManager.m */; };
-		ABC428C21AD7136700BDA15D /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = ABC428C11AD7136700BDA15D /* libsqlite3.dylib */; };
 		ABC428C81AD72AAA00BDA15D /* FruitItemDBHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = ABC428C71AD72AAA00BDA15D /* FruitItemDBHelper.m */; };
 		ABC428CB1AD72B0C00BDA15D /* FruitItem.m in Sources */ = {isa = PBXBuildFile; fileRef = ABC428CA1AD72B0C00BDA15D /* FruitItem.m */; };
 		ABC428CE1AD72DBD00BDA15D /* FruitItemBasicInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = ABC428CD1AD72DBD00BDA15D /* FruitItemBasicInfo.m */; };
@@ -35,6 +38,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		ABAF88281AD9F9C0008FE837 /* AvenirLTStd-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "AvenirLTStd-Light.otf"; path = "../../../Downloads/avenir-lt-std/AvenirLTStd-Light.otf"; sourceTree = "<group>"; };
+		ABAF882A1ADC7E64008FE837 /* SegueGoToRight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SegueGoToRight.h; sourceTree = "<group>"; };
+		ABAF882B1ADC7E65008FE837 /* SegueGoToRight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SegueGoToRight.m; sourceTree = "<group>"; };
+		ABAF882D1ADC89E1008FE837 /* UnwindSegueGoToRight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnwindSegueGoToRight.h; sourceTree = "<group>"; };
+		ABAF882E1ADC89E1008FE837 /* UnwindSegueGoToRight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnwindSegueGoToRight.m; sourceTree = "<group>"; };
 		ABC4286B1AD2335D00BDA15D /* Fruity.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Fruity.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABC4286F1AD2335D00BDA15D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ABC428701AD2335D00BDA15D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -69,7 +77,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ABC428C21AD7136700BDA15D /* libsqlite3.dylib in Frameworks */,
+				ABAF88271AD9CB86008FE837 /* libsqlite3.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -105,9 +113,14 @@
 		ABC4286D1AD2335D00BDA15D /* Fruity */ = {
 			isa = PBXGroup;
 			children = (
+				ABAF88281AD9F9C0008FE837 /* AvenirLTStd-Light.otf */,
 				ABC428721AD2335D00BDA15D /* AppDelegate.h */,
 				ABC428731AD2335D00BDA15D /* AppDelegate.m */,
 				ABC428781AD2335D00BDA15D /* Main.storyboard */,
+				ABAF882D1ADC89E1008FE837 /* UnwindSegueGoToRight.h */,
+				ABAF882E1ADC89E1008FE837 /* UnwindSegueGoToRight.m */,
+				ABAF882A1ADC7E64008FE837 /* SegueGoToRight.h */,
+				ABAF882B1ADC7E65008FE837 /* SegueGoToRight.m */,
 				ABC428D71AD9AB1700BDA15D /* SettingsViewController.h */,
 				ABC428D81AD9AB1700BDA15D /* SettingsViewController.m */,
 				ABC4289E1AD6E49100BDA15D /* AddDeleteFruitsViewController.h */,
@@ -238,6 +251,7 @@
 			files = (
 				ABC428D61AD98B9200BDA15D /* FruityDB.db in Resources */,
 				ABC4287A1AD2335D00BDA15D /* Main.storyboard in Resources */,
+				ABAF88291AD9F9C0008FE837 /* AvenirLTStd-Light.otf in Resources */,
 				ABC428BD1AD710FC00BDA15D /* LaunchScreen.xib in Resources */,
 				ABC4287C1AD2335D00BDA15D /* Images.xcassets in Resources */,
 			);
@@ -260,11 +274,13 @@
 				ABC428CB1AD72B0C00BDA15D /* FruitItem.m in Sources */,
 				ABC428741AD2335D00BDA15D /* AppDelegate.m in Sources */,
 				ABC428A01AD6E49100BDA15D /* AddDeleteFruitsViewController.m in Sources */,
+				ABAF882C1ADC7E65008FE837 /* SegueGoToRight.m in Sources */,
 				ABC428D91AD9AB1700BDA15D /* SettingsViewController.m in Sources */,
 				ABC428C81AD72AAA00BDA15D /* FruitItemDBHelper.m in Sources */,
 				ABC428711AD2335D00BDA15D /* main.m in Sources */,
 				ABC428CE1AD72DBD00BDA15D /* FruitItemBasicInfo.m in Sources */,
 				ABC428D41AD7601200BDA15D /* FruitTouchButton.m in Sources */,
+				ABAF882F1ADC89E1008FE837 /* UnwindSegueGoToRight.m in Sources */,
 				ABC428C01AD712E800BDA15D /* DBManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -380,6 +396,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Fruity/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -391,6 +408,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Fruity/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
