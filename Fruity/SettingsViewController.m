@@ -98,7 +98,7 @@
         reminderTextView.textColor = [UIColor colorWithRed:255/255 green:0/255 blue:0/255 alpha:1];
         reminderTextView.textAlignment = NSTextAlignmentRight;
         reminderTextView.frame = CGRectMake(0, 30 + i * 50, self.screenRect.size.width * 1 / 2, 30);
-        reminderTextView.backgroundColor = [UIColor colorWithRed:(CGFloat)173/255 green:(CGFloat)217/255 blue:(CGFloat)192/255 alpha:1];
+        reminderTextView.backgroundColor = [UIColor colorWithRed:(CGFloat)173/255 green:(CGFloat)217/255 blue:(CGFloat)194/255 alpha:1];
         
         // Initialize the reminder time text field
         UITextField *reminderTimeTextField = [[UITextField alloc] init];
@@ -156,7 +156,7 @@
     ignoreReminderText.textAlignment = NSTextAlignmentLeft;
     ignoreReminderText.font = font;
     ignoreReminderText.frame = CGRectMake(30, 50 + [self.notificationRemindTimes count] * 50, self.screenRect.size.width * 3 / 4, 30);
-    ignoreReminderText.backgroundColor = [UIColor colorWithRed:(CGFloat)173/255 green:(CGFloat)217/255 blue:(CGFloat)192/255 alpha:1];
+    ignoreReminderText.backgroundColor = [UIColor colorWithRed:(CGFloat)173/255 green:(CGFloat)217/255 blue:(CGFloat)194/255 alpha:1];
     
     // Initialize the ignore reminder text view 2
     UITextView *ignoreReminderText2 = [[UITextView alloc] init];
@@ -164,7 +164,7 @@
     ignoreReminderText2.font = font;
     ignoreReminderText2.textAlignment = NSTextAlignmentLeft;
     ignoreReminderText2.frame = CGRectMake(30, 90 + [self.notificationRemindTimes count] * 50, self.screenRect.size.width * 1 / 2, 30);
-    ignoreReminderText2.backgroundColor = [UIColor colorWithRed:(CGFloat)173/255 green:(CGFloat)217/255 blue:(CGFloat)192/255 alpha:1];
+    ignoreReminderText2.backgroundColor = [UIColor colorWithRed:(CGFloat)173/255 green:(CGFloat)217/255 blue:(CGFloat)194/255 alpha:1];
     
     // Initialize the ignore reminder text field
     UITextField *ignoreReminderTimeTextField = [[UITextField alloc] init];

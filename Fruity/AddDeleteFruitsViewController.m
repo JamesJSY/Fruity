@@ -10,7 +10,6 @@
 #import "FruitItemBasicInfo.h"
 #import "FruitTouchButton.h"
 #import "FruitItemDBHelper.h"
-#import "SegueGoToRight.h"
 #import "UnwindSegueGoToRight.h"
 
 @interface AddDeleteFruitsViewController ()
@@ -56,15 +55,15 @@
     [self.calendarButton setImage:[UIImage imageNamed:@"calendar.png"] forState:UIControlStateNormal];
     [self.view addSubview:self.calendarButton];
     
-    self.view.backgroundColor = [UIColor colorWithRed:(CGFloat)173/255 green:(CGFloat)217/255 blue:(CGFloat)192/255 alpha:1];
+    self.view.backgroundColor = [UIColor colorWithRed:(CGFloat)173/255 green:(CGFloat)217/255 blue:(CGFloat)194/255 alpha:1];
     
     // Create two subview, one for displaying fruits bought and one for displaying what fruits can be added.
     self.fruitsInHandView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 60, self.screenRect.size.width , self.screenRect.size.height / 2 - 30)];
-    self.fruitsInHandView.backgroundColor = [UIColor colorWithRed:(CGFloat)173/255 green:(CGFloat)217/255 blue:(CGFloat)192/255 alpha:1];
+    self.fruitsInHandView.backgroundColor = [UIColor colorWithRed:(CGFloat)173/255 green:(CGFloat)217/255 blue:(CGFloat)194/255 alpha:1];
     self.fruitsInHandView.contentSize = CGSizeMake(self.screenRect.size.width, self.screenRect.size.height);
     
     self.fruitsAddView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.screenRect.size.height / 2 + 30, self.screenRect.size.width , self.screenRect.size.height / 2 - 30)];
-    self.fruitsAddView.backgroundColor = [UIColor colorWithRed:(CGFloat)244/255 green:(CGFloat)244/255 blue:(CGFloat)206/255 alpha:1];
+    self.fruitsAddView.backgroundColor = [UIColor colorWithRed:(CGFloat)244/255 green:(CGFloat)244/255 blue:(CGFloat)205/255 alpha:1];
     
     // Initialize all fruits' basic information, like the seasonal property
     [self initAllFruitsBasicInfo];
@@ -88,7 +87,7 @@
 }
 
 -(void)goToCalendarView:(UIButton*)calendarButton {
-    
+    [self performSegueWithIdentifier:@"MovingToCalendarView" sender:calendarButton];
 }
 
 -(void)addFruitsToDatabase:(FruitTouchButton*)inputFruit {
@@ -336,15 +335,18 @@
     // Resize the scroll board size according to the item size
     self.fruitsInHandView.contentSize = CGSizeMake(self.screenRect.size.width, self.fruitsInHand.count / itemsPerRow * pixelsWidthForDisplayingItem + 90);
 }
-
+/*
 // We need to over-ride this method from UIViewController to provide a custom segue for unwinding
 - (UIStoryboardSegue *)segueForUnwindingToViewController:(UIViewController *)toViewController fromViewController:(UIViewController *)fromViewController identifier:(NSString *)identifier {
     // Instantiate a new CustomUnwindSegue
     UnwindSegueGoToRight *segue = [[UnwindSegueGoToRight alloc] initWithIdentifier:identifier source:fromViewController destination:toViewController];
     return segue;
-}
+}*/
 
 - (IBAction)unwindFromSettingsView:(UIStoryboardSegue *)segue {
+}
+
+- (IBAction)unwindFromCalendarView:(UIStoryboardSegue *)segue {
 }
 
 - (void)didReceiveMemoryWarning {

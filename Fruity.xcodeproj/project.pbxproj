@@ -9,8 +9,10 @@
 /* Begin PBXBuildFile section */
 		ABAF88271AD9CB86008FE837 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = ABC428C11AD7136700BDA15D /* libsqlite3.dylib */; };
 		ABAF88291AD9F9C0008FE837 /* AvenirLTStd-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = ABAF88281AD9F9C0008FE837 /* AvenirLTStd-Light.otf */; };
-		ABAF882C1ADC7E65008FE837 /* SegueGoToRight.m in Sources */ = {isa = PBXBuildFile; fileRef = ABAF882B1ADC7E65008FE837 /* SegueGoToRight.m */; };
 		ABAF882F1ADC89E1008FE837 /* UnwindSegueGoToRight.m in Sources */ = {isa = PBXBuildFile; fileRef = ABAF882E1ADC89E1008FE837 /* UnwindSegueGoToRight.m */; };
+		ABAF88321ADC9609008FE837 /* CalendarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ABAF88311ADC9609008FE837 /* CalendarViewController.m */; };
+		ABAF88351ADC9843008FE837 /* SeguePushFromLeft.m in Sources */ = {isa = PBXBuildFile; fileRef = ABAF88341ADC9843008FE837 /* SeguePushFromLeft.m */; };
+		ABAF88381ADC9890008FE837 /* SeguePushFromRight.m in Sources */ = {isa = PBXBuildFile; fileRef = ABAF88371ADC9890008FE837 /* SeguePushFromRight.m */; };
 		ABC428711AD2335D00BDA15D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = ABC428701AD2335D00BDA15D /* main.m */; };
 		ABC428741AD2335D00BDA15D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = ABC428731AD2335D00BDA15D /* AppDelegate.m */; };
 		ABC4287A1AD2335D00BDA15D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ABC428781AD2335D00BDA15D /* Main.storyboard */; };
@@ -39,10 +41,14 @@
 
 /* Begin PBXFileReference section */
 		ABAF88281AD9F9C0008FE837 /* AvenirLTStd-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "AvenirLTStd-Light.otf"; path = "../../../Downloads/avenir-lt-std/AvenirLTStd-Light.otf"; sourceTree = "<group>"; };
-		ABAF882A1ADC7E64008FE837 /* SegueGoToRight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SegueGoToRight.h; sourceTree = "<group>"; };
-		ABAF882B1ADC7E65008FE837 /* SegueGoToRight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SegueGoToRight.m; sourceTree = "<group>"; };
 		ABAF882D1ADC89E1008FE837 /* UnwindSegueGoToRight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnwindSegueGoToRight.h; sourceTree = "<group>"; };
 		ABAF882E1ADC89E1008FE837 /* UnwindSegueGoToRight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnwindSegueGoToRight.m; sourceTree = "<group>"; };
+		ABAF88301ADC9609008FE837 /* CalendarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalendarViewController.h; sourceTree = "<group>"; };
+		ABAF88311ADC9609008FE837 /* CalendarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalendarViewController.m; sourceTree = "<group>"; };
+		ABAF88331ADC9843008FE837 /* SeguePushFromLeft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SeguePushFromLeft.h; sourceTree = "<group>"; };
+		ABAF88341ADC9843008FE837 /* SeguePushFromLeft.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SeguePushFromLeft.m; sourceTree = "<group>"; };
+		ABAF88361ADC9890008FE837 /* SeguePushFromRight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SeguePushFromRight.h; path = ../SeguePushFromRight.h; sourceTree = "<group>"; };
+		ABAF88371ADC9890008FE837 /* SeguePushFromRight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SeguePushFromRight.m; path = ../SeguePushFromRight.m; sourceTree = "<group>"; };
 		ABC4286B1AD2335D00BDA15D /* Fruity.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Fruity.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABC4286F1AD2335D00BDA15D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ABC428701AD2335D00BDA15D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -117,10 +123,14 @@
 				ABC428721AD2335D00BDA15D /* AppDelegate.h */,
 				ABC428731AD2335D00BDA15D /* AppDelegate.m */,
 				ABC428781AD2335D00BDA15D /* Main.storyboard */,
+				ABAF88301ADC9609008FE837 /* CalendarViewController.h */,
+				ABAF88311ADC9609008FE837 /* CalendarViewController.m */,
 				ABAF882D1ADC89E1008FE837 /* UnwindSegueGoToRight.h */,
 				ABAF882E1ADC89E1008FE837 /* UnwindSegueGoToRight.m */,
-				ABAF882A1ADC7E64008FE837 /* SegueGoToRight.h */,
-				ABAF882B1ADC7E65008FE837 /* SegueGoToRight.m */,
+				ABAF88361ADC9890008FE837 /* SeguePushFromRight.h */,
+				ABAF88371ADC9890008FE837 /* SeguePushFromRight.m */,
+				ABAF88331ADC9843008FE837 /* SeguePushFromLeft.h */,
+				ABAF88341ADC9843008FE837 /* SeguePushFromLeft.m */,
 				ABC428D71AD9AB1700BDA15D /* SettingsViewController.h */,
 				ABC428D81AD9AB1700BDA15D /* SettingsViewController.m */,
 				ABC4289E1AD6E49100BDA15D /* AddDeleteFruitsViewController.h */,
@@ -274,10 +284,12 @@
 				ABC428CB1AD72B0C00BDA15D /* FruitItem.m in Sources */,
 				ABC428741AD2335D00BDA15D /* AppDelegate.m in Sources */,
 				ABC428A01AD6E49100BDA15D /* AddDeleteFruitsViewController.m in Sources */,
-				ABAF882C1ADC7E65008FE837 /* SegueGoToRight.m in Sources */,
+				ABAF88381ADC9890008FE837 /* SeguePushFromRight.m in Sources */,
+				ABAF88321ADC9609008FE837 /* CalendarViewController.m in Sources */,
 				ABC428D91AD9AB1700BDA15D /* SettingsViewController.m in Sources */,
 				ABC428C81AD72AAA00BDA15D /* FruitItemDBHelper.m in Sources */,
 				ABC428711AD2335D00BDA15D /* main.m in Sources */,
+				ABAF88351ADC9843008FE837 /* SeguePushFromLeft.m in Sources */,
 				ABC428CE1AD72DBD00BDA15D /* FruitItemBasicInfo.m in Sources */,
 				ABC428D41AD7601200BDA15D /* FruitTouchButton.m in Sources */,
 				ABAF882F1ADC89E1008FE837 /* UnwindSegueGoToRight.m in Sources */,
