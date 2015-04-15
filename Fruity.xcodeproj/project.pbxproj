@@ -13,6 +13,7 @@
 		ABAF88321ADC9609008FE837 /* CalendarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ABAF88311ADC9609008FE837 /* CalendarViewController.m */; };
 		ABAF88351ADC9843008FE837 /* SeguePushFromLeft.m in Sources */ = {isa = PBXBuildFile; fileRef = ABAF88341ADC9843008FE837 /* SeguePushFromLeft.m */; };
 		ABAF88381ADC9890008FE837 /* SeguePushFromRight.m in Sources */ = {isa = PBXBuildFile; fileRef = ABAF88371ADC9890008FE837 /* SeguePushFromRight.m */; };
+		ABAF883B1ADDF3A7008FE837 /* AddReminderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ABAF883A1ADDF3A7008FE837 /* AddReminderViewController.m */; };
 		ABC428711AD2335D00BDA15D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = ABC428701AD2335D00BDA15D /* main.m */; };
 		ABC428741AD2335D00BDA15D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = ABC428731AD2335D00BDA15D /* AppDelegate.m */; };
 		ABC4287A1AD2335D00BDA15D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ABC428781AD2335D00BDA15D /* Main.storyboard */; };
@@ -49,6 +50,8 @@
 		ABAF88341ADC9843008FE837 /* SeguePushFromLeft.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SeguePushFromLeft.m; sourceTree = "<group>"; };
 		ABAF88361ADC9890008FE837 /* SeguePushFromRight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SeguePushFromRight.h; path = ../SeguePushFromRight.h; sourceTree = "<group>"; };
 		ABAF88371ADC9890008FE837 /* SeguePushFromRight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SeguePushFromRight.m; path = ../SeguePushFromRight.m; sourceTree = "<group>"; };
+		ABAF88391ADDF3A7008FE837 /* AddReminderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddReminderViewController.h; sourceTree = "<group>"; };
+		ABAF883A1ADDF3A7008FE837 /* AddReminderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddReminderViewController.m; sourceTree = "<group>"; };
 		ABC4286B1AD2335D00BDA15D /* Fruity.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Fruity.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABC4286F1AD2335D00BDA15D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ABC428701AD2335D00BDA15D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -133,6 +136,8 @@
 				ABAF88341ADC9843008FE837 /* SeguePushFromLeft.m */,
 				ABC428D71AD9AB1700BDA15D /* SettingsViewController.h */,
 				ABC428D81AD9AB1700BDA15D /* SettingsViewController.m */,
+				ABAF88391ADDF3A7008FE837 /* AddReminderViewController.h */,
+				ABAF883A1ADDF3A7008FE837 /* AddReminderViewController.m */,
 				ABC4289E1AD6E49100BDA15D /* AddDeleteFruitsViewController.h */,
 				ABC4289F1AD6E49100BDA15D /* AddDeleteFruitsViewController.m */,
 				ABC428D21AD7601200BDA15D /* FruitTouchButton.h */,
@@ -281,6 +286,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ABAF883B1ADDF3A7008FE837 /* AddReminderViewController.m in Sources */,
 				ABC428CB1AD72B0C00BDA15D /* FruitItem.m in Sources */,
 				ABC428741AD2335D00BDA15D /* AppDelegate.m in Sources */,
 				ABC428A01AD6E49100BDA15D /* AddDeleteFruitsViewController.m in Sources */,

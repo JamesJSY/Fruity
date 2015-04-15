@@ -16,17 +16,23 @@
 
 @property CGRect screenRect;
 
-@property UIScrollView *fruitsInHandView;
-@property UIScrollView *fruitsAddView;
+@property (nonatomic) UIScrollView *fruitsInHandView;
+@property (nonatomic) UIScrollView *fruitsAddView;
 @property (weak, nonatomic) IBOutlet UIButton *settingsButton;
 @property (weak, nonatomic) IBOutlet UIButton *calendarButton;
 
-@property NSMutableArray *allFruitsBasicInfo;
-@property NSArray *fruitsInHand;
-@property NSMutableArray *seasonalFruits;
+@property (nonatomic) NSMutableArray *allFruitsBasicInfo;
+@property (nonatomic) NSArray *fruitsInHand;
+@property (nonatomic) NSMutableArray *seasonalFruits;
 
-@property FruitItemDBHelper *dbHelper;
-@property NSString *dataBaseName;
+@property (nonatomic) FruitItemDBHelper *dbHelper;
+@property (nonatomic) NSString *dataBaseName;
+
+@property (nonatomic) UIView *addFruitBottomView;
+
+@property (nonatomic) UIFont *font;
+
+@property (nonatomic) FruitTouchButton *addFruitButton;
 
 @end
 
@@ -36,24 +42,19 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    
+    
+    // Set Font for the text
+    self.font = [UIFont fontWithName:@"AvenirLTStd-Light" size:16];
+    
     // Get the screen resolution
     self.screenRect = [[UIScreen mainScreen] bounds];
     
     // Create settings button
-    self.settingsButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.settingsButton addTarget:self action:@selector(goToSettingsView:) forControlEvents:UIControlEventTouchUpInside];
-    self.settingsButton.frame = CGRectMake(self.screenRect.size.width - 30.0f, 20.0f, 20.0f, 20.0f);
-    self.settingsButton.adjustsImageWhenHighlighted = false;
-    [self.settingsButton setImage:[UIImage imageNamed:@"settings.png"] forState:UIControlStateNormal];
-    [self.view addSubview:self.settingsButton];
     
     // Create calendar button
-    self.calendarButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.calendarButton addTarget:self action:@selector(goToCalendarView:) forControlEvents:UIControlEventTouchUpInside];
-    self.calendarButton.frame = CGRectMake(10.0f, 20.0f, 20.0f, 20.0f);
-    self.calendarButton.adjustsImageWhenHighlighted = false;
-    [self.calendarButton setImage:[UIImage imageNamed:@"calendar.png"] forState:UIControlStateNormal];
-    [self.view addSubview:self.calendarButton];
     
     self.view.backgroundColor = [UIColor colorWithRed:(CGFloat)173/255 green:(CGFloat)217/255 blue:(CGFloat)194/255 alpha:1];
     
@@ -62,7 +63,7 @@
     self.fruitsInHandView.backgroundColor = [UIColor colorWithRed:(CGFloat)173/255 green:(CGFloat)217/255 blue:(CGFloat)194/255 alpha:1];
     self.fruitsInHandView.contentSize = CGSizeMake(self.screenRect.size.width, self.screenRect.size.height);
     
-    self.fruitsAddView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.screenRect.size.height / 2 + 30, self.screenRect.size.width , self.screenRect.size.height / 2 - 30)];
+    self.fruitsAddView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.screenRect.size.height / 2 + 30, self.screenRect.size.width , self.screenRect.size.height)];
     self.fruitsAddView.backgroundColor = [UIColor colorWithRed:(CGFloat)244/255 green:(CGFloat)244/255 blue:(CGFloat)205/255 alpha:1];
     
     // Initialize all fruits' basic information, like the seasonal property
@@ -78,8 +79,41 @@
     // Load fruits user already bought into the FruitsInHandView
     [self loadFruitsInHandViewWitnFruitsInDB];
     
+    // Set add fruit bottom view
+    [self setAddFruitBottomView];
+    
     [self.view addSubview:self.fruitsInHandView];
     [self.view addSubview:self.fruitsAddView];
+}
+
+- (void)setAddFruitBottomView {
+    self.addFruitBottomView = [[UIView alloc] initWithFrame:CGRectMake(0, self.screenRect.size.height / 2, self.screenRect.size.width, self.screenRect.size.height / 6)];
+    self.addFruitBottomView.backgroundColor = [UIColor blackColor];
+    
+    UITextView *quantityText = [[UITextView alloc] init];
+    quantityText.frame = CGRectMake(0, self.screenRect.size.height / 18, self.screenRect.size.width / 3, self.screenRect.size.height / 12);
+    quantityText.text = @"Quantity";
+    quantityText.textColor = [UIColor whiteColor];
+    quantityText.font = self.font;
+    quantityText.backgroundColor = self.addFruitBottomView.backgroundColor;
+    quantityText.textAlignment = NSTextAlignmentCenter;
+    
+    [self.addFruitBottomView addSubview:quantityText];
+    
+    for (int i = 0; i < 3; i++) {
+        UIButton *quantityButton = [[UIButton alloc] init];
+        [quantityButton setTitle:[NSString stringWithFormat:@"%d", i + 1] forState:UIControlStateNormal];
+        quantityButton.backgroundColor = [UIColor yellowColor];
+        quantityButton.titleLabel.font = self.font;
+        quantityButton.frame = CGRectMake(self.screenRect.size.width / 3 + i * self.screenRect.size.width / 5, self.screenRect.size.height / 16, self.screenRect.size.width / 6, self.screenRect.size.height / 12);
+        [quantityButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        quantityButton.tag = i;
+        [quantityButton addTarget:self action:@selector(addFruitsToDatabaseWithQuantity:) forControlEvents:UIControlEventTouchUpInside];
+        
+        [self.addFruitBottomView addSubview:quantityButton];
+    }
+    
+    [self.fruitsAddView addSubview:self.addFruitBottomView];
 }
 
 -(void)goToSettingsView:(UIButton*)settingsButton {
@@ -93,6 +127,18 @@
 -(void)addFruitsToDatabase:(FruitTouchButton*)inputFruit {
     NSLog(@"%@ is pressed in add view!", inputFruit.fruitItem.name);
     
+    // Shift the current view up a little bit
+    [UIView animateWithDuration:0.3
+                          delay:0
+                        options:0
+                     animations:^{
+                         self.fruitsAddView.frame = CGRectOffset(self.fruitsAddView.frame, 0, -self.screenRect.size.height / 6);
+                     }
+                     completion:nil];
+    inputFruit.transform = CGAffineTransformMakeScale(1.2, 1.2);
+    self.addFruitButton = inputFruit;
+    
+    /*
     // Get the current date
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"yyyy-MM-dd"];
@@ -109,7 +155,41 @@
     [self.dbHelper insertFruitItemIntoDB:item];
     
     // Reload fruitsInHandView
+    [self loadFruitsInHandViewWitnFruitsInDB];*/
+    
+}
+
+-(void)addFruitsToDatabaseWithQuantity:(UIButton*)inputQuantityButton{
+    // Get the current date
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"yyyy-MM-dd"];
+    
+    // Prepare for the new item to be inserted into the database
+    FruitItem *item = [[FruitItem alloc] init];
+    item.name = self.addFruitButton.fruitItem.name;
+    item.purchaseDate = [formatter stringFromDate:[NSDate date]];
+    item.startStatus = 10;
+    item.statusChangeThreshold = 1;
+    item.isEaten = NO;
+    
+    for (int i = 0; i <inputQuantityButton.tag + 1; i++) {
+        // Insert the new item into the database
+        [self.dbHelper insertFruitItemIntoDB:item];
+    }
+    
+    // Reload fruitsInHandView
     [self loadFruitsInHandViewWitnFruitsInDB];
+    
+    // Shift the current view down back
+    [UIView animateWithDuration:0.3
+                          delay:0
+                        options:0
+                     animations:^{
+                         self.fruitsAddView.frame = CGRectOffset(self.fruitsAddView.frame, 0, self.screenRect.size.height / 6);
+                     }
+                     completion:nil];
+    self.addFruitButton.transform = CGAffineTransformMakeScale(1 / 1.2, 1 / 1.2);
+
 }
 
 -(void)deleteFruitsToDatabase:(FruitTouchButton*)inputFruit {

@@ -25,7 +25,7 @@
     
     // Initialize the calendar view
     UIScrollView *calendarView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 20, self.screenRect.size.width, self.screenRect.size.height * 2 / 3 - 20)];
-    calendarView.backgroundColor = [UIColor colorWithRed:(CGFloat)173/255 green:(CGFloat)217/255 blue:(CGFloat)194/255 alpha:1];
+    calendarView.backgroundColor = self.view.backgroundColor;
     
     // Initialize the bottom view
     UIView *bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, self.screenRect.size.height * 2 / 3, self.screenRect.size.width, self.screenRect.size.height * 1 / 3)];

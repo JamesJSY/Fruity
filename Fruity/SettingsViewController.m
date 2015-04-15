@@ -7,18 +7,37 @@
 //
 
 #import "SettingsViewController.h"
+#import "AddReminderViewController.h"
+
+#define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 @interface SettingsViewController ()
 
-@property CGRect screenRect;
+@property (nonatomic) UIView *displayReminderView;
+@property UIButton *addReminderButton;
 
-@property (weak, nonatomic) IBOutlet UIImageView *profileImageView;
-@property (weak, nonatomic) IBOutlet UIScrollView *notificationsView;
+@property (nonatomic) CGRect screenRect;
 
-@property NSMutableArray *notificationRemindTimes;
-@property NSUserDefaults *userPreference;
+@property (nonatomic) NSMutableArray *reminderTimes;
+@property (nonatomic) NSUserDefaults *userPreference;
 
-@property NSMutableArray *allReminderTextFields;
+@property (nonatomic) UITextView *notificationTipTextView;
+@property (nonatomic) UITextView *notificationTextView;
+
+@property (nonatomic) UIButton *switchNotificationButton;
+@property (nonatomic) UIButton *notificationTipButton;
+@property (nonatomic) NSMutableArray *allRemindersButtons;
+@property (nonatomic) NSMutableArray *allRemindersDeleteButtons;
+
+@property (nonatomic) UIFont *font;
+@property (nonatomic) bool isNotificationOn;
+
+
+// The tag -1 refers to the addReminderButton.
+// The tag with other number refers to the index of the reminder button
+@property (nonatomic) int pressButtonTag;
+
+@property (weak, nonatomic) IBOutlet UIButton *backButton;
 
 // Formatter that is used to transform date to string
 @property NSDateFormatter *dateFormatter;
@@ -31,19 +50,47 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    // Set Font for the text
+    self.font = [UIFont fontWithName:@"AvenirLTStd-Light" size:16];
+    
     // Get the screen resolution
     self.screenRect = [[UIScreen mainScreen] bounds];
+    
+    self.displayReminderView = [[UIView alloc] init];
+    self.displayReminderView.frame = CGRectMake(0, 60, self.screenRect.size.width, self.screenRect.size.height / 3);
+    self.displayReminderView.backgroundColor = self.view.backgroundColor;
     
     // Initialize the formatter to transform date to string
     self.dateFormatter = [[NSDateFormatter alloc] init];
     [self.dateFormatter setDateFormat:@"hh:mm a"];
-
     
     // Initialize the user preference
     self.userPreference = [[NSUserDefaults alloc] init];
     
-    // Set a reminder at 10:00 the first launching the app
-    if ([self.userPreference objectForKey:@"notificationRemindTimes"] == nil) {
+    // Load data from userDefaults
+    [self loadUserPreference];
+    
+    // Display each notification reminder set by users
+    [self displayReminders];
+    
+    // Display all static sub views
+    [self displayStaticSubviews];
+    
+    UITapGestureRecognizer *tapToHideTipForNotification = [[UITapGestureRecognizer alloc]
+                                                           initWithTarget:self
+                                                           action:@selector(hideTipForNotification:)];
+    [self.view addGestureRecognizer:tapToHideTipForNotification];
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+- (void)loadUserPreference {
+    /*
+    // Set a reminder at 10:00 the first time launching the view controller
+    if ([self.userPreference objectForKey:@"notificationRemindTimes"] == nil || [[self.userPreference objectForKey:@"notificationRemindTimes"] count] == 0) {
         // Set the initial reminder time to 10:00
         NSCalendar *cal = [NSCalendar currentCalendar];
         NSDateComponents * comps = [[NSDateComponents alloc] init];
@@ -53,188 +100,348 @@
         
         NSMutableArray *reminders = [[NSMutableArray alloc] initWithObjects:date, nil];
         [self.userPreference setObject:reminders forKey:@"notificationRemindTimes"];
+    }*/
+    
+    // Load all reminders
+    self.reminderTimes = [[NSMutableArray alloc] initWithArray:[self.userPreference objectForKey:@"notificationRemindTimes"]];
+    
+    // Set notification on the first time launching the view controller
+    if ([self.userPreference objectForKey:@"isNotificationOn"] == nil) {
+        [self.userPreference setBool:YES forKey:@"isNotificationOn"];
     }
-    
-    // Set profile image to be circle-shaped
-    self.profileImageView.layer.cornerRadius = self.profileImageView.frame.size.height / 2;
-    self.profileImageView.clipsToBounds = YES;
-    
-    // Load data from userDefaults
-    [self loadUserPreference];
-    
-    // Display each notification reminder set by users
-    [self displayNotifications];
+    self.isNotificationOn = [self.userPreference boolForKey:@"isNotificationOn"];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-- (void)loadUserPreference {
-    self.notificationRemindTimes = [[NSMutableArray alloc] initWithArray:[self.userPreference objectForKey:@"notificationRemindTimes"]];
-    
-    if ([self.userPreference objectForKey:@"remindTimeWhenIgnored"] == nil) {
-        [self.userPreference setValue:@"30" forKey:@"remindTimeWhenIgnored"];
-    }
-}
-
-- (void)displayNotifications {
+- (void)displayReminders {
     // Remove all subviews currently in the notificationsView
-    [self.notificationsView.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
+    [self.displayReminderView.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
     
-    // Set Font for the text
-    UIFont *font = [UIFont fontWithName:@"AvenirLTStd-Light" size:16];
+    // Reinitialize the array of all reminder buttons
+    [self.allRemindersButtons removeAllObjects];
+    self.allRemindersButtons = [[NSMutableArray alloc] init];
     
-    // Reinitialize the array of all remind time text fields
-    [self.allReminderTextFields removeAllObjects];
-    self.allReminderTextFields = [[NSMutableArray alloc] init];
+    // Reinitialize the array of all reminder delete buttons
+    [self.allRemindersDeleteButtons removeAllObjects];
+    self.allRemindersDeleteButtons = [[NSMutableArray alloc] init];
     
-    for (int i = 0; i < [self.notificationRemindTimes count]; i++) {
-        // Initialize the reminder text view
-        UITextView *reminderTextView = [[UITextView alloc] init];
-        reminderTextView.text = @"Push reminder on";
-        reminderTextView.font = font;
-        reminderTextView.textColor = [UIColor colorWithRed:255/255 green:0/255 blue:0/255 alpha:1];
-        reminderTextView.textAlignment = NSTextAlignmentRight;
-        reminderTextView.frame = CGRectMake(0, 30 + i * 50, self.screenRect.size.width * 1 / 2, 30);
-        reminderTextView.backgroundColor = [UIColor colorWithRed:(CGFloat)173/255 green:(CGFloat)217/255 blue:(CGFloat)194/255 alpha:1];
-        
-        // Initialize the reminder time text field
-        UITextField *reminderTimeTextField = [[UITextField alloc] init];
-        
-        reminderTimeTextField.text = [self.dateFormatter stringFromDate:self.notificationRemindTimes[i]];
-        reminderTimeTextField.font = font;
-        reminderTimeTextField.textAlignment = NSTextAlignmentCenter;
-        reminderTimeTextField.backgroundColor = [UIColor colorWithRed:(CGFloat)239/255 green:(CGFloat)245/255 blue:(CGFloat)207/255 alpha:1];
-        reminderTimeTextField.frame = CGRectMake(self.screenRect.size.width * 1 / 2 + 30, 35 + i * 50, self.screenRect.size.width / 5, 30);
-        reminderTimeTextField.layer.cornerRadius = 5;
-        [self.allReminderTextFields addObject:reminderTimeTextField];
-        
-        // Initializ the date pick as the input view for reminder time text field
-        UIDatePicker *reminderTimeDatePicker = [[UIDatePicker alloc] initWithFrame:CGRectZero];
-        reminderTimeDatePicker.datePickerMode = UIDatePickerModeTime;
-        [reminderTimeDatePicker addTarget:self action:@selector(reminderTimeDatePickerValueDidUpdate:) forControlEvents:UIControlEventValueChanged];
-        [reminderTimeDatePicker setDate:self.notificationRemindTimes[i] animated:YES];
-        reminderTimeDatePicker.tag = i;
-        reminderTimeTextField.inputView = reminderTimeDatePicker;
-        
-        // Initialize the red decriptionButton
-        UIButton *descriptionButton = [[UIButton alloc] init];
-        descriptionButton.frame = CGRectMake(reminderTimeTextField.frame.origin.x + self.screenRect.size.width / 5 - 10, 25 + i * 50, 20, 20);
-        [descriptionButton setImage:[UIImage imageNamed:@"questionmark.png"] forState:UIControlStateNormal];
-        [descriptionButton addTarget:self action:@selector(displayTips:) forControlEvents:UIControlEventTouchUpInside];
-        descriptionButton.tag = i;
-        
-        // Initialize the delete button if it is not the last row
-        if (i < [self.notificationRemindTimes count] - 1) {
-            UIButton *deleteReminderButton = [[UIButton alloc] init];
-            deleteReminderButton.frame = CGRectMake(self.screenRect.size.width - 65, 33.5 + i * 50, 30, 30);
-            [deleteReminderButton setImage:[UIImage imageNamed:@"delete.png"] forState:UIControlStateNormal];
-            [deleteReminderButton addTarget:self action:@selector(deleteReminder:) forControlEvents: UIControlEventTouchUpInside];
-            deleteReminderButton.tag = i;
-            [self.notificationsView addSubview:deleteReminderButton];
-        }
-        
-        // Initialize the add button if it is the last row
-        if (i == [self.notificationRemindTimes count] - 1) {
-            UIButton *addReminderButton = [[UIButton alloc] init];
-            addReminderButton.frame = CGRectMake(self.screenRect.size.width - 65, 33.5 + i * 50, 30, 30);
-            [addReminderButton setImage:[UIImage imageNamed:@"add.png"] forState:UIControlStateNormal];
-            [addReminderButton addTarget:self action:@selector(addReminder:) forControlEvents: UIControlEventTouchUpInside];
-            [self.notificationsView addSubview:addReminderButton];
-        }
+    // Each row is going to display 3 timers
+    int remindersPerRow = 3;
     
-        [self.notificationsView addSubview:reminderTextView];
-        [self.notificationsView addSubview:reminderTimeTextField];
-        [self.notificationsView addSubview:descriptionButton];
+    for (int i = 0; i < [self.reminderTimes count]; i++) {
+        
+        UIButton *reminderDisplayButton = [[UIButton alloc] init];
+        reminderDisplayButton.titleLabel.font = self.font;
+        reminderDisplayButton.titleLabel.textColor = [UIColor blackColor];
+        [reminderDisplayButton setTitle:[self.dateFormatter stringFromDate:self.reminderTimes[i]] forState:UIControlStateNormal];
+        reminderDisplayButton.backgroundColor = UIColorFromRGB(0xd26168);
+        
+        reminderDisplayButton.frame = CGRectMake(0, 0, self.screenRect.size.width / 5, self.screenRect.size.width / 5);
+        reminderDisplayButton.center = CGPointMake(self.screenRect.size.width / 6 + i % remindersPerRow * self.screenRect.size.width / 3, self.screenRect.size.width / 6 + i / remindersPerRow * self.screenRect.size.width / 3);
+        reminderDisplayButton.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
+        reminderDisplayButton.titleLabel.textAlignment = NSTextAlignmentCenter;
+        reminderDisplayButton.layer.cornerRadius = self.screenRect.size.width / 10;
+        reminderDisplayButton.tag = i;
+        [reminderDisplayButton addTarget:self action:@selector(updateReminder:) forControlEvents:UIControlEventTouchUpInside];
+        
+        [self.allRemindersButtons addObject:reminderDisplayButton];
+        
+        UIButton *reminderDeleteButton = [[UIButton alloc] init];
+        [reminderDeleteButton setImage:[UIImage imageNamed:@"delete.png"] forState:UIControlStateNormal];
+        reminderDeleteButton.frame = CGRectMake(0, 0, self.screenRect.size.width / 30, self.screenRect.size.width / 30);
+        reminderDeleteButton.center = CGPointMake(reminderDisplayButton.center.x + self.screenRect.size.width / 10, reminderDisplayButton.center.y - self.screenRect.size.width / 10);
+        reminderDeleteButton.tag = i;
+        [reminderDeleteButton addTarget:self action:@selector(deleteReminder:) forControlEvents:UIControlEventTouchUpInside];
+        [self.allRemindersDeleteButtons addObject:reminderDeleteButton];
+        
+        [self.displayReminderView addSubview:reminderDisplayButton];
+        [self.displayReminderView addSubview:reminderDeleteButton];
     }
     
-    // Initialize the ignore reminder text view
-    UITextView *ignoreReminderText = [[UITextView alloc] init];
-    ignoreReminderText.text = @"When ignored, remind me";
-    ignoreReminderText.textAlignment = NSTextAlignmentLeft;
-    ignoreReminderText.font = font;
-    ignoreReminderText.frame = CGRectMake(30, 50 + [self.notificationRemindTimes count] * 50, self.screenRect.size.width * 3 / 4, 30);
-    ignoreReminderText.backgroundColor = [UIColor colorWithRed:(CGFloat)173/255 green:(CGFloat)217/255 blue:(CGFloat)194/255 alpha:1];
+    [self.view addSubview:self.displayReminderView];
     
-    // Initialize the ignore reminder text view 2
-    UITextView *ignoreReminderText2 = [[UITextView alloc] init];
-    ignoreReminderText2.text = @"mins later";
-    ignoreReminderText2.font = font;
-    ignoreReminderText2.textAlignment = NSTextAlignmentLeft;
-    ignoreReminderText2.frame = CGRectMake(30, 90 + [self.notificationRemindTimes count] * 50, self.screenRect.size.width * 1 / 2, 30);
-    ignoreReminderText2.backgroundColor = [UIColor colorWithRed:(CGFloat)173/255 green:(CGFloat)217/255 blue:(CGFloat)194/255 alpha:1];
-    
-    // Initialize the ignore reminder text field
-    UITextField *ignoreReminderTimeTextField = [[UITextField alloc] init];
-    ignoreReminderTimeTextField.text = [self.userPreference objectForKey:@"remindTimeWhenIgnored"];
-    ignoreReminderTimeTextField.font = font;
-    ignoreReminderTimeTextField.textAlignment = NSTextAlignmentCenter;
-    ignoreReminderTimeTextField.backgroundColor = [UIColor colorWithRed:(CGFloat)239/255 green:(CGFloat)245/255 blue:(CGFloat)207/255 alpha:1];
-    ignoreReminderTimeTextField.frame = CGRectMake(self.screenRect.size.width * 3 / 4 - 25, 55 + [self.notificationRemindTimes count] * 50, self.screenRect.size.width / 5, 30);
-    ignoreReminderTimeTextField.layer.cornerRadius = 5;
-    [ignoreReminderTimeTextField addTarget:self action:@selector(ignoreReminderTimeTextFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
-    
-    [self.notificationsView addSubview:ignoreReminderText];
-    [self.notificationsView addSubview:ignoreReminderText2];
-    [self.notificationsView addSubview:ignoreReminderTimeTextField];
+    // Hide all reminder buttons and related delete buttons if the notification switch is off
+    if (!self.isNotificationOn) {
+        [self.displayReminderView setHidden:YES];
+    }
 }
 
-- (void)ignoreReminderTimeTextFieldDidChange:(UITextField*) textField{
-    [self.userPreference setValue:textField.text forKey:@"remindTimeWhenIgnored"];
-}
-
-- (void)reminderTimeDatePickerValueDidUpdate:(UIDatePicker*) datePicker{
-    // Update the related remind time text field
-    UITextField *textField = self.allReminderTextFields[datePicker.tag];
-    textField.text = [self.dateFormatter stringFromDate:datePicker.date];
+- (void)displayStaticSubviews {
+    // Initialize the add reminder button
+    self.addReminderButton = [[UIButton alloc] init];
+    [self.addReminderButton setImage:[UIImage imageNamed:@"add-timer.png"] forState:UIControlStateNormal];
+    self.addReminderButton.frame = CGRectMake(0, 0, self.screenRect.size.width / 2, self.screenRect.size.width / 2);
+    self.addReminderButton.center = CGPointMake(self.screenRect.size.width / 2, self.screenRect.size.height * 2 / 3);
+    [self.addReminderButton addTarget:self action:@selector(addReminder:) forControlEvents:UIControlEventTouchUpInside];
     
-    // Update the date at index of datePicker.tag in notificationRemindTimes array
-    [self.notificationRemindTimes replaceObjectAtIndex:datePicker.tag withObject:datePicker.date];
+    self.notificationTextView = [[UITextView alloc] init];
+    self.notificationTextView.text = @"Notification";
+    self.notificationTextView.textColor = UIColorFromRGB(0xabacab);
+    self.notificationTextView.font = self.font;
+    self.notificationTextView.frame = CGRectMake(0, 0, self.screenRect.size.width / 2, 30);
+    self.notificationTextView.textAlignment = NSTextAlignmentCenter;
+    self.notificationTextView.backgroundColor = self.view.backgroundColor;
+    self.notificationTextView.center = CGPointMake(self.screenRect.size.width / 2, self.addReminderButton.center.y + self.screenRect.size.height / 5);
     
-    // Update the stored object in the userPreference
-    [self.userPreference setObject:self.notificationRemindTimes forKey:@"notificationRemindTimes"];
+    self.switchNotificationButton = [[UIButton alloc] init];
+    if (self.isNotificationOn)
+        [self.switchNotificationButton setImage:[UIImage imageNamed:@"on.png"] forState:UIControlStateNormal];
+    else
+        [self.switchNotificationButton setImage:[UIImage imageNamed:@"off.png"] forState:UIControlStateNormal];
+    self.switchNotificationButton.frame = CGRectMake(0, 0, self.screenRect.size.width / 9, self.screenRect.size.width / 9);
+    self.switchNotificationButton.center = CGPointMake(self.screenRect.size.width / 2, self.notificationTextView.center.y + self.screenRect.size.height / 16);
+    [self.switchNotificationButton addTarget:self action:@selector(switchNotification:) forControlEvents:UIControlEventTouchUpInside];
+    
+    self.notificationTipButton = [[UIButton alloc] init];
+    [self.notificationTipButton setImage:[UIImage imageNamed:@"questionmark.png"] forState:UIControlStateNormal];
+    self.notificationTipButton.frame = CGRectMake(0, 0, self.screenRect.size.width / 20, self.screenRect.size.width / 20);
+    [self.notificationTipButton addTarget:self action:@selector(showTipForNotification:) forControlEvents:UIControlEventTouchUpInside];
+    [self.notificationTipButton setHidden:YES];
+    
+    self.notificationTipTextView = [[UITextView alloc] init];
+    self.notificationTipTextView.text = @"Send Notification to remind you of fruits time";
+    self.notificationTipTextView.textColor = UIColorFromRGB(0xabacab);
+    self.notificationTipTextView.font = self.font;
+    self.notificationTipTextView.frame = CGRectMake(0, 0, self.screenRect.size.width * 5 / 6, self.screenRect.size.height / 8);
+    self.notificationTipTextView.textAlignment = NSTextAlignmentCenter;
+    self.notificationTipTextView.layer.cornerRadius = 5;
+    self.notificationTipTextView.backgroundColor = UIColorFromRGB(0xadd9c2);
+    self.notificationTipTextView.center = CGPointMake(self.screenRect.size.width / 2, self.screenRect.size.height * 2 / 5);
+    [self.notificationTipTextView setHidden:YES];
+    
+    [self.view addSubview:self.addReminderButton];
+    [self.view addSubview:self.notificationTextView];
+    [self.view addSubview:self.switchNotificationButton];
+    [self.view addSubview:self.notificationTipButton];
+    [self.view addSubview:self.notificationTipTextView];
+    
+    // Hide related sub views if the notification switch is off
+    if (!self.isNotificationOn) {
+        [self.addReminderButton setHidden:YES];
+        [self.notificationTipButton setHidden:NO];
+        
+        self.notificationTextView.center = CGPointMake(self.screenRect.size.width / 2, self.screenRect.size.height / 2);
+        self.switchNotificationButton.center = CGPointMake(self.screenRect.size.width / 2, self.screenRect.size.height / 2 + self.screenRect.size.height / 16);
+        
+        self.notificationTipButton.center = CGPointMake(self.screenRect.size.width * 3 / 4, self.screenRect.size.height / 2);
+        [self.notificationTipButton setHidden:NO];
+    }
 }
 
 - (void)addReminder:(UIButton*)addButton {
-    // Add one reminder
-    NSDateComponents *dateComponents = [NSDateComponents new];
-    dateComponents.hour = 1;
-    NSDate *date = [[NSCalendar currentCalendar] dateByAddingComponents:dateComponents toDate: [NSDate date] options:0];
-    [self.notificationRemindTimes addObject:date];
-    
-    // Update stored object in the userPreference
-    [self.userPreference setObject:self.notificationRemindTimes forKey:@"notificationRemindTimes"];
-    
-    // Reload the scroll View
-    [self displayNotifications];
+    // User has a maximum of 6 reminders
+    if ([self.allRemindersButtons count] < 6) {
+        // Go to the add reminder view controller
+        [self performSegueWithIdentifier:@"addOrUpdateReminderSegue" sender:addButton];
+    }
+    else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Don't eat too much!"
+                                                        message:@"My mum told me that never eat fruits over six times a day. It is true!"
+                                                       delegate:nil
+                                              cancelButtonTitle:@"Got it!"
+                                              otherButtonTitles:nil];
+        [alert show];
+    }
+}
+
+- (void)updateReminder:(UIButton*)reminderButton {
+    // Go to the add reminder view controller
+    [self performSegueWithIdentifier:@"addOrUpdateReminderSegue" sender:reminderButton];
 }
 
 - (void)deleteReminder:(UIButton*)deleteButton {
-    // Delete the row from deleteButton.tag
-    [self.notificationRemindTimes removeObjectAtIndex:deleteButton.tag];
-    
-    // Update stored object in the userPreference
-    [self.userPreference setObject:self.notificationRemindTimes forKey:@"notificationRemindTimes"];
-    
-    // Reload the scroll View
-    [self displayNotifications];
+    // Make the reminder button and it's related delete button vanish gradually
+    [UIView animateWithDuration:0.5
+                          delay:0
+                        options:0
+                     animations:^{
+                         [self.allRemindersButtons[deleteButton.tag] setAlpha:0.0];
+                         [self.allRemindersDeleteButtons[deleteButton.tag] setAlpha:0.0];
+                     }
+                     completion:^(BOOL finished){
+                         // Delete the row from deleteButton.tag
+                         [self.reminderTimes removeObjectAtIndex:deleteButton.tag];
+                         
+                         // Update stored object in the userPreference
+                         [self.userPreference setObject:self.reminderTimes forKey:@"notificationRemindTimes"];
+                         
+                         // Reload all reminders
+                         [self displayReminders];
+                     }];
 }
 
-- (void)displayTips:(UIButton*)descriptionButton {
+- (void)switchNotification:(UIButton*)switchButton {
     
+    // Reverse notification on/off and save it to the user preference
+    self.isNotificationOn = !self.isNotificationOn;
+    [self.userPreference setBool:self.isNotificationOn forKey:@"isNotificationOn"];
+    
+    if (self.isNotificationOn) {
+        // Change the switch notification button to on
+        [self.switchNotificationButton setImage:[UIImage imageNamed:@"on.png"] forState:UIControlStateNormal];
+        
+        // Hide the notification tip button
+        [self.notificationTipButton setHidden:YES];
+        
+        // Hide the notification tip text view if the user has not done it already
+        [self.notificationTipTextView setHidden:YES];
+        
+        for (int i = 0; i < [self.allRemindersButtons count]; i++) {
+            [self.allRemindersButtons[i] setAlpha:0.0];
+            [self.allRemindersDeleteButtons[i] setAlpha:0.0];
+        }
+        
+        [self.displayReminderView setHidden:NO];
+        
+        [self.addReminderButton setAlpha:0.0];
+        [self.addReminderButton setHidden:NO];
+        
+        // Move the notification text view and the switch button to the bottom
+        [UIView animateWithDuration:0.5
+                              delay:0
+                            options:0
+                         animations:^{
+                             self.notificationTextView.center = CGPointMake(self.screenRect.size.width / 2, self.addReminderButton.center.y + self.screenRect.size.height / 5);
+                             self.switchNotificationButton.center = CGPointMake(self.screenRect.size.width / 2, self.notificationTextView.center.y + self.screenRect.size.height / 16);
+                         }
+                         completion:^(BOOL finished){
+                             [UIView animateWithDuration:0.5
+                                                   delay:0
+                                                 options:0
+                                              animations:^{
+                                                  
+                                                  // Show all reminder buttons
+                                                  for (int i = 0; i < [self.allRemindersButtons count]; i++) {
+                                                      [self.allRemindersButtons[i] setAlpha:1.0];
+                                                      [self.allRemindersDeleteButtons[i] setAlpha:1.0];
+                                                  }
+                                                  // Show add reminder button hidden
+                                                  [self.addReminderButton setAlpha:1.0];
+                                              }
+                                              completion:nil];
+                         }];
+        
+        // Set the notification service on
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    }
+    else {
+        // Change the switch notification button to off
+        [self.switchNotificationButton setImage:[UIImage imageNamed:@"off.png"] forState:UIControlStateNormal];
+        
+        // Make add reminder button, all reminder buttons and their related delete buttons vanish gradually
+        [UIView animateWithDuration:0.5
+                              delay:0
+                            options:0
+                         animations:^{
+                             // Set all reminder buttons hidden
+                             for (int i = 0; i < [self.allRemindersButtons count]; i++) {
+                                 [self.allRemindersButtons[i] setAlpha:0.0];
+                                 [self.allRemindersDeleteButtons[i] setAlpha:0.0];
+                             }
+                             // Set add reminder button hidden
+                             [self.addReminderButton setAlpha:0.0];
+                         }
+                         completion:^(BOOL finished){
+                             [self.displayReminderView setHidden:YES];
+                             
+                             // Set add reminder button hidden;
+                             [self.addReminderButton setHidden:YES];
+                             
+                             // Move the notification text view and the switch button to the middle
+                             [UIView animateWithDuration:0.5
+                                                   delay:0
+                                                 options:0
+                                              animations:^{
+                                                  self.notificationTextView.center = CGPointMake(self.screenRect.size.width / 2, self.screenRect.size.height / 2);
+                                                  self.switchNotificationButton.center = CGPointMake(self.screenRect.size.width / 2, self.screenRect.size.height / 2 + self.screenRect.size.height / 16);
+                                              }
+                                              completion:^(BOOL finished){
+                                                  // Adjust the notification tip button center and show it to the user
+                                                  self.notificationTipButton.center = CGPointMake(self.screenRect.size.width * 3 / 4, self.screenRect.size.height / 2);
+                                                  [self.notificationTipButton setHidden:NO];
+                                              }];
+                         }];
+        
+
+        
+            
+        // Set the notification service off
+            
+            
+            
+            
+            
+            
+            
+        
+    }
 }
 
-/*
+- (void)showTipForNotification:(UIButton*)tipButton {
+    [self.notificationTipTextView setHidden:NO];
+}
+
+- (void)hideTipForNotification:(UIButton*)tipButton {
+    [self.notificationTipTextView setHidden:YES];
+}
+
+- (IBAction)unwindFromAddReminderView:(UIStoryboardSegue *)segue {
+    AddReminderViewController *sourceViewController = segue.sourceViewController;
+    
+    // If the user pressed the add button and return from the addReminderViewController
+    if (self.pressButtonTag == -1) {
+        // If it is not the cancel button pressed at the other side
+        if (sourceViewController.date != nil) {
+            [self.reminderTimes addObject:sourceViewController.date];
+    
+            // Update stored object in the userPreference
+            [self.userPreference setObject:self.reminderTimes forKey:@"notificationRemindTimes"];
+    
+            // Reload all reminders
+            [self displayReminders];
+        }
+    }
+    // If the user pressed one reminder button and return from the addReminderViewController
+    else {
+        // Update the date at index of datePicker.tag in notificationRemindTimes array
+        [self.reminderTimes replaceObjectAtIndex:self.pressButtonTag withObject:sourceViewController.date];
+        
+        // Update the stored object in the userPreference
+        [self.userPreference setObject:self.reminderTimes forKey:@"notificationRemindTimes"];
+        
+        // Reload all reminders
+        [self displayReminders];
+    }
+}
+
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
-    NSLog(@"Poped!");
+    
+    AddReminderViewController *destinationViewController = segue.destinationViewController;
+    if (sender == self.addReminderButton) {
+        destinationViewController.date = [NSDate date];
+        destinationViewController.isFromAddButton = YES;
+        self.pressButtonTag = -1;
+    }
+    else if (sender != self.backButton) {
+        UIButton *currentReminderButton = sender;
+        destinationViewController.date = self.reminderTimes[currentReminderButton.tag];
+        destinationViewController.isFromAddButton = NO;
+        self.pressButtonTag = currentReminderButton.tag;
+    }
 }
-*/
+
 
 @end
