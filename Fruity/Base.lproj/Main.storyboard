@@ -94,76 +94,86 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CLW-AX-ppI">
-                                <rect key="frame" x="152" y="119" width="57" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jBt-UW-TiN">
+                                <rect key="frame" x="-23" y="-15" width="46" height="30"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="7x9-Nq-Tl4"/>
-                                    <constraint firstAttribute="width" constant="30" id="rGN-9c-G3n"/>
+                                    <constraint firstAttribute="height" constant="30" id="OKR-Mo-Inf"/>
+                                    <constraint firstAttribute="width" constant="30" id="Py9-ng-4ux"/>
                                 </constraints>
-                                <state key="normal" title="Settings" image="icon-timer">
+                                <state key="normal" title="Button" image="icon-timer">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <variation key="default">
                                     <mask key="constraints">
-                                        <exclude reference="7x9-Nq-Tl4"/>
-                                        <exclude reference="rGN-9c-G3n"/>
+                                        <exclude reference="OKR-Mo-Inf"/>
+                                        <exclude reference="Py9-ng-4ux"/>
                                     </mask>
                                 </variation>
                                 <variation key="heightClass=regular-widthClass=compact">
                                     <mask key="constraints">
-                                        <include reference="7x9-Nq-Tl4"/>
-                                        <include reference="rGN-9c-G3n"/>
+                                        <include reference="OKR-Mo-Inf"/>
+                                        <include reference="Py9-ng-4ux"/>
                                     </mask>
                                 </variation>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qbm-XQ-Irw">
-                                <rect key="frame" x="16" y="119" width="62" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ffa-lz-b1X">
+                                <rect key="frame" x="-23" y="-15" width="46" height="30"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="30" id="XRY-y9-F9M"/>
-                                    <constraint firstAttribute="height" constant="30" id="vTn-Tn-bOb"/>
+                                    <constraint firstAttribute="width" constant="30" id="CVQ-ek-5I2"/>
+                                    <constraint firstAttribute="height" constant="30" id="tBN-6s-rnx"/>
                                 </constraints>
-                                <state key="normal" title="Calendar" image="icon-calendar">
+                                <state key="normal" title="Button" image="icon-calendar">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <variation key="default">
                                     <mask key="constraints">
-                                        <exclude reference="XRY-y9-F9M"/>
-                                        <exclude reference="vTn-Tn-bOb"/>
+                                        <exclude reference="CVQ-ek-5I2"/>
+                                        <exclude reference="tBN-6s-rnx"/>
                                     </mask>
                                 </variation>
                                 <variation key="heightClass=regular-widthClass=compact">
                                     <mask key="constraints">
-                                        <include reference="XRY-y9-F9M"/>
-                                        <include reference="vTn-Tn-bOb"/>
+                                        <include reference="CVQ-ek-5I2"/>
+                                        <include reference="tBN-6s-rnx"/>
                                     </mask>
                                 </variation>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="CLW-AX-ppI" firstAttribute="top" secondItem="EiN-Bv-i8h" secondAttribute="bottom" id="4Yc-IU-R2N"/>
-                            <constraint firstItem="qbm-XQ-Irw" firstAttribute="leading" secondItem="M1m-aY-GnY" secondAttribute="leadingMargin" id="Bhu-RU-cfO"/>
-                            <constraint firstItem="CLW-AX-ppI" firstAttribute="trailing" secondItem="M1m-aY-GnY" secondAttribute="trailingMargin" id="PPx-7O-sLd"/>
-                            <constraint firstItem="qbm-XQ-Irw" firstAttribute="top" secondItem="EiN-Bv-i8h" secondAttribute="bottom" id="vq2-Me-ezM"/>
+                            <constraint firstItem="jBt-UW-TiN" firstAttribute="trailing" secondItem="M1m-aY-GnY" secondAttribute="trailingMargin" id="AVW-4q-a46"/>
+                            <constraint firstItem="Ffa-lz-b1X" firstAttribute="top" secondItem="EiN-Bv-i8h" secondAttribute="bottom" id="d7p-fn-Sg5"/>
+                            <constraint firstItem="jBt-UW-TiN" firstAttribute="top" secondItem="EiN-Bv-i8h" secondAttribute="bottom" id="k3m-p0-k5b"/>
+                            <constraint firstItem="Ffa-lz-b1X" firstAttribute="leading" secondItem="M1m-aY-GnY" secondAttribute="leadingMargin" id="m7Z-tk-zQT"/>
                         </constraints>
                         <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="jBt-UW-TiN"/>
+                                <exclude reference="Ffa-lz-b1X"/>
+                            </mask>
                             <mask key="constraints">
-                                <exclude reference="Bhu-RU-cfO"/>
-                                <exclude reference="vq2-Me-ezM"/>
-                                <exclude reference="4Yc-IU-R2N"/>
-                                <exclude reference="PPx-7O-sLd"/>
+                                <exclude reference="d7p-fn-Sg5"/>
+                                <exclude reference="m7Z-tk-zQT"/>
+                                <exclude reference="AVW-4q-a46"/>
+                                <exclude reference="k3m-p0-k5b"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
+                            <mask key="subviews">
+                                <include reference="jBt-UW-TiN"/>
+                                <include reference="Ffa-lz-b1X"/>
+                            </mask>
                             <mask key="constraints">
-                                <include reference="Bhu-RU-cfO"/>
-                                <include reference="vq2-Me-ezM"/>
-                                <include reference="4Yc-IU-R2N"/>
-                                <include reference="PPx-7O-sLd"/>
+                                <include reference="d7p-fn-Sg5"/>
+                                <include reference="m7Z-tk-zQT"/>
+                                <include reference="AVW-4q-a46"/>
+                                <include reference="k3m-p0-k5b"/>
                             </mask>
                         </variation>
                     </view>
                     <connections>
+                        <outlet property="calendarButton" destination="Ffa-lz-b1X" id="f3H-Gt-QaR"/>
+                        <outlet property="settingsButton" destination="jBt-UW-TiN" id="qSz-US-9dD"/>
                         <segue destination="XXV-9D-qPc" kind="custom" identifier="MovingToSettingsView" customClass="SeguePushFromRight" id="Tht-xO-IGR"/>
                         <segue destination="rGA-1A-dyN" kind="custom" identifier="MovingToCalendarView" customClass="SeguePushFromLeft" id="sB3-5V-ejp"/>
                     </connections>

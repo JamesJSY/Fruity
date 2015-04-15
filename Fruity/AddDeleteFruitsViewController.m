@@ -12,18 +12,21 @@
 #import "FruitItemDBHelper.h"
 #import "UnwindSegueGoToRight.h"
 
+#define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
+
 @interface AddDeleteFruitsViewController ()
 
 @property CGRect screenRect;
 
 @property (nonatomic) UIScrollView *fruitsInHandView;
 @property (nonatomic) UIScrollView *fruitsAddView;
-@property (weak, nonatomic) IBOutlet UIButton *settingsButton;
-@property (weak, nonatomic) IBOutlet UIButton *calendarButton;
 
 @property (nonatomic) NSMutableArray *allFruitsBasicInfo;
 @property (nonatomic) NSArray *fruitsInHand;
 @property (nonatomic) NSMutableArray *seasonalFruits;
+
+@property (weak, nonatomic) IBOutlet UIButton *calendarButton;
+@property (weak, nonatomic) IBOutlet UIButton *settingsButton;
 
 @property (nonatomic) FruitItemDBHelper *dbHelper;
 @property (nonatomic) NSString *dataBaseName;
@@ -56,7 +59,7 @@
     // Create calendar button
     [self.calendarButton addTarget:self action:@selector(goToCalendarView:) forControlEvents:UIControlEventTouchUpInside];
     
-    self.view.backgroundColor = [UIColor colorWithRed:(CGFloat)173/255 green:(CGFloat)217/255 blue:(CGFloat)194/255 alpha:1];
+    self.view.backgroundColor = UIColorFromRGB(0xf4f4cd);
     
     // Create two subview, one for displaying fruits bought and one for displaying what fruits can be added.
     self.fruitsInHandView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 60, self.screenRect.size.width , self.screenRect.size.height / 2 - 30)];
