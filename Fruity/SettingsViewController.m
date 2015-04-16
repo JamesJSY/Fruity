@@ -78,7 +78,7 @@
     
     UITapGestureRecognizer *tapToHideTipForNotification = [[UITapGestureRecognizer alloc]
                                                            initWithTarget:self
-                                                           action:@selector(hideTipForNotification:)];
+                                                           action:@selector(hideTipForNotification)];
     [self.view addGestureRecognizer:tapToHideTipForNotification];
 }
 
@@ -147,7 +147,7 @@
         
         UIButton *reminderDeleteButton = [[UIButton alloc] init];
         [reminderDeleteButton setImage:[UIImage imageNamed:@"delete.png"] forState:UIControlStateNormal];
-        reminderDeleteButton.frame = CGRectMake(0, 0, self.screenRect.size.width / 30, self.screenRect.size.width / 30);
+        reminderDeleteButton.frame = CGRectMake(0, 0, self.screenRect.size.width / 24, self.screenRect.size.width / 24);
         reminderDeleteButton.center = CGPointMake(reminderDisplayButton.center.x + self.screenRect.size.width / 10, reminderDisplayButton.center.y - self.screenRect.size.width / 10);
         reminderDeleteButton.tag = i;
         [reminderDeleteButton addTarget:self action:@selector(deleteReminder:) forControlEvents:UIControlEventTouchUpInside];
@@ -181,6 +181,7 @@
     self.notificationTextView.textAlignment = NSTextAlignmentCenter;
     self.notificationTextView.backgroundColor = self.view.backgroundColor;
     self.notificationTextView.center = CGPointMake(self.screenRect.size.width / 2, self.addReminderButton.center.y + self.screenRect.size.height / 5);
+    self.notificationTextView.editable = NO;
     
     self.switchNotificationButton = [[UIButton alloc] init];
     if (self.isNotificationOn)
@@ -199,13 +200,14 @@
     
     self.notificationTipTextView = [[UITextView alloc] init];
     self.notificationTipTextView.text = @"Send Notification to remind you of fruits time";
-    self.notificationTipTextView.textColor = UIColorFromRGB(0xabacab);
+    self.notificationTipTextView.textColor = UIColorFromRGB(0xf4f4cd);
     self.notificationTipTextView.font = self.font;
-    self.notificationTipTextView.frame = CGRectMake(0, 0, self.screenRect.size.width * 5 / 6, self.screenRect.size.height / 8);
+    self.notificationTipTextView.frame = CGRectMake(0, 0, self.screenRect.size.width * 5 / 6, self.screenRect.size.height / 12);
     self.notificationTipTextView.textAlignment = NSTextAlignmentCenter;
     self.notificationTipTextView.layer.cornerRadius = 5;
-    self.notificationTipTextView.backgroundColor = UIColorFromRGB(0xadd9c2);
+    self.notificationTipTextView.backgroundColor = UIColorFromRGB(0xd26168);
     self.notificationTipTextView.center = CGPointMake(self.screenRect.size.width / 2, self.screenRect.size.height * 2 / 5);
+    self.notificationTipTextView.editable = NO;
     [self.notificationTipTextView setHidden:YES];
     
     [self.view addSubview:self.addReminderButton];
@@ -388,7 +390,7 @@
     [self.notificationTipTextView setHidden:NO];
 }
 
-- (void)hideTipForNotification:(UIButton*)tipButton {
+- (void)hideTipForNotification{
     [self.notificationTipTextView setHidden:YES];
 }
 
