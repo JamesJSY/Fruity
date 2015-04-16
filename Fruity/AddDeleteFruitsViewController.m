@@ -26,13 +26,14 @@
 @property (nonatomic) NSMutableArray *seasonalFruits;
 
 @property (nonatomic) NSMutableArray *allSeasonalFruitsButton;
+@property (nonatomic) NSMutableArray *allStorageFruitsButton;
 
 @property (nonatomic) UIButton *calendarButton;
 @property (nonatomic) UIButton *settingsButton;
 
 @property (nonatomic) UITextView *seasonalFruitTextView;
 @property (nonatomic) UITextView *monthTextView;
-
+@property (nonatomic) UIImageView *animationImageViewBottom;
 
 @property (nonatomic) FruitItemDBHelper *dbHelper;
 @property (nonatomic) NSString *dataBaseName;
@@ -77,11 +78,28 @@
     [self.addFruitBottomView setHidden:YES];
     self.displayStorageBottomView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.screenRect.size.height, self.screenRect.size.width, self.screenRect.size.height)];
     self.displayStorageBottomView.backgroundColor = UIColorFromRGB(0xadd9c2);
+    self.displayStorageBottomView.clipsToBounds = NO;
     [self.displayStorageBottomView setHidden:YES];
     
     self.allSeasonalFruitsButton = [[NSMutableArray alloc] init];
+    self.allStorageFruitsButton = [[NSMutableArray alloc] init];
     self.canScrollDown = NO;
     self.isInAddingStatus = NO;
+    
+    // Initialize the animation image view
+    self.animationImageViewBottom = [[UIImageView alloc] init];
+    NSMutableArray *allChewingImages = [[NSMutableArray alloc] init];
+    for (int i = 0; i < 8; i++) {
+        [allChewingImages addObject:[UIImage imageNamed:[NSString stringWithFormat:@"monsterChew%d.png", i]]];
+    }
+    [self.animationImageViewBottom setAnimationImages:allChewingImages];
+    [self.animationImageViewBottom setAnimationDuration:1.0];
+    [self.animationImageViewBottom setAnimationRepeatCount:1];
+    self.animationImageViewBottom.frame = CGRectMake(0, 0, self.screenRect.size.width / 3, self.screenRect.size.width / 3);
+    self.animationImageViewBottom.center = CGPointMake(self.screenRect.size.width / 2, 0);
+    
+    [self.displayStorageBottomView addSubview:self.animationImageViewBottom];
+
     
     // Load all static subviews
     [self loadStaticSubviews];
@@ -175,6 +193,7 @@
                      completion:^(BOOL finished) {
                          //self.addFruitButton.transform = CGAffineTransformMakeScale(1 / 1.2, 1 / 1.2);
                          
+                         self.isInAddingStatus = NO;
                          
                          self.mainView.backgroundColor = UIColorFromRGB(0xf4f4cd);
                          [self.seasonalFruitTextView setAlpha:1];
@@ -195,14 +214,37 @@
 
 }
 
--(void)deleteFruitsToDatabase:(FruitTouchButton*)inputFruit {
-    NSLog(@"%@ is pressed in delete view!", inputFruit.fruitItem.name);
+- (void)dragFruitButton:(FruitTouchButton*)inputFruit withEvent:(UIEvent*) event{
+    
+    inputFruit.center = [[[event allTouches] anyObject] locationInView:self.displayStorageBottomView];
+    
+    /*
+    // Start chewing animation
+    [self.animationImageViewBottom startAnimating];
     
     // Delete the pressed item in the database
     [self.dbHelper deleteFruitItemsFromDB:inputFruit.fruitItem.ID];
     
     // Reload the view that display storage list
-    [self loadDisplayStorageBottomView];
+    [self loadDisplayStorageBottomView];*/
+}
+
+- (void)releaseFruitButton:(FruitTouchButton*)inputFruit withEvent:(UIEvent*) event{
+    CGPoint point = [[[event allTouches] anyObject] locationInView:self.displayStorageBottomView];
+    
+    if ( CGRectContainsPoint(self.animationImageViewBottom.frame, point)) {
+        // Start chewing animation
+        [self.animationImageViewBottom startAnimating];
+        
+        // Delete the pressed item in the database
+        [self.dbHelper deleteFruitItemsFromDB:inputFruit.fruitItem.ID];
+        
+        // Reload the view that display storage list
+        [self loadDisplayStorageBottomView];
+    }
+    else {
+        inputFruit.frame = CGRectMake((float)20 + inputFruit.tag * self.screenRect.size.width / 5, 30, (float) self.screenRect.size.width / 5 * 2 / 3, (float) self.screenRect.size.width / 5 * 2 / 3);
+    }
 }
 
 - (void)loadStaticSubviews {
@@ -233,10 +275,11 @@
     self.eatButton.titleLabel.font = self.font;
     self.eatButton.titleLabel.textColor = UIColorFromRGB(0x676f6b);
     [self.eatButton setTitleEdgeInsets: UIEdgeInsetsMake(75,0,0,0)];
+    
     [self.mainView addSubview:self.eatButton];
     
     // Load seasonal fruits to the middle of the mainView;
-    self.AddSeasonalFruitView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.screenRect.size.height / 3, self.screenRect.size.width, self.screenRect.size.height / 2)];
+    self.AddSeasonalFruitView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.screenRect.size.height / 5, self.screenRect.size.width, self.screenRect.size.height * 3 / 5)];
     [self loadFruitsAddViewWitnSeasonalFruits];
     [self.mainView addSubview:self.AddSeasonalFruitView];
 }
@@ -244,6 +287,10 @@
 - (void)showStorageBottomView:(UIButton *)eatButton {
     [self.displayStorageBottomView setHidden:NO];
     self.canScrollDown = YES;
+    self.eatButton.frame = CGRectMake(0, 0, self.screenRect.size.width / 3, self.screenRect.size.width / 3);
+    self.eatButton.center = CGPointMake(self.screenRect.size.width / 2, self.screenRect.size.height);
+    [self.eatButton setImage:[UIImage imageNamed:@"monsterChew0"] forState:UIControlStateNormal];
+    [self.mainView bringSubviewToFront:self.eatButton];
     
     [self.eatButton setUserInteractionEnabled:NO];
     for (int i = 0; i < [self.allSeasonalFruitsButton count]; i++) {
@@ -263,7 +310,7 @@
 }
 
 - (void)gestureRecognition {
-
+    
     if (self.isInAddingStatus) {
         self.isInAddingStatus = NO;
         
@@ -311,6 +358,10 @@
                                  [self.allSeasonalFruitsButton[i] setUserInteractionEnabled:YES];
                              }
                              [self.eatButton setUserInteractionEnabled:YES];
+                             
+                             self.eatButton.frame = CGRectMake(0, 0, self.screenRect.size.width / 3, self.screenRect.size.width / 6);
+                             self.eatButton.center = CGPointMake(self.screenRect.size.width / 2, self.screenRect.size.height - self.screenRect.size.width / 12);
+                             [self.eatButton setImage:[UIImage imageNamed:@"eat-button"] forState:UIControlStateNormal];
                          }];
     }
 }
@@ -378,33 +429,26 @@
             [seasonalFruit setImage:[UIImage imageNamed:imageFileName] forState:UIControlStateNormal];
             seasonalFruit.fruitItem = [[FruitItem alloc] init];
             seasonalFruit.fruitItem.name = [[NSString alloc] initWithString:item.fruitName];
-            seasonalFruit.frame = CGRectMake(0, 0, self.screenRect.size.width / 9, self.screenRect.size.width / 9);
-            /*int row = (int)([self.seasonalFruits count] - 1) / itemsPerRow;
-            int column = (int)([self.seasonalFruits count] - 1) % itemsPerRow;
-            seasonalFruit.frame = CGRectMake(20 + column * pixelsWidthForDisplayingItem, 20 + row * pixelsWidthForDisplayingItem, pixelsWidthForDisplayingItem * itemDisplayRatio, pixelsWidthForDisplayingItem * itemDisplayRatio);*/
-            int currentNumber = [self.allSeasonalFruitsButton count] + 1;
-            if (currentNumber <= 2) {
-                seasonalFruit.center = CGPointMake(self.screenRect.size.width / 2 + (currentNumber - 1) * self.screenRect.size.width / 6, self.screenRect.size.height / 20);
-            }
-            else if (currentNumber <= 5) {
-                seasonalFruit.center = CGPointMake(self.screenRect.size.width * 5 / 6, (currentNumber - 2) * self.screenRect.size.width / 6);
-            }
-            else if (currentNumber <= 8) {
-                seasonalFruit.center = CGPointMake(self.screenRect.size.width * 5 / 6 - (currentNumber - 5) * self.screenRect.size.width / 6, self.screenRect.size.height * 1 / 3);
-            }
-            else {
-                seasonalFruit.center = CGPointMake(self.screenRect.size.width * 1 / 6, self.screenRect.size.height * 1 / 3 - (currentNumber - 8) * self.screenRect.size.width / 6);
-            }
+            seasonalFruit.frame = CGRectMake(0, 0, self.screenRect.size.width / 7, self.screenRect.size.width / 7);
             
             [self.allSeasonalFruitsButton addObject:seasonalFruit];
             [self.AddSeasonalFruitView addSubview:seasonalFruit];
         }
     }
+    
+    double radius = (double) self.screenRect.size.width / 3;
+    double degreePerButton = (double) 2 * M_PI / [self.allSeasonalFruitsButton count];
+    
+    for (int i = 0; i < [self.allSeasonalFruitsButton count]; i++) {
+        double degree = (double) degreePerButton * i;
+        [self.allSeasonalFruitsButton[i] setCenter:CGPointMake(self.screenRect.size.width / 2 + radius * sin(degree), self.screenRect.size.height * 3 / 10 - radius * cos(degree))];
+        
+    }
 }
 
 - (void)loadAddFruitBottomView {
     self.addFruitBottomView.backgroundColor = [UIColor blackColor];
-    
+
     UITextView *quantityText = [[UITextView alloc] init];
     quantityText.frame = CGRectMake(0, self.screenRect.size.height / 18, self.screenRect.size.width / 3, self.screenRect.size.height / 12);
     quantityText.text = @"Quantity";
@@ -436,7 +480,10 @@
 - (void)loadDisplayStorageBottomView {
     
     // Remove all subviews currently in the fruitsInHandView
-    [self.displayStorageBottomView.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
+    //[self.displayStorageBottomView.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
+    for (int i = 0; i < [self.allStorageFruitsButton count]; i++) {
+        [self.allStorageFruitsButton[i] removeFromSuperview];
+    }
     
     // Reinitialize _fruitsInHand
     if (self.fruitsInHand != nil) {
@@ -444,6 +491,9 @@
     }
     NSString *query = [NSString stringWithFormat:(@"SELECT * FROM '%@'"), self.dataBaseName];
     self.fruitsInHand = [[NSArray alloc] initWithArray:[self.dbHelper loadFruitItemsFromDB:query]];
+    
+    self.allStorageFruitsButton = nil;
+    self.allStorageFruitsButton = [[NSMutableArray alloc] init];
     
     // Set the display mode
     float pixelsWidthForDisplayingItem = self.screenRect.size.width / 5;
@@ -454,12 +504,17 @@
         FruitItem *item = self.fruitsInHand[i];
         
         FruitTouchButton *fruitInHand = [[FruitTouchButton alloc] init];
-        [fruitInHand addTarget:self action:@selector(deleteFruitsToDatabase:) forControlEvents:UIControlEventTouchUpInside];
+        [fruitInHand addTarget:self action:@selector(dragFruitButton:withEvent:) forControlEvents:UIControlEventTouchDragInside];
+        [fruitInHand addTarget:self action:@selector(releaseFruitButton:withEvent:) forControlEvents:UIControlEventTouchUpInside];
+        
         NSString *imageFileName = [item.name stringByAppendingString:@".png"];
         [fruitInHand setImage:[UIImage imageNamed:imageFileName] forState:UIControlStateNormal];
         fruitInHand.fruitItem = [[FruitItem alloc] initWithFruitItem:item];
+        fruitInHand.tag = i;
         
-        fruitInHand.frame = CGRectMake(20 + i * pixelsWidthForDisplayingItem, 20, pixelsWidthForDisplayingItem * itemDisplayRatio, pixelsWidthForDisplayingItem * itemDisplayRatio);
+        fruitInHand.frame = CGRectMake(20 + i * pixelsWidthForDisplayingItem, 30, pixelsWidthForDisplayingItem * itemDisplayRatio, pixelsWidthForDisplayingItem * itemDisplayRatio);
+        
+        [self.allStorageFruitsButton addObject:fruitInHand];
         [self.displayStorageBottomView addSubview:fruitInHand];
     }
     // Resize the scroll board size according to the item size

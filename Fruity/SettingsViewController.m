@@ -441,7 +441,7 @@
         UIButton *currentReminderButton = sender;
         destinationViewController.date = self.reminderTimes[currentReminderButton.tag];
         destinationViewController.isFromAddButton = NO;
-        self.pressButtonTag = currentReminderButton.tag;
+        self.pressButtonTag = (int)currentReminderButton.tag;
     }
 }
 
