@@ -41,7 +41,8 @@
 @property (nonatomic) UIView *mainView;
 @property (nonatomic) UIScrollView *AddSeasonalFruitView;
 @property (nonatomic) UIView *addFruitBottomView;
-@property (nonatomic) UIScrollView *displayStorageBottomView;
+@property (nonatomic) UIView *displayStorageBottomView;
+@property (nonatomic) UIScrollView *storageListScrollView;
 
 @property (nonatomic) UIFont *font;
 
@@ -76,10 +77,15 @@
     // Initialize two views at the bottom
     self.addFruitBottomView = [[UIView alloc] initWithFrame:CGRectMake(0, self.screenRect.size.height, self.screenRect.size.width, self.screenRect.size.height / 6)];
     [self.addFruitBottomView setHidden:YES];
-    self.displayStorageBottomView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.screenRect.size.height, self.screenRect.size.width, self.screenRect.size.height)];
+    self.displayStorageBottomView = [[UIView alloc] initWithFrame:CGRectMake(0, self.screenRect.size.height, self.screenRect.size.width, self.screenRect.size.height)];
     self.displayStorageBottomView.backgroundColor = UIColorFromRGB(0xadd9c2);
     self.displayStorageBottomView.clipsToBounds = NO;
     [self.displayStorageBottomView setHidden:YES];
+    
+    self.storageListScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 30, self.screenRect.size.width, self.screenRect.size.height / 3)];
+    self.storageListScrollView.backgroundColor = [UIColor clearColor];
+    self.storageListScrollView.clipsToBounds = NO;
+    [self.displayStorageBottomView addSubview:self.storageListScrollView];
     
     self.allSeasonalFruitsButton = [[NSMutableArray alloc] init];
     self.allStorageFruitsButton = [[NSMutableArray alloc] init];
@@ -216,7 +222,7 @@
 
 - (void)dragFruitButton:(FruitTouchButton*)inputFruit withEvent:(UIEvent*) event{
     
-    inputFruit.center = [[[event allTouches] anyObject] locationInView:self.displayStorageBottomView];
+    inputFruit.center = [[[event allTouches] anyObject] locationInView:self.storageListScrollView];
     
     /*
     // Start chewing animation
@@ -301,8 +307,8 @@
                           delay:0
                         options:0
                      animations:^{
-                         self.mainView.frame = CGRectOffset(self.mainView.frame, 0, -self.screenRect.size.height / 6);
-                         self.displayStorageBottomView.frame = CGRectOffset(self.displayStorageBottomView.frame, 0, -self.screenRect.size.height / 6);
+                         self.mainView.frame = CGRectOffset(self.mainView.frame, 0, -self.screenRect.size.height / 4);
+                         self.displayStorageBottomView.frame = CGRectOffset(self.displayStorageBottomView.frame, 0, -self.screenRect.size.height / 4);
                      }
                      completion:^(BOOL finished) {
                          
@@ -348,8 +354,8 @@
                               delay:0
                             options:0
                          animations:^{
-                             self.mainView.frame = CGRectOffset(self.mainView.frame, 0, self.screenRect.size.height / 6);
-                             self.displayStorageBottomView.frame = CGRectOffset(self.displayStorageBottomView.frame, 0, self.screenRect.size.height / 6);
+                             self.mainView.frame = CGRectOffset(self.mainView.frame, 0, self.screenRect.size.height / 4);
+                             self.displayStorageBottomView.frame = CGRectOffset(self.displayStorageBottomView.frame, 0, self.screenRect.size.height / 4);
                          }
                          completion:^(BOOL finished) {
                              [self.displayStorageBottomView setHidden:YES];
@@ -515,10 +521,10 @@
         fruitInHand.frame = CGRectMake(20 + i * pixelsWidthForDisplayingItem, 30, pixelsWidthForDisplayingItem * itemDisplayRatio, pixelsWidthForDisplayingItem * itemDisplayRatio);
         
         [self.allStorageFruitsButton addObject:fruitInHand];
-        [self.displayStorageBottomView addSubview:fruitInHand];
+        [self.storageListScrollView addSubview:fruitInHand];
     }
     // Resize the scroll board size according to the item size
-    self.displayStorageBottomView.contentSize = CGSizeMake(([self.fruitsInHand count] + 1) *pixelsWidthForDisplayingItem, self.screenRect.size.height / 6);
+    self.storageListScrollView.contentSize = CGSizeMake(([self.fruitsInHand count] + 1) *pixelsWidthForDisplayingItem, self.screenRect.size.height / 6);
 
 }
 
