@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DisplaySeasonalFruitsScrollView.h"
+#import "AddFruitBottomView.h"
+#import "DisplayStorageBottomView.h"
 
-@interface AddDeleteFruitsViewController : UIViewController
+@interface AddDeleteFruitsViewController : UIViewController <DisplaySeasonalFruitsScrollViewDelegate,AddFruitBottomViewDelegate, DisplayStorageBottomViewDelegate>
 
 @end

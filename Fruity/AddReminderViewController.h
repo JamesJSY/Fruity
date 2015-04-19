@@ -11,6 +11,7 @@
 @interface AddReminderViewController : UIViewController
 
 @property NSDate *date;
+@property bool didClickDelete;
 @property (nonatomic) bool isFromAddButton;
 
 @end

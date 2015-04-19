@@ -27,7 +27,7 @@
 @property (nonatomic) UIButton *switchNotificationButton;
 @property (nonatomic) UIButton *notificationTipButton;
 @property (nonatomic) NSMutableArray *allRemindersButtons;
-@property (nonatomic) NSMutableArray *allRemindersDeleteButtons;
+//@property (nonatomic) NSMutableArray *allRemindersDeleteButtons;
 
 @property (nonatomic) UIFont *font;
 @property (nonatomic) bool isNotificationOn;
@@ -120,10 +120,6 @@
     [self.allRemindersButtons removeAllObjects];
     self.allRemindersButtons = [[NSMutableArray alloc] init];
     
-    // Reinitialize the array of all reminder delete buttons
-    [self.allRemindersDeleteButtons removeAllObjects];
-    self.allRemindersDeleteButtons = [[NSMutableArray alloc] init];
-    
     // Each row is going to display 3 timers
     int remindersPerRow = 3;
     
@@ -144,17 +140,17 @@
         [reminderDisplayButton addTarget:self action:@selector(updateReminder:) forControlEvents:UIControlEventTouchUpInside];
         
         [self.allRemindersButtons addObject:reminderDisplayButton];
-        
+        /*
         UIButton *reminderDeleteButton = [[UIButton alloc] init];
         [reminderDeleteButton setImage:[UIImage imageNamed:@"delete.png"] forState:UIControlStateNormal];
         reminderDeleteButton.frame = CGRectMake(0, 0, self.screenRect.size.width / 24, self.screenRect.size.width / 24);
         reminderDeleteButton.center = CGPointMake(reminderDisplayButton.center.x + self.screenRect.size.width / 10, reminderDisplayButton.center.y - self.screenRect.size.width / 10);
         reminderDeleteButton.tag = i;
         [reminderDeleteButton addTarget:self action:@selector(deleteReminder:) forControlEvents:UIControlEventTouchUpInside];
-        [self.allRemindersDeleteButtons addObject:reminderDeleteButton];
+        [self.allRemindersDeleteButtons addObject:reminderDeleteButton];*/
         
         [self.displayReminderView addSubview:reminderDisplayButton];
-        [self.displayReminderView addSubview:reminderDeleteButton];
+        //[self.displayReminderView addSubview:reminderDeleteButton];
     }
     
     [self.view addSubview:self.displayReminderView];
@@ -194,7 +190,7 @@
     
     self.notificationTipButton = [[UIButton alloc] init];
     [self.notificationTipButton setImage:[UIImage imageNamed:@"questionmark.png"] forState:UIControlStateNormal];
-    self.notificationTipButton.frame = CGRectMake(0, 0, self.screenRect.size.width / 20, self.screenRect.size.width / 20);
+    self.notificationTipButton.frame = CGRectMake(0, 0, self.screenRect.size.width / 15, self.screenRect.size.width / 15);
     [self.notificationTipButton addTarget:self action:@selector(showTipForNotification:) forControlEvents:UIControlEventTouchUpInside];
     [self.notificationTipButton setHidden:YES];
     
@@ -250,27 +246,6 @@
     [self performSegueWithIdentifier:@"addOrUpdateReminderSegue" sender:reminderButton];
 }
 
-- (void)deleteReminder:(UIButton*)deleteButton {
-    // Make the reminder button and it's related delete button vanish gradually
-    [UIView animateWithDuration:0.5
-                          delay:0
-                        options:0
-                     animations:^{
-                         [self.allRemindersButtons[deleteButton.tag] setAlpha:0.0];
-                         [self.allRemindersDeleteButtons[deleteButton.tag] setAlpha:0.0];
-                     }
-                     completion:^(BOOL finished){
-                         // Delete the row from deleteButton.tag
-                         [self.reminderTimes removeObjectAtIndex:deleteButton.tag];
-                         
-                         // Update stored object in the userPreference
-                         [self.userPreference setObject:self.reminderTimes forKey:@"notificationRemindTimes"];
-                         
-                         // Reload all reminders
-                         [self displayReminders];
-                     }];
-}
-
 - (void)switchNotification:(UIButton*)switchButton {
     
     // Reverse notification on/off and save it to the user preference
@@ -289,7 +264,6 @@
         
         for (int i = 0; i < [self.allRemindersButtons count]; i++) {
             [self.allRemindersButtons[i] setAlpha:0.0];
-            [self.allRemindersDeleteButtons[i] setAlpha:0.0];
         }
         
         [self.displayReminderView setHidden:NO];
@@ -314,7 +288,6 @@
                                                   // Show all reminder buttons
                                                   for (int i = 0; i < [self.allRemindersButtons count]; i++) {
                                                       [self.allRemindersButtons[i] setAlpha:1.0];
-                                                      [self.allRemindersDeleteButtons[i] setAlpha:1.0];
                                                   }
                                                   // Show add reminder button hidden
                                                   [self.addReminderButton setAlpha:1.0];
@@ -345,7 +318,6 @@
                              // Set all reminder buttons hidden
                              for (int i = 0; i < [self.allRemindersButtons count]; i++) {
                                  [self.allRemindersButtons[i] setAlpha:0.0];
-                                 [self.allRemindersDeleteButtons[i] setAlpha:0.0];
                              }
                              // Set add reminder button hidden
                              [self.addReminderButton setAlpha:0.0];
@@ -412,14 +384,28 @@
     }
     // If the user pressed one reminder button and return from the addReminderViewController
     else {
-        // Update the date at index of datePicker.tag in notificationRemindTimes array
-        [self.reminderTimes replaceObjectAtIndex:self.pressButtonTag withObject:sourceViewController.date];
         
-        // Update the stored object in the userPreference
-        [self.userPreference setObject:self.reminderTimes forKey:@"notificationRemindTimes"];
+        // If the user deleted the current reminder in the add reminder view controller
+        if (sourceViewController.didClickDelete) {
+            // Remove the object and reload the reminder view
+            [self.reminderTimes removeObjectAtIndex:self.pressButtonTag];
+            
+            // Update stored object in the userPreference
+            [self.userPreference setObject:self.reminderTimes forKey:@"notificationRemindTimes"];
+            
+            // Reload all reminders
+            [self displayReminders];
+        }
+        else {
+            // Update the date at index of datePicker.tag in notificationRemindTimes array
+            [self.reminderTimes replaceObjectAtIndex:self.pressButtonTag withObject:sourceViewController.date];
         
-        // Reload all reminders
-        [self displayReminders];
+            // Update the stored object in the userPreference
+            [self.userPreference setObject:self.reminderTimes forKey:@"notificationRemindTimes"];
+        
+            // Reload all reminders
+            [self displayReminders];
+        }
     }
 }
 

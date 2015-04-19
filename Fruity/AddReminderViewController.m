@@ -13,6 +13,7 @@
 @property (weak, nonatomic) IBOutlet UIDatePicker *myDatepicker;
 @property (weak, nonatomic) IBOutlet UIButton *saveButton;
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
+@property (weak, nonatomic) IBOutlet UIButton *deleteButton;
 
 @end
 
@@ -23,6 +24,10 @@
     // Do any additional setup after loading the view.
     self.myDatepicker.datePickerMode = UIDatePickerModeTime;
     self.myDatepicker.date = self.date;
+    self.didClickDelete = false;
+    if (self.isFromAddButton) {
+        [self.deleteButton setHidden:YES];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -42,6 +47,9 @@
     }
     else if (self.isFromAddButton) {
         self.date = nil;
+    }
+    else if (self.deleteButton) {
+        self.didClickDelete = YES;
     }
 }
 
