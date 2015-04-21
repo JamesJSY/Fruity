@@ -8,11 +8,18 @@
 
 #import "GlobalVariables.h"
 
+#define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
+
 @implementation GlobalVariables
 
 @synthesize screenWidth;
 @synthesize screenHeight;
 @synthesize font;
+@synthesize blueColor;
+@synthesize softWhiteColor;
+@synthesize darkGreyColor;
+@synthesize lightGreyColor;
+@synthesize pinkColor;
 
 static GlobalVariables *instance = nil;
 
@@ -26,6 +33,12 @@ static GlobalVariables *instance = nil;
             instance.screenWidth = screenRect.size.width;
             instance.screenHeight = screenRect.size.height;
             instance.font = [UIFont fontWithName:@"AvenirLTStd-Light" size:16];
+            
+            instance.blueColor = UIColorFromRGB(0xadd9c2);
+            instance.softWhiteColor = UIColorFromRGB(0xf4f4cd);
+            instance.darkGreyColor = UIColorFromRGB(0x676f6b);
+            instance.lightGreyColor = UIColorFromRGB(0xabacab);
+            instance.pinkColor = UIColorFromRGB(0xd26168);
         }
     }
     return instance;

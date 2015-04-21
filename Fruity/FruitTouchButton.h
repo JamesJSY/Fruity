@@ -13,4 +13,6 @@
 
 @property FruitItem *fruitItem;
 
+- (instancetype)init;
+
 @end

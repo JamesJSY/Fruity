@@ -43,6 +43,7 @@
         self.seasonalFruitTextView.frame = CGRectMake(0, 0, 110, 50);
         self.seasonalFruitTextView.textAlignment = NSTextAlignmentCenter;
         self.seasonalFruitTextView.center = CGPointMake(self.frame.size.width / 2, self.frame.size.height / 2);
+        self.seasonalFruitTextView.editable = NO;
         [self addSubview:self.seasonalFruitTextView];
         
         self.monthTextView.font = [UIFont fontWithName:@"AvenirLTStd-Light" size:22];
@@ -52,6 +53,7 @@
         self.monthTextView.frame = CGRectMake(0, 0, 100, 50);
         self.monthTextView.textAlignment = NSTextAlignmentCenter;
         self.monthTextView.center = CGPointMake(self.frame.size.width / 2, self.frame.size.height / 2 + 40);
+        self.monthTextView.editable = NO;
         [self addSubview:self.monthTextView];
     }
     return (self);
@@ -85,7 +87,6 @@
             [seasonalFruit addTarget:self.superViewDelegate action:@selector(addFruitsToDatabase:) forControlEvents:UIControlEventTouchUpInside];
             NSString *imageFileName = [item.fruitName stringByAppendingString:@".png"];
             [seasonalFruit setImage:[UIImage imageNamed:imageFileName] forState:UIControlStateNormal];
-            seasonalFruit.fruitItem = [[FruitItem alloc] init];
             seasonalFruit.fruitItem.name = [[NSString alloc] initWithString:item.fruitName];
             seasonalFruit.frame = CGRectMake(0, 0, self.frame.size.width / 7, self.frame.size.width / 7);
             

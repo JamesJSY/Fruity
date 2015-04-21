@@ -29,6 +29,7 @@
 @property (nonatomic) NSString *dataBaseName;
 
 @property (nonatomic) UIView *mainView;
+@property (nonatomic) DisplaySearchBarView *displaySearchBarView;
 @property (nonatomic) DisplaySeasonalFruitsScrollView *displaySeasonalFruitsView;
 @property (nonatomic) AddFruitBottomView *addFruitBottomView;
 @property (nonatomic) DisplayStorageBottomView *displayStorageBottomView;
@@ -77,21 +78,27 @@
     NSInteger month = [dateComponents month];
     
     // Load seasonal fruits to the middle of the mainView
-    self.displaySeasonalFruitsView = [[DisplaySeasonalFruitsScrollView alloc] initWithFrame:CGRectMake(0, self.globalVs.screenHeight / 5, self.globalVs.screenWidth, self.globalVs.screenHeight * 3 / 5)];
+    self.displaySeasonalFruitsView = [[DisplaySeasonalFruitsScrollView alloc] initWithFrame:CGRectMake(0, self.globalVs.screenHeight / 4, self.globalVs.screenWidth, self.globalVs.screenHeight * 3 / 5)];
     self.displaySeasonalFruitsView.superViewDelegate = self;
-    [self.displaySeasonalFruitsView loadViewWithSeasonalFruitsBasicInfo:self.allFruitsBasicInfo withMonth:month];
+    [self.displaySeasonalFruitsView loadViewWithSeasonalFruitsBasicInfo:self.allFruitsBasicInfo withMonth:(int)month];
     [self.mainView addSubview:self.displaySeasonalFruitsView];
+    
+    // Load the search bar view
+    self.displaySearchBarView = [[DisplaySearchBarView alloc] initWithFrame:CGRectMake(0, self.globalVs.screenHeight / 9, self.globalVs.screenWidth, self.globalVs.screenHeight / 6)];
+    self.displaySearchBarView.superViewDelegate = self;
+    [self.mainView insertSubview:self.displaySearchBarView aboveSubview:self.displaySeasonalFruitsView];
     
     // Load bottom view that is in charge of the quantity of fruits added to the database
     self.addFruitBottomView = [[AddFruitBottomView alloc] initWithFrame:CGRectMake(0, self.globalVs.screenHeight, self.globalVs.screenWidth, self.globalVs.screenHeight / 6)];
     self.addFruitBottomView.superViewDelegate = self;
     [self.addFruitBottomView setHidden:YES];
-    [self.mainView addSubview:self.addFruitBottomView];
+    [self.view addSubview:self.addFruitBottomView];
     
     
     UITapGestureRecognizer *tapToAct = [[UITapGestureRecognizer alloc]
                                                            initWithTarget:self
                                                            action:@selector(gestureRecognition)];
+    tapToAct.cancelsTouchesInView = NO;
     [self.mainView addGestureRecognizer:tapToAct];
 }
 
@@ -135,8 +142,14 @@
     
 }
 
+- (void)addFruitToDBFromSearchBar:(NSString*)fruitName {
+    self.addFruitButton = [[FruitTouchButton alloc] init];
+    self.addFruitButton.fruitItem.name = fruitName;
+    
+    [self addFruitsToDatabase:self.addFruitButton];
+}
 
--(void)addFruitsToDatabase:(FruitTouchButton*)inputFruit {
+- (void)addFruitsToDatabase:(FruitTouchButton*)inputFruit {
     NSLog(@"%@ is pressed in add view!", inputFruit.fruitItem.name);
     self.isInAddingStatus = YES;
     
@@ -149,6 +162,7 @@
     [self.settingsButton setUserInteractionEnabled:NO];
     [self.settingsButton setAlpha:0.3];
     [self.displaySeasonalFruitsView highlightOneFruitTouchButton:inputFruit];
+    [self.displaySearchBarView setAlpha:0.3];
     
     // Shift the current view up a little bit
     [UIView animateWithDuration:0.3
@@ -158,7 +172,6 @@
                          self.addFruitBottomView.frame = CGRectOffset(self.addFruitBottomView.frame, 0, -self.globalVs.screenHeight / 6);
                      }
                      completion:nil];
-    //inputFruit.transform = CGAffineTransformMakeScale(1.2, 1.2);
     self.addFruitButton = inputFruit;
     
 }
@@ -193,7 +206,6 @@
                          self.addFruitBottomView.frame = CGRectOffset(self.addFruitBottomView.frame, 0, self.globalVs.screenHeight / 6);
                      }
                      completion:^(BOOL finished) {
-                         //self.addFruitButton.transform = CGAffineTransformMakeScale(1 / 1.2, 1 / 1.2);
                          
                          self.isInAddingStatus = NO;
                          
@@ -205,6 +217,7 @@
                          [self.settingsButton setUserInteractionEnabled:YES];
                          [self.settingsButton setAlpha:1];
                          [self.displaySeasonalFruitsView deHighlightFruitTouchButton];
+                         [self.displaySearchBarView setAlpha:1];
                          
                          [self.eatButton setHidden:NO];
                          [self.addFruitBottomView setHidden:YES];
@@ -222,7 +235,6 @@
     [self.dbHelper deleteFruitItemsFromDB:ID];
 }
 
-
 - (void)showStorageBottomView:(UIButton *)eatButton {
     [self.displayStorageBottomView setHidden:NO];
     self.canScrollDown = YES;
@@ -230,7 +242,7 @@
     [self.mainView bringSubviewToFront:self.eatButton];
     
     //[self.eatButton setUserInteractionEnabled:NO];
-    [self.displaySeasonalFruitsView disableAllFruitTouchButtonsInteraction];
+    
     
     [UIView animateWithDuration:0.3
                           delay:0
@@ -266,6 +278,7 @@
                              [self.settingsButton setAlpha:1];
                              
                              [self.displaySeasonalFruitsView deHighlightFruitTouchButton];
+                             [self.displaySearchBarView setAlpha:1];
                              
                              [self.eatButton setHidden:NO];
                              [self.addFruitBottomView setHidden:YES];

@@ -31,6 +31,7 @@
 		ABC428D41AD7601200BDA15D /* FruitTouchButton.m in Sources */ = {isa = PBXBuildFile; fileRef = ABC428D31AD7601200BDA15D /* FruitTouchButton.m */; };
 		ABC428D61AD98B9200BDA15D /* FruityDB.db in Resources */ = {isa = PBXBuildFile; fileRef = ABC428D51AD98B9200BDA15D /* FruityDB.db */; };
 		ABC428D91AD9AB1700BDA15D /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ABC428D81AD9AB1700BDA15D /* SettingsViewController.m */; };
+		ABC7A1351AE5AA2500F08733 /* DisplaySearchBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = ABC7A1341AE5AA2500F08733 /* DisplaySearchBarView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -88,6 +89,8 @@
 		ABC428D51AD98B9200BDA15D /* FruityDB.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = FruityDB.db; sourceTree = "<group>"; };
 		ABC428D71AD9AB1700BDA15D /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		ABC428D81AD9AB1700BDA15D /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
+		ABC7A1331AE5AA2500F08733 /* DisplaySearchBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisplaySearchBarView.h; sourceTree = "<group>"; };
+		ABC7A1341AE5AA2500F08733 /* DisplaySearchBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DisplaySearchBarView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,6 +150,8 @@
 				ABAF883A1ADDF3A7008FE837 /* AddReminderViewController.m */,
 				ABC4289E1AD6E49100BDA15D /* AddDeleteFruitsViewController.h */,
 				ABC4289F1AD6E49100BDA15D /* AddDeleteFruitsViewController.m */,
+				ABC7A1331AE5AA2500F08733 /* DisplaySearchBarView.h */,
+				ABC7A1341AE5AA2500F08733 /* DisplaySearchBarView.m */,
 				ABAF884B1AE32744008FE837 /* DisplayStorageBottomView.h */,
 				ABAF884C1AE32744008FE837 /* DisplayStorageBottomView.m */,
 				ABAF88481AE30B57008FE837 /* AddFruitBottomView.h */,
@@ -303,6 +308,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				ABAF883B1ADDF3A7008FE837 /* AddReminderViewController.m in Sources */,
+				ABC7A1351AE5AA2500F08733 /* DisplaySearchBarView.m in Sources */,
 				ABC428CB1AD72B0C00BDA15D /* FruitItem.m in Sources */,
 				ABAF884A1AE30B57008FE837 /* AddFruitBottomView.m in Sources */,
 				ABAF88441AE2DEAF008FE837 /* DisplaySeasonalFruitsScrollView.m in Sources */,

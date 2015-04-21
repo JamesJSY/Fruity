@@ -14,11 +14,22 @@
     int screenWidth;
     int screenHeight;
     UIFont *font;
+    UIColor *blueColor;
+    UIColor *softWhiteColor;
+    UIColor *darkGreyColor;
+    UIColor *lightGreyColor;
+    UIColor *pinkColor;
 }
 
 @property (nonatomic) int screenWidth;
 @property (nonatomic) int screenHeight;
 @property (nonatomic) UIFont *font;
+@property (nonatomic) UIColor *blueColor;
+@property (nonatomic) UIColor *softWhiteColor;
+@property (nonatomic) UIColor *darkGreyColor;
+@property (nonatomic) UIColor *lightGreyColor;
+@property (nonatomic) UIColor *pinkColor;
+
 + (GlobalVariables *)getInstance;
 
 @end

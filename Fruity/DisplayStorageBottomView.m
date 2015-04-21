@@ -137,7 +137,7 @@
     }
     else {
         inputFruit.frame = CGRectMake((float)20 + inputFruit.tag * self.frame.size.width / 5, 30, (float) self.frame.size.width / 5 * 2 / 3, (float) self.frame.size.width / 5 * 2 / 3);
-        [self.animationMouthOpeningImageViewBottom setImage:[UIImage imageNamed:@"monsterChew0.png"]];
+        //[self.animationMouthOpeningImageViewBottom setImage:[UIImage imageNamed:@"monsterChew0.png"]];
     }
 }
 

@@ -48,7 +48,7 @@
     else if (self.isFromAddButton) {
         self.date = nil;
     }
-    else if (self.deleteButton) {
+    else if (sender == self.deleteButton) {
         self.didClickDelete = YES;
     }
 }
