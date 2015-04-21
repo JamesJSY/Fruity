@@ -67,7 +67,47 @@
     self.seasonalFruits = [[NSMutableArray alloc] init];
     self.allSeasonalFruitsButton = [[NSMutableArray alloc] init];
 
-    self.monthTextView.text = @"April";
+    switch (month) {
+        case 1:
+            self.monthTextView.text = @"January";
+            break;
+        case 2:
+            self.monthTextView.text = @"February";
+            break;
+        case 3:
+            self.monthTextView.text = @"March";
+            break;
+        case 4:
+            self.monthTextView.text = @"April";
+            break;
+        case 5:
+            self.monthTextView.text = @"May";
+            break;
+        case 6:
+            self.monthTextView.text = @"June";
+            break;
+        case 7:
+            self.monthTextView.text = @"July";
+            break;
+        case 8:
+            self.monthTextView.text = @"August";
+            break;
+        case 9:
+            self.monthTextView.text = @"September";
+            break;
+        case 10:
+            self.monthTextView.text = @"October";
+            break;
+        case 11:
+            self.monthTextView.text = @"November";
+            break;
+        case 12:
+            self.monthTextView.text = @"December";
+            break;
+        default:
+            break;
+    }
+    
     
     // Compute what seasonal fruits are in the current month.
     for (int i = 0; i < [allFruitsBasicInfo count]; i++) {

@@ -31,7 +31,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         
-        self.allFruitNames = [[NSMutableArray alloc] initWithObjects:@"apple", @"apricot", @"avocado", @"banana", @"blackberry", @"blueberry", @"boysenberry", @"cherry", @"fig", @"grape", @"grapefruit", @"guava", @"kiwi", @"lemon", @"lime", @"melon", @"nectarine", @"orange", @"pear", @"plum", @"pomegranate", @"raspberry", @"strawberry", nil];
+        self.allFruitNames = [[NSMutableArray alloc] initWithObjects:@"apple", @"apricot", @"avocado", @"banana", @"blackberry", @"blueberry", @"boysenberry", @"cherry", @"fig", @"grape", @"grapefruit", @"guava", @"kiwi", @"lemon", @"lime", @"melon", @"orange", @"pear", @"plum", @"pomegranate", @"raspberry", @"strawberry", nil];
         self.autoCompletedFruitNames = [[NSMutableArray alloc] init];
         
         self.frameHeight = self.frame.size.height;
@@ -57,7 +57,7 @@
         self.searchBarTextField.font  = self.globalVs.font;
         self.searchBarTextField.textColor = self.globalVs.darkGreyColor;
         self.searchBarTextField.backgroundColor = self.globalVs.blueColor;
-        self.searchBarTextField.placeholder = @"kiwi";
+        self.searchBarTextField.placeholder = @"fruit name";
         self.searchBarTextField.delegate = self;
         
         // Set a space view to the left of the text in the text field so that the text would not be too close to the left edge of the text field
@@ -79,17 +79,26 @@
         
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
                                        initWithTarget:self
-                                       action:@selector(dismissKeyboard)];
+                                       action:@selector(dismissKeyboard:)];
         tap.cancelsTouchesInView = NO;
         [self addGestureRecognizer:tap];
     }
     return self;
 }
 
-- (void)dismissKeyboard{
+- (void)mainViewDidFinishAddingFruitToDB {
     [self.searchBarTextField resignFirstResponder];
     self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, self.frameHeight);
     self.displayAutoCompletedItemsTableView.hidden = YES;
+}
+
+- (void)dismissKeyboard:(UITapGestureRecognizer *)tap{
+    CGPoint tapLocation = [tap locationInView:self];
+    if (!CGRectContainsPoint(self.displayAutoCompletedItemsTableView.frame, tapLocation)) {
+        [self.searchBarTextField resignFirstResponder];
+        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, self.frameHeight);
+        self.displayAutoCompletedItemsTableView.hidden = YES;
+    }
 }
 
 - (void)searchAutocompleteEntriesWithSubstring:(NSString *)substring {
@@ -97,8 +106,10 @@
     // Put anything that starts with this substring into the autocompleteUrls array
     // The items in this array is what will show up in the table view
     [self.autoCompletedFruitNames removeAllObjects];
+    //NSString *subStringWithFirstLetterInUpperCase = [[[substring substringToIndex:1] uppercaseString] stringByAppendingString:[substring substringFromIndex:1]];
     for(NSString *curString in self.allFruitNames) {
         NSRange substringRange = [curString rangeOfString:substring];
+        //NSRange subStringWithFirstLetterInUpperCaseRange = [curString rangeOfString:subStringWithFirstLetterInUpperCase];
         if (substringRange.location == 0) {
             [self.autoCompletedFruitNames addObject:curString];
         }
@@ -154,6 +165,7 @@
     UITableViewCell *selectedCell = [tableView cellForRowAtIndexPath:indexPath];
     self.searchBarTextField.text = @"";
     [self.superViewDelegate addFruitToDBFromSearchBar:selectedCell.textLabel.text];
+    [self.searchBarTextField resignFirstResponder];
 
     
     //urlField.text = selectedCell.textLabel.text;

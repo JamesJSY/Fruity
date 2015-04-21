@@ -145,6 +145,10 @@
 - (void)addFruitToDBFromSearchBar:(NSString*)fruitName {
     self.addFruitButton = [[FruitTouchButton alloc] init];
     self.addFruitButton.fruitItem.name = fruitName;
+    self.addFruitButton.frame = CGRectMake(0, 0, self.globalVs.screenWidth / 7, self.globalVs.screenWidth / 7);
+    self.addFruitButton.center = CGPointMake(self.globalVs.screenWidth / 2, self.globalVs.screenHeight / 4);
+    self.addFruitButton.hidden = YES;
+    [self.mainView addSubview:self.addFruitButton];
     
     [self addFruitsToDatabase:self.addFruitButton];
 }
@@ -198,6 +202,24 @@
     // Reload the view that displays fruits in storage
     [self.displayStorageBottomView loadDisplayStorageBottomView];
     
+    // Create a new fruit button and do an animation to move it to the eat button
+    
+    // Get the current location of the addFruitButton
+    CGRect currentFrameInWindow = [self.addFruitButton convertRect:self.addFruitButton.bounds toView:nil];
+    
+    // Create a new addFruitButton with related image
+    FruitTouchButton *newFruitTouchButton = [[FruitTouchButton alloc] initWithFrame:currentFrameInWindow];
+    
+    NSString *imageFileName = [self.addFruitButton.fruitItem.name stringByAppendingString:@".png"];
+    [newFruitTouchButton setImage:[UIImage imageNamed:imageFileName] forState:UIControlStateNormal];
+    [self.mainView addSubview:newFruitTouchButton];
+    
+    // Lighten the current FruitTouchButton
+    self.addFruitButton.alpha = 0.3;
+    
+    
+    [self.eatButton setHidden:NO];
+    
     // Shift the current view down back
     [UIView animateWithDuration:0.3
                           delay:0
@@ -207,20 +229,37 @@
                      }
                      completion:^(BOOL finished) {
                          
-                         self.isInAddingStatus = NO;
-                         
-                         self.mainView.backgroundColor = UIColorFromRGB(0xf4f4cd);
                          
                          
-                         [self.calendarButton setUserInteractionEnabled:YES];
-                         [self.calendarButton setAlpha:1];
-                         [self.settingsButton setUserInteractionEnabled:YES];
-                         [self.settingsButton setAlpha:1];
-                         [self.displaySeasonalFruitsView deHighlightFruitTouchButton];
-                         [self.displaySearchBarView setAlpha:1];
-                         
-                         [self.eatButton setHidden:NO];
-                         [self.addFruitBottomView setHidden:YES];
+                         [UIView animateWithDuration:0.5
+                                               delay:0
+                                             options:0
+                                          animations:^{
+                                              newFruitTouchButton.center = self.eatButton.center;
+                                          }
+                                          completion:^(BOOL finished) {
+                                              
+                                              self.isInAddingStatus = NO;
+                                              
+                                              self.mainView.backgroundColor = UIColorFromRGB(0xf4f4cd);
+                                              
+                                              
+                                              [self.calendarButton setUserInteractionEnabled:YES];
+                                              [self.calendarButton setAlpha:1];
+                                              [self.settingsButton setUserInteractionEnabled:YES];
+                                              [self.settingsButton setAlpha:1];
+                                              
+                                              [self.displaySeasonalFruitsView deHighlightFruitTouchButton];
+                                              [self.displaySearchBarView setAlpha:1];
+                                              [self.displaySearchBarView mainViewDidFinishAddingFruitToDB];
+                                              
+                                              self.addFruitButton.alpha = 1;
+                                              [newFruitTouchButton removeFromSuperview];
+                                              
+                                              
+                                              [self.addFruitBottomView setHidden:YES];
+                                              
+                                          }];
                      }];
 
 }
@@ -278,6 +317,7 @@
                              [self.settingsButton setAlpha:1];
                              
                              [self.displaySeasonalFruitsView deHighlightFruitTouchButton];
+                             [self.displaySearchBarView mainViewDidFinishAddingFruitToDB];
                              [self.displaySearchBarView setAlpha:1];
                              
                              [self.eatButton setHidden:NO];
@@ -389,10 +429,11 @@
     melon.seasons = [[NSArray alloc] initWithObjects:[NSNumber numberWithInt:6], [NSNumber numberWithInt:7], [NSNumber numberWithInt:8], [NSNumber numberWithInt:9], [NSNumber numberWithInt:10], nil];
     [self.allFruitsBasicInfo addObject:melon];
     
+    /*
     FruitItemBasicInfo *nectarine= [[FruitItemBasicInfo alloc] init];
     nectarine.fruitName = @"nectarine";
     nectarine.seasons = [[NSArray alloc] initWithObjects:[NSNumber numberWithInt:5], [NSNumber numberWithInt:6], [NSNumber numberWithInt:7], [NSNumber numberWithInt:8], [NSNumber numberWithInt:9], [NSNumber numberWithInt:10], nil];
-    [self.allFruitsBasicInfo addObject:nectarine];
+    [self.allFruitsBasicInfo addObject:nectarine];*/
     
     FruitItemBasicInfo *orange= [[FruitItemBasicInfo alloc] init];
     orange.fruitName = @"orange";
