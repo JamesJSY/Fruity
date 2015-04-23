@@ -9,11 +9,11 @@
 #import "AddFruitBottomView.h"
 #import "GlobalVariables.h"
 
-#define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
-
 @interface AddFruitBottomView ()
 
 @property GlobalVariables *globalVs;
+@property UIScrollView *quantityButtonScrollView;
+@property int numberOfQuantityButtons;
 
 @end
 
@@ -23,6 +23,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.globalVs = [GlobalVariables getInstance];
+        self.numberOfQuantityButtons = 9;
         
         self.backgroundColor = [UIColor blackColor];
         
@@ -30,28 +31,36 @@
         quantityText.frame = CGRectMake(0, self.frame.size.height / 3, self.frame.size.width / 3, self.frame.size.height / 2);
         quantityText.text = @"Quantity";
         quantityText.textAlignment = NSTextAlignmentCenter;
-        quantityText.textColor = UIColorFromRGB(0xabacab);
+        quantityText.textColor = self.globalVs.lightGreyColor;
         quantityText.font = self.globalVs.font;
         [quantityText setEditable:NO];
         quantityText.backgroundColor = [UIColor clearColor];
         
         [self addSubview:quantityText];
         
-        for (int i = 0; i < 3; i++) {
+        self.quantityButtonScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(self.frame.size.width / 3 , self.frame.size.height / 6, self.frame.size.width * 2 / 3, self.frame.size.height / 2)];
+        [self addSubview:self.quantityButtonScrollView];
+        
+        for (int i = 0; i < self.numberOfQuantityButtons; i++) {
             UIButton *quantityButton = [[UIButton alloc] init];
             [quantityButton setTitle:[NSString stringWithFormat:@"%d", i + 1] forState:UIControlStateNormal];
             quantityButton.backgroundColor = [UIColor clearColor];
             quantityButton.titleLabel.font = self.globalVs.font;
-            quantityButton.tintColor = quantityText.textColor;
-            quantityButton.frame = CGRectMake(self.frame.size.width / 3 + i * self.frame.size.width / 5, self.frame.size.height / 3, self.frame.size.width / 6, self.frame.size.height / 2);
-            [quantityButton setTitleColor:UIColorFromRGB(0xabacab) forState:UIControlStateNormal];
+            quantityButton.frame = CGRectMake(i * self.frame.size.width / 5, self.frame.size.height / 6, self.frame.size.width / 6, self.frame.size.height / 3);
+            [quantityButton setTitleColor:quantityText.textColor forState:UIControlStateNormal];
             quantityButton.tag = i;
             [quantityButton addTarget:self.superViewDelegate action:@selector(addFruitsToDatabaseWithQuantity:) forControlEvents:UIControlEventTouchUpInside];
             
-            [self addSubview:quantityButton];
+            [self.quantityButtonScrollView addSubview:quantityButton];
         }
+        
+        self.quantityButtonScrollView.contentSize = CGSizeMake(self.frame.size.width * self.numberOfQuantityButtons / 5, self.frame.size.height / 3);
     }
     return self;
+}
+
+- (void)addButtonDidFinishPressing {
+    [self.quantityButtonScrollView setContentOffset:CGPointMake(0, 0)];
 }
 
 /*

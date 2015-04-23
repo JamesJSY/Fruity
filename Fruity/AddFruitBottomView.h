@@ -22,4 +22,6 @@
 
 - (instancetype)initWithFrame:(CGRect)frame;
 
+- (void)addButtonDidFinishPressing;
+
 @end

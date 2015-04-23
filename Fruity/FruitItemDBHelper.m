@@ -13,6 +13,7 @@
 
 @property DBManager *dbManager;
 @property NSMutableArray *fruitItems;
+@property NSString *dabaBaseName;
 
 @end
 
@@ -22,13 +23,14 @@
     self = [super init];
     if (self) {
         self.dbManager = [[DBManager alloc] initWithDatabaseFilename:@"FruityDB.db"];
+        self.dabaBaseName = [[NSString alloc] initWithFormat:@"FRUITITEMINFO"];
     }
     return self;
 }
 
 -(void)insertFruitItemIntoDB:(FruitItem *) item {
     // Prepare the query string.
-    NSString *query = [NSString stringWithFormat:@"INSERT INTO FRUITITEMINFO(NAME, PURCHASEDATE, STARTSTATUS, STATUSCHANGETHRESHOLD, ISEATEN) values('%@', '%@', %f, %f, %d)", item.name, item.purchaseDate, item.startStatus, item.statusChangeThreshold, item.isEaten] ;
+    NSString *query = [NSString stringWithFormat:@"INSERT INTO '%@'(NAME, PURCHASEDATE, STARTSTATUS, STATUSCHANGETHRESHOLD, ISEATEN) values('%@', '%@', %f, %f, %d)", self.dabaBaseName ,item.name, item.purchaseDate, item.startStatus, item.statusChangeThreshold, item.isEaten] ;
     
     // Execute the query.
     [self.dbManager executeQuery:query];
@@ -42,7 +44,9 @@
     }
 }
 
--(NSArray *)loadFruitItemsFromDB:(NSString *) query {
+-(NSArray *)loadAllFruitItemsNotEatenFromDB {
+    NSString *query = [NSString stringWithFormat:(@"SELECT * FROM '%@' WHERE ISEATEN = 0"), self.dabaBaseName];
+    
     // Raw data obatained from database via the query
     NSArray *data = [[NSArray alloc] initWithArray:[self.dbManager loadDataFromDB:query]];
     
@@ -77,7 +81,23 @@
 
 -(void)deleteFruitItemsFromDB:(int) ID {
     // Prepare the query.
-    NSString *query = [NSString stringWithFormat:@"DELETE FROM FRUITITEMINFO WHERE ID = %d", ID];
+    NSString *query = [NSString stringWithFormat:@"DELETE FROM '%@' WHERE ID = %d", self.dabaBaseName, ID];
+    
+    // Execute the query.
+    [self.dbManager executeQuery:query];
+    
+    // If the query was successfully executed then pop the view controller.
+    if (self.dbManager.affectedRows != 0) {
+        NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
+    }
+    else{
+        NSLog(@"Could not execute the query.");
+    }
+}
+
+- (void)eatFruitItemFromDB:(int) ID {
+    // Prepare the query string.
+    NSString *query = [NSString stringWithFormat:@"UPDATE '%@' SET ISEATEN = %d WHERE ID = %d", self.dabaBaseName, 1, ID] ;
     
     // Execute the query.
     [self.dbManager executeQuery:query];
@@ -93,7 +113,7 @@
 
 -(void)updateFruitItemsFromDB:(FruitItem *) item {
     // Prepare the query string.
-    NSString *query = [NSString stringWithFormat:@"UPDATE FRUITITEMINFO SET NAME = '%@', PURCHASEDATE = '%@', STARTSTATUS = %f, STATUSCHANGETHRESHOLD = %f, ISEATEN = %d, WHERE ID = %d", item.name, item.purchaseDate, item.startStatus, item.statusChangeThreshold, item.isEaten, item.ID] ;
+    NSString *query = [NSString stringWithFormat:@"UPDATE '%@' SET NAME = '%@', PURCHASEDATE = '%@', STARTSTATUS = %f, STATUSCHANGETHRESHOLD = %f, ISEATEN = %d, WHERE ID = %d", self.dabaBaseName, item.name, item.purchaseDate, item.startStatus, item.statusChangeThreshold, item.isEaten, item.ID] ;
     
     // Execute the query.
     [self.dbManager executeQuery:query];

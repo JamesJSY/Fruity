@@ -35,6 +35,8 @@
 @property (nonatomic) DisplayStorageBottomView *displayStorageBottomView;
 
 @property (nonatomic) FruitTouchButton *addFruitButton;
+@property (nonatomic) NSMutableArray *tempFruitButtons;
+@property (nonatomic) UIButton *quantityButton;
 @property (nonatomic) UIButton *eatButton;
 
 @property (nonatomic) bool canScrollDown;
@@ -111,6 +113,9 @@
 }
 
 - (void)loadStaticSubviews {
+    // Init arrays
+    self.tempFruitButtons = [[NSMutableArray alloc] init];
+    
     // set up the main view
     self.mainView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.globalVs.screenWidth, self.globalVs.screenHeight)];
     self.mainView.backgroundColor = UIColorFromRGB(0xf4f4cd);
@@ -194,31 +199,51 @@
     item.statusChangeThreshold = 1;
     item.isEaten = NO;
     
+    // Get the current location of the addFruitButton
+    CGRect currentFrameInWindow = [self.addFruitButton convertRect:self.addFruitButton.bounds toView:nil];
+    
+    currentFrameInWindow.origin.x -= inputQuantityButton.frame.size.width;
+    
     for (int i = 0; i <inputQuantityButton.tag + 1; i++) {
         // Insert the new item into the database
         [self.dbHelper insertFruitItemIntoDB:item];
+        
+        // Create new addFruitButton with related image and do an animation to move it to the eat button
+        FruitTouchButton *tempFruitButton = [[FruitTouchButton alloc] initWithFrame:currentFrameInWindow];;
+        NSString *imageFileName = [self.addFruitButton.fruitItem.name stringByAppendingString:@".png"];
+        [tempFruitButton setImage:[UIImage imageNamed:imageFileName] forState:UIControlStateNormal];
+        currentFrameInWindow.origin.x += inputQuantityButton.frame.size.width;
+        if (i % 3 == 2) {
+            currentFrameInWindow.origin.y += inputQuantityButton.frame.size.height;
+            currentFrameInWindow.origin.x -= 3 *inputQuantityButton.frame.size.width;
+        }
+        [self.mainView addSubview:tempFruitButton];
+        [self.tempFruitButtons addObject:tempFruitButton];
+
     }
     
     // Reload the view that displays fruits in storage
     [self.displayStorageBottomView loadDisplayStorageBottomView];
-    
-    // Create a new fruit button and do an animation to move it to the eat button
-    
-    // Get the current location of the addFruitButton
-    CGRect currentFrameInWindow = [self.addFruitButton convertRect:self.addFruitButton.bounds toView:nil];
-    
-    // Create a new addFruitButton with related image
-    FruitTouchButton *newFruitTouchButton = [[FruitTouchButton alloc] initWithFrame:currentFrameInWindow];
-    
-    NSString *imageFileName = [self.addFruitButton.fruitItem.name stringByAppendingString:@".png"];
-    [newFruitTouchButton setImage:[UIImage imageNamed:imageFileName] forState:UIControlStateNormal];
-    [self.mainView addSubview:newFruitTouchButton];
-    
+        
     // Lighten the current FruitTouchButton
     self.addFruitButton.alpha = 0.3;
     
+    // Highlight the quantity button
+    [inputQuantityButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    self.quantityButton = inputQuantityButton;
     
+    // Set eat button not visible
     [self.eatButton setHidden:NO];
+    
+    // Highlight the press button for one second
+    [self performSelector:@selector(quantityButtonDidPressAfterSeveralSeconds) withObject:nil afterDelay:1.0];
+    
+}
+
+- (void)quantityButtonDidPressAfterSeveralSeconds {
+    
+    // Dehighlight the quantity button
+    [self.quantityButton setTitleColor:self.globalVs.lightGreyColor forState:UIControlStateNormal];
     
     // Shift the current view down back
     [UIView animateWithDuration:0.3
@@ -235,7 +260,10 @@
                                                delay:0
                                              options:0
                                           animations:^{
-                                              newFruitTouchButton.center = self.eatButton.center;
+                                              for (int i = 0; i < [self.tempFruitButtons count]; i++) {
+                                                  FruitTouchButton *fruitButton = self.tempFruitButtons[i];
+                                                  fruitButton.center = self.eatButton.center;
+                                              }
                                           }
                                           completion:^(BOOL finished) {
                                               
@@ -254,20 +282,22 @@
                                               [self.displaySearchBarView mainViewDidFinishAddingFruitToDB];
                                               
                                               self.addFruitButton.alpha = 1;
-                                              [newFruitTouchButton removeFromSuperview];
-                                              
+                                              [self.tempFruitButtons makeObjectsPerformSelector: @selector(removeFromSuperview)];
                                               
                                               [self.addFruitBottomView setHidden:YES];
-                                              
+                                              [self.addFruitBottomView addButtonDidFinishPressing];
                                           }];
                      }];
 
 }
 
 - (NSArray *) loadAllFruitsInStorageFromDB {
-    NSString *query = [NSString stringWithFormat:(@"SELECT * FROM '%@'"), self.dataBaseName];
-    self.fruitsInStorage = [[NSArray alloc] initWithArray:[self.dbHelper loadFruitItemsFromDB:query]];
+    self.fruitsInStorage = [[NSArray alloc] initWithArray:[self.dbHelper loadAllFruitItemsNotEatenFromDB]];
     return self.fruitsInStorage;
+}
+
+- (void) eatFruitItemWithID:(int) ID {
+    [self.dbHelper eatFruitItemFromDB:ID];
 }
 
 - (void) deleteFruitItemWithID:(int) ID {
@@ -322,6 +352,7 @@
                              
                              [self.eatButton setHidden:NO];
                              [self.addFruitBottomView setHidden:YES];
+                             [self.addFruitBottomView addButtonDidFinishPressing];
                          }];
     }
     

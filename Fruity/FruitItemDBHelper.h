@@ -15,11 +15,12 @@
 
 -(void)insertFruitItemIntoDB:(FruitItem *) item;
 
--(NSArray *)loadFruitItemsFromDB:(NSString *) query;
+-(NSArray *)loadAllFruitItemsNotEatenFromDB;
 
 -(void)deleteFruitItemsFromDB:(int) ID;
 
 -(void)updateFruitItemsFromDB:(FruitItem *) item;
- 
+
+-(void)eatFruitItemFromDB:(int) ID;
 
 @end

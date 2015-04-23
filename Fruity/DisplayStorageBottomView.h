@@ -12,6 +12,7 @@
 
 - (NSArray *) loadAllFruitsInStorageFromDB;
 - (void) deleteFruitItemWithID:(int) ID;
+- (void) eatFruitItemWithID:(int) ID;
 
 @end
 

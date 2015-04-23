@@ -129,9 +129,8 @@
 
         
         // Delete the pressed item in the database
-        [self.superViewDelegate deleteFruitItemWithID:inputFruit.fruitItem.ID];
-        
-        
+        [self.superViewDelegate eatFruitItemWithID:inputFruit.fruitItem.ID];
+                
         // Reload the view that display storage list
         [self loadDisplayStorageBottomView];
     }
