@@ -107,11 +107,10 @@
     // Put anything that starts with this substring into the autocompleteUrls array
     // The items in this array is what will show up in the table view
     [self.autoCompletedFruitNames removeAllObjects];
-    //NSString *subStringWithFirstLetterInUpperCase = [[[substring substringToIndex:1] uppercaseString] stringByAppendingString:[substring substringFromIndex:1]];
     for(NSString *curString in self.allFruitNames) {
         NSRange substringRange = [curString rangeOfString:substring];
-        //NSRange subStringWithFirstLetterInUpperCaseRange = [curString rangeOfString:subStringWithFirstLetterInUpperCase];
-        if (substringRange.location == 0) {
+        NSRange subStringWithFirstLetterInUpperCaseRange = [[curString capitalizedString] rangeOfString:substring];
+        if (substringRange.location == 0 || subStringWithFirstLetterInUpperCaseRange.location == 0) {
             [self.autoCompletedFruitNames addObject:curString];
         }
     }
