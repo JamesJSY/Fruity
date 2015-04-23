@@ -69,11 +69,12 @@
         [self addSubview:self.searchBarTextField];
         
         self.displayAutoCompletedItemsTableView = [[UITableView alloc] initWithFrame:
-                                 CGRectMake(self.frame.size.width / 6, self.frame.size.height * 5 / 6, self.frame.size.width * 2 / 3, self.frame.size.height) style:UITableViewStylePlain];
+                                 CGRectMake(self.frame.size.width / 6 + self.frame.size.height / 6, self.frame.size.height * 5 / 6 , self.frame.size.width * 2 / 3 - self.frame.size.height / 3, self.frame.size.height) style:UITableViewStylePlain];
         self.displayAutoCompletedItemsTableView.delegate = self;
         self.displayAutoCompletedItemsTableView.dataSource = self;
         self.displayAutoCompletedItemsTableView.scrollEnabled = YES;
         self.displayAutoCompletedItemsTableView.hidden = YES;
+        self.displayAutoCompletedItemsTableView.backgroundColor = self.searchBarTextField.backgroundColor;
         [self.displayAutoCompletedItemsTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
         [self addSubview:self.displayAutoCompletedItemsTableView];
         
@@ -150,9 +151,14 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    //UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
     UITableViewCell *cell = [[UITableViewCell alloc] init];
     cell.textLabel.text = [self.autoCompletedFruitNames objectAtIndex:indexPath.row];
+    NSString *imageName = [[NSString alloc] initWithFormat:@"%@.png", cell.textLabel.text];
+    cell.imageView.image = [UIImage imageNamed:imageName];
+    cell.frame = CGRectMake(0, 0, 200, 50);
+    cell.backgroundColor = self.searchBarTextField.backgroundColor;
+    cell.textLabel.font = self.globalVs.font;
+    cell.textLabel.textColor = self.searchBarTextField.textColor;
     return cell;
 }
 
