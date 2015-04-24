@@ -172,6 +172,7 @@
     [self.settingsButton setAlpha:0.3];
     [self.displaySeasonalFruitsView highlightOneFruitTouchButton:inputFruit];
     [self.displaySearchBarView setAlpha:0.3];
+    self.displaySearchBarView.userInteractionEnabled = NO;
     
     // Shift the current view up a little bit
     [UIView animateWithDuration:0.3
@@ -180,12 +181,15 @@
                      animations:^{
                          self.addFruitBottomView.frame = CGRectOffset(self.addFruitBottomView.frame, 0, -self.globalVs.screenHeight / 6);
                      }
-                     completion:nil];
+                     completion:^(BOOL finished){
+                     }];
     self.addFruitButton = inputFruit;
     
 }
 
 -(void)addFruitsToDatabaseWithQuantity:(UIButton*)inputQuantityButton{
+    
+    self.isInAddingStatus = NO;
     
     // Get the current date
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
@@ -236,7 +240,7 @@
     [self.eatButton setHidden:NO];
     
     // Highlight the press button for one second
-    [self performSelector:@selector(quantityButtonDidPressAfterSeveralSeconds) withObject:nil afterDelay:1.0];
+    [self performSelector:@selector(quantityButtonDidPressAfterSeveralSeconds) withObject:nil afterDelay:0.5];
     
 }
 
@@ -267,8 +271,6 @@
                                           }
                                           completion:^(BOOL finished) {
                                               
-                                              self.isInAddingStatus = NO;
-                                              
                                               self.mainView.backgroundColor = UIColorFromRGB(0xf4f4cd);
                                               
                                               
@@ -286,6 +288,7 @@
                                               
                                               [self.addFruitBottomView setHidden:YES];
                                               [self.addFruitBottomView addButtonDidFinishPressing];
+                                              self.displaySearchBarView.userInteractionEnabled = YES;
                                           }];
                      }];
 
@@ -353,6 +356,8 @@
                              [self.eatButton setHidden:NO];
                              [self.addFruitBottomView setHidden:YES];
                              [self.addFruitBottomView addButtonDidFinishPressing];
+                             
+                             self.displaySearchBarView.userInteractionEnabled = YES;
                          }];
     }
     
@@ -366,6 +371,7 @@
                              self.displayStorageBottomView.frame = CGRectOffset(self.displayStorageBottomView.frame, 0, self.globalVs.screenHeight / 4);
                          }
                          completion:^(BOOL finished) {
+                             [self.displayStorageBottomView mainViewDidMoveDown];
                              [self.displayStorageBottomView setHidden:YES];
                              
                              [self.displaySeasonalFruitsView enableAllFruitTouchButtonsInteraction];

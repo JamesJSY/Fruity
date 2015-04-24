@@ -25,5 +25,6 @@
 - (instancetype)initWithFrame:(CGRect)frame;
 
 - (void)loadDisplayStorageBottomView;
+- (void)mainViewDidMoveDown;
 
 @end

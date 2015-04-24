@@ -38,6 +38,21 @@
         [self addSubview:self.storageListScrollView];
         
         // Initialize the animation image view
+        self.animationChewingImageViewBottom = [[UIImageView alloc] init];
+        NSMutableArray *chewingImages = [[NSMutableArray alloc] init];
+        for (int i = 4; i < 8; i++) {
+            [chewingImages addObject:[UIImage imageNamed:[NSString stringWithFormat:@"monsterChew%d.png", i]]];
+        }
+        [self.animationChewingImageViewBottom setAnimationImages:chewingImages];
+        self.animationChewingImageViewBottom.image = [UIImage imageNamed:@"monsterChew3.png"];
+        [self.animationChewingImageViewBottom setAnimationDuration:1.0];
+        [self.animationChewingImageViewBottom setAnimationRepeatCount:1];
+        self.animationChewingImageViewBottom.frame = CGRectMake(0, 0, self.frame.size.width / 3, self.frame.size.width / 3);
+        self.animationChewingImageViewBottom.center = CGPointMake(self.frame.size.width / 2, 0);
+        [self.animationChewingImageViewBottom setHidden:YES];
+        [self insertSubview:self.animationChewingImageViewBottom belowSubview:self.storageListScrollView];
+        
+        // Initialize the animation image view
         self.animationMouthOpeningImageViewBottom = [[UIImageView alloc] init];
         NSMutableArray *mouthOpeningImages = [[NSMutableArray alloc] init];
         for (int i = 0; i < 4; i++) {
@@ -49,21 +64,9 @@
         [self.animationMouthOpeningImageViewBottom setAnimationRepeatCount:1];
         self.animationMouthOpeningImageViewBottom.frame = CGRectMake(0, 0, self.frame.size.width / 3, self.frame.size.width / 3);
         self.animationMouthOpeningImageViewBottom.center = CGPointMake(self.frame.size.width / 2, 0);
-        [self insertSubview:self.animationMouthOpeningImageViewBottom belowSubview:self.storageListScrollView];
+        [self insertSubview:self.animationMouthOpeningImageViewBottom belowSubview:self.animationChewingImageViewBottom];
         
-        // Initialize the animation image view
-        self.animationChewingImageViewBottom = [[UIImageView alloc] init];
-        NSMutableArray *chewingImages = [[NSMutableArray alloc] init];
-        for (int i = 4; i < 8; i++) {
-            [chewingImages addObject:[UIImage imageNamed:[NSString stringWithFormat:@"monsterChew%d.png", i]]];
-        }
-        [self.animationChewingImageViewBottom setAnimationImages:chewingImages];
-        [self.animationChewingImageViewBottom setAnimationDuration:1.0];
-        [self.animationChewingImageViewBottom setAnimationRepeatCount:1];
-        self.animationChewingImageViewBottom.frame = CGRectMake(0, 0, self.frame.size.width / 3, self.frame.size.width / 3);
-        self.animationChewingImageViewBottom.center = CGPointMake(self.frame.size.width / 2, 0);
-        [self.animationChewingImageViewBottom setHidden:YES];
-        [self insertSubview:self.animationChewingImageViewBottom belowSubview:self.storageListScrollView];
+        
     }
     return self;
 }
@@ -106,10 +109,10 @@
 }
 
 - (void)showMouth:(FruitTouchButton *)inputFruit {
-    [self.animationMouthOpeningImageViewBottom setImage:[UIImage imageNamed:@"monsterChew3.png"]];
+    //[self.animationMouthOpeningImageViewBottom setImage:[UIImage imageNamed:@"monsterChew3.png"]];
     [self.animationMouthOpeningImageViewBottom startAnimating];
     [self performSelector:@selector(animationAfterMouthDidShow) withObject:nil
-               afterDelay:self.animationMouthOpeningImageViewBottom.animationDuration];
+               afterDelay:self.animationMouthOpeningImageViewBottom.animationDuration - 0.1];
 }
 
 - (void)dragFruitButton:(FruitTouchButton*)inputFruit withEvent:(UIEvent*) event{
@@ -121,12 +124,12 @@
     
     if ( CGRectContainsPoint(self.animationMouthOpeningImageViewBottom.frame, point)) {
         // Start chewing animation
-        [self.animationMouthOpeningImageViewBottom setHidden:YES];
-        [self.animationChewingImageViewBottom setHidden:NO];
+        //[self.animationMouthOpeningImageViewBottom setHidden:YES];
+        //[self.animationChewingImageViewBottom setHidden:NO];
+        //[self performSelector:@selector(animationAfterDiDChew) withObject:nil afterDelay:self.animationChewingImageViewBottom.animationDuration];
         [self.animationChewingImageViewBottom startAnimating];
-        [self performSelector:@selector(animationAfterDiDChew) withObject:nil
-                   afterDelay:self.animationChewingImageViewBottom.animationDuration];
-
+        
+        
         
         // Delete the pressed item in the database
         [self.superViewDelegate eatFruitItemWithID:inputFruit.fruitItem.ID];
@@ -141,13 +144,17 @@
 }
 
 - (void)animationAfterMouthDidShow {
-    [self.animationMouthOpeningImageViewBottom stopAnimating];
+    self.animationChewingImageViewBottom.hidden = NO;
+    //[self.animationMouthOpeningImageViewBottom setImage:[UIImage imageNamed:@"monsterChew0.png"]];
+    //[self.animationMouthOpeningImageViewBottom stopAnimating];
 }
 
 - (void)animationAfterDiDChew {
-    [self.animationMouthOpeningImageViewBottom setHidden:NO];
     [self.animationChewingImageViewBottom setHidden:YES];
-    [self.animationMouthOpeningImageViewBottom setImage:[UIImage imageNamed:@"monsterChew0.png"]];
+}
+
+- (void)mainViewDidMoveDown {
+    self.animationChewingImageViewBottom.hidden = YES;
 }
 
 /*
