@@ -12,6 +12,7 @@
 @interface FruitTouchButton : UIButton
 
 @property FruitItem *fruitItem;
+@property int numberOfFruits;
 
 - (instancetype)init;
 

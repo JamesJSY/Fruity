@@ -43,7 +43,7 @@
                                       inUnit:NSCalendarUnitMonth
                                      forDate:firstDayOfMonth];
         // Weekday starts from Sunday
-        int weekday = firstDayOfMonthComp.weekday - 1;
+        int weekday = (int)firstDayOfMonthComp.weekday - 1;
         
         NSString *monthText;
         switch (comps.month) {
@@ -116,7 +116,7 @@
         for (int i = 0; i < days.length; i++) {
             int row = (i + weekday) / daysPerWeek;
             int col = (i + weekday) % daysPerWeek;
-            NSArray *eatFruitsArray = [self.globalVs.dbHelper loadAllFruitItemsEatenFromDBInYear:comps.year month:comps.month day:comps.day + i];
+            NSArray *eatFruitsArray = [self.globalVs.dbHelper loadAllFruitItemsEatenFromDBInYear:(int)comps.year month:(int)comps.month day:(int)comps.day + i];
             
             UILabel *day = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width / 6 + col * self.frame.size.width / 10, self.frame.size.height / 5 + row * self.frame.size.width / 10, self.frame.size.width / 10, self.frame.size.width / 10)];
             day.textAlignment = NSTextAlignmentCenter;
@@ -142,7 +142,7 @@
         }
         
         // Set the displayDaysDidEatFruitLabel to the number of days that the user have eaten fruits
-        self.displayDaysDidEatFruitLabel.text = [NSString stringWithFormat:@"%d/%d", daysDidEatFruit, days.length];
+        self.displayDaysDidEatFruitLabel.text = [NSString stringWithFormat:@"%d/%lu", daysDidEatFruit, (unsigned long)days.length ];
         // Reset the color of the days in the label on which users have eaten fruits
         NSMutableAttributedString *text =
         [[NSMutableAttributedString alloc]

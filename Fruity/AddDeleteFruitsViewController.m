@@ -32,7 +32,8 @@
 @property (nonatomic) DisplayStorageBottomView *displayStorageBottomView;
 
 @property (nonatomic) FruitTouchButton *addFruitButton;
-@property (nonatomic) NSMutableArray *tempFruitButtons;
+@property (nonatomic) UILabel *fruitQuantityLabel;
+@property (nonatomic) UIButton *tempFruitButton;
 @property (nonatomic) UIButton *quantityButton;
 @property (nonatomic) UIButton *eatButton;
 
@@ -112,7 +113,7 @@
 
 - (void)loadStaticSubviews {
     // Init arrays
-    self.tempFruitButtons = [[NSMutableArray alloc] init];
+    //self.tempFruitButtons = [[NSMutableArray alloc] init];
     
     // set up the main view
     self.mainView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.globalVs.screenWidth, self.globalVs.screenHeight)];
@@ -201,12 +202,29 @@
     // Get the current location of the addFruitButton
     CGRect currentFrameInWindow = [self.addFruitButton convertRect:self.addFruitButton.bounds toView:nil];
     
-    currentFrameInWindow.origin.x -= inputQuantityButton.frame.size.width;
+    // Create new addFruitButton with related image and do an animation to move it to the eat button
+    self.tempFruitButton = [[UIButton alloc] initWithFrame:currentFrameInWindow];;
+    NSString *imageFileName = [self.addFruitButton.fruitItem.name stringByAppendingString:@".png"];
+    [self.tempFruitButton setImage:[UIImage imageNamed:imageFileName] forState:UIControlStateNormal];
+    [self.mainView addSubview:self.tempFruitButton];
+    
+    // Set the fruit quantity label
+    self.fruitQuantityLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.addFruitButton.frame.size.width * 2 / 3, self.addFruitButton.frame.size.width * 2 / 3)];
+    self.fruitQuantityLabel.layer.cornerRadius = self.fruitQuantityLabel.frame.size.width / 2;
+    self.fruitQuantityLabel.center = CGPointMake(self.addFruitButton.frame.size.width / 2, self.addFruitButton.frame.size.height / 2);
+    self.fruitQuantityLabel.clipsToBounds = YES;
+    self.fruitQuantityLabel.font = self.globalVs.font;
+    self.fruitQuantityLabel.textColor = self.globalVs.softWhiteColor;
+    self.fruitQuantityLabel.backgroundColor = self.globalVs.pinkColor;
+    self.fruitQuantityLabel.textAlignment = NSTextAlignmentCenter;
+    self.fruitQuantityLabel.text = [NSString stringWithFormat:@"x %d", (int)inputQuantityButton.tag + 1];
+    [self.tempFruitButton addSubview:self.fruitQuantityLabel];
+
     
     for (int i = 0; i <inputQuantityButton.tag + 1; i++) {
         // Insert the new item into the database
         [self.globalVs.dbHelper insertFruitItemIntoDB:item];
-        
+        /*
         // Create new addFruitButton with related image and do an animation to move it to the eat button
         FruitTouchButton *tempFruitButton = [[FruitTouchButton alloc] initWithFrame:currentFrameInWindow];;
         NSString *imageFileName = [self.addFruitButton.fruitItem.name stringByAppendingString:@".png"];
@@ -217,8 +235,7 @@
             currentFrameInWindow.origin.x -= 3 *inputQuantityButton.frame.size.width;
         }
         [self.mainView addSubview:tempFruitButton];
-        [self.tempFruitButtons addObject:tempFruitButton];
-
+        [self.tempFruitButtons addObject:tempFruitButton];*/
     }
     
     // Reload the view that displays fruits in storage
@@ -259,15 +276,15 @@
                                                delay:0
                                              options:0
                                           animations:^{
-                                              for (int i = 0; i < [self.tempFruitButtons count]; i++) {
-                                                  FruitTouchButton *fruitButton = self.tempFruitButtons[i];
-                                                  fruitButton.center = self.eatButton.center;
-                                              }
+                                              self.tempFruitButton.center = self.eatButton.center;
+                                              self.fruitQuantityLabel.center = CGPointMake(self.addFruitButton.frame.size.width / 2, self.addFruitButton.frame.size.height / 2);
                                           }
                                           completion:^(BOOL finished) {
                                               
-                                              self.mainView.backgroundColor = UIColorFromRGB(0xf4f4cd);
+                                              [self.fruitQuantityLabel removeFromSuperview];
+                                              [self.tempFruitButton removeFromSuperview];
                                               
+                                              self.mainView.backgroundColor = UIColorFromRGB(0xf4f4cd);
                                               
                                               [self.calendarButton setUserInteractionEnabled:YES];
                                               [self.calendarButton setAlpha:1];
@@ -279,7 +296,7 @@
                                               [self.displaySearchBarView mainViewDidFinishAddingFruitToDB];
                                               
                                               self.addFruitButton.alpha = 1;
-                                              [self.tempFruitButtons makeObjectsPerformSelector: @selector(removeFromSuperview)];
+                                              //[self.tempFruitButtons makeObjectsPerformSelector: @selector(removeFromSuperview)];
                                               
                                               [self.addFruitBottomView setHidden:YES];
                                               [self.addFruitBottomView addButtonDidFinishPressing];

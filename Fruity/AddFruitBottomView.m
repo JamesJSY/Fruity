@@ -32,7 +32,7 @@
         quantityText.text = @"Quantity";
         quantityText.textAlignment = NSTextAlignmentCenter;
         quantityText.textColor = self.globalVs.lightGreyColor;
-        quantityText.font = self.globalVs.font;
+        quantityText.font = [UIFont fontWithName:@"AvenirLTStd-Light" size:24];
         [quantityText setEditable:NO];
         quantityText.backgroundColor = [UIColor clearColor];
         
@@ -46,7 +46,7 @@
             [quantityButton setTitle:[NSString stringWithFormat:@"%d", i + 1] forState:UIControlStateNormal];
             quantityButton.backgroundColor = [UIColor clearColor];
             quantityButton.titleLabel.font = self.globalVs.font;
-            quantityButton.frame = CGRectMake(i * self.frame.size.width / 5, self.frame.size.height / 6, self.frame.size.width / 6, self.frame.size.height / 3);
+            quantityButton.frame = CGRectMake(i * self.frame.size.width / 5, self.frame.size.height / 5, self.frame.size.width / 6, self.frame.size.height / 3);
             [quantityButton setTitleColor:quantityText.textColor forState:UIControlStateNormal];
             quantityButton.tag = i;
             [quantityButton addTarget:self.superViewDelegate action:@selector(addFruitsToDatabaseWithQuantity:) forControlEvents:UIControlEventTouchUpInside];

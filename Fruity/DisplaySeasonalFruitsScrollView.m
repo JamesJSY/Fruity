@@ -42,17 +42,16 @@
         self.seasonalFruitTextView.textColor = UIColorFromRGB(0xabacab);
         self.seasonalFruitTextView.frame = CGRectMake(0, 0, 110, 50);
         self.seasonalFruitTextView.textAlignment = NSTextAlignmentCenter;
-        self.seasonalFruitTextView.center = CGPointMake(self.frame.size.width / 2, self.frame.size.height / 2);
+        self.seasonalFruitTextView.center = CGPointMake(self.frame.size.width / 2, self.frame.size.height / 2 - 20);
         self.seasonalFruitTextView.editable = NO;
         [self addSubview:self.seasonalFruitTextView];
         
-        self.monthTextView.font = [UIFont fontWithName:@"AvenirLTStd-Light" size:22];
+        self.monthTextView.font = [UIFont fontWithName:@"AvenirLTStd-Light" size:40];
         self.monthTextView.backgroundColor = [UIColor clearColor];
         self.monthTextView.textColor = UIColorFromRGB(0x676f6b);
         self.monthTextView.textAlignment = NSTextAlignmentCenter;
         self.monthTextView.frame = CGRectMake(0, 0, 100, 50);
-        self.monthTextView.textAlignment = NSTextAlignmentCenter;
-        self.monthTextView.center = CGPointMake(self.frame.size.width / 2, self.frame.size.height / 2 + 40);
+        self.monthTextView.center = CGPointMake(self.frame.size.width / 2, self.frame.size.height / 2 + 20);
         self.monthTextView.editable = NO;
         [self addSubview:self.monthTextView];
     }

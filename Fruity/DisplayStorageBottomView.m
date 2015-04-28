@@ -17,11 +17,15 @@
 @property GlobalVariables *globalVs;
 
 @property (nonatomic) NSMutableArray *allStorageFruitsButton;
+@property (nonatomic) NSMutableArray *allQuantityLabels;
 
 @property (nonatomic) UIScrollView *storageListScrollView;
 
 @property (nonatomic) UIImageView *animationMouthOpeningImageViewBottom;
 @property (nonatomic) UIImageView *animationChewingImageViewBottom;
+
+@property (nonatomic) float pixelsWidthForDisplayingItem;
+@property (nonatomic) float itemDisplayRatio;
 
 @end
 
@@ -33,10 +37,14 @@
         
         self.globalVs = [GlobalVariables getInstance];
         
+        // Set the display mode
+        self.pixelsWidthForDisplayingItem = self.frame.size.width / 5;
+        self.itemDisplayRatio = (float) 2 / 3;
+        
         self.backgroundColor = self.globalVs.blueColor;
         self.clipsToBounds = NO;
         
-        self.storageListScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 30, self.frame.size.width, self.frame.size.height / 3)];
+        self.storageListScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 30, self.frame.size.width, self.frame.size.height / 2)];
         self.storageListScrollView.backgroundColor = [UIColor clearColor];
         self.storageListScrollView.clipsToBounds = NO;
         [self addSubview:self.storageListScrollView];
@@ -79,36 +87,59 @@
     
     // Remove all subviews currently in the fruitsInHandView
     [self.allStorageFruitsButton makeObjectsPerformSelector: @selector(removeFromSuperview)];
+    [self.allQuantityLabels makeObjectsPerformSelector: @selector(removeFromSuperview)];
 
     NSArray *fruitsInStorage = [[NSArray alloc] initWithArray:[self.superViewDelegate loadAllFruitsInStorageFromDB]];
     
     self.allStorageFruitsButton = [[NSMutableArray alloc] init];
-    
-    // Set the display mode
-    float pixelsWidthForDisplayingItem = self.frame.size.width / 5;
-    float itemDisplayRatio = (float) 2 / 3;
+    self.allQuantityLabels = [[NSMutableArray alloc] init];;
     
     // Display all fruits user already bought
     for (int i = 0; i < [fruitsInStorage count]; i++) {
         FruitItem *item = fruitsInStorage[i];
         
-        FruitTouchButton *fruitInHand = [[FruitTouchButton alloc] init];
-        //[fruitInHand addTarget:self action:@selector(showMouth:) forControlEvents:UIControlEventTouchDown];
-        [fruitInHand addTarget:self action:@selector(dragFruitButton:withEvent:) forControlEvents:UIControlEventTouchDragInside];
-        [fruitInHand addTarget:self action:@selector(releaseFruitButton:withEvent:) forControlEvents:UIControlEventTouchUpInside];
+        // Check if the item is in the previous list. If it is, then add one to the quantity. If it is not, create a new button
+        bool isFound = false;
+        for (FruitTouchButton *fruitButton in self.allStorageFruitsButton) {
+            if ([item.name isEqualToString:fruitButton.fruitItem.name]) {
+                isFound = true;
+                fruitButton.numberOfFruits++;
+                break;
+            }
+        }
         
-        NSString *imageFileName = [item.name stringByAppendingString:@".png"];
-        [fruitInHand setImage:[UIImage imageNamed:imageFileName] forState:UIControlStateNormal];
-        fruitInHand.fruitItem = [[FruitItem alloc] initWithFruitItem:item];
-        fruitInHand.tag = i;
+        if (!isFound) {
+            FruitTouchButton *fruitInHand = [[FruitTouchButton alloc] init];
+            //[fruitInHand addTarget:self action:@selector(showMouth:) forControlEvents:UIControlEventTouchDown];
+            [fruitInHand addTarget:self action:@selector(dragFruitButton:withEvent:) forControlEvents:UIControlEventTouchDragInside];
+            [fruitInHand addTarget:self action:@selector(releaseFruitButton:withEvent:) forControlEvents:UIControlEventTouchUpInside];
         
-        fruitInHand.frame = CGRectMake(20 + i * pixelsWidthForDisplayingItem, 30, pixelsWidthForDisplayingItem * itemDisplayRatio, pixelsWidthForDisplayingItem * itemDisplayRatio);
+            NSString *imageFileName = [item.name stringByAppendingString:@".png"];
+            [fruitInHand setImage:[UIImage imageNamed:imageFileName] forState:UIControlStateNormal];
+            fruitInHand.fruitItem = [[FruitItem alloc] initWithFruitItem:item];
+            fruitInHand.numberOfFruits = 1;
+            fruitInHand.tag = i;
         
-        [self.allStorageFruitsButton addObject:fruitInHand];
-        [self.storageListScrollView addSubview:fruitInHand];
+            fruitInHand.frame = CGRectMake(20 + [self.allStorageFruitsButton count] * self.pixelsWidthForDisplayingItem, 30, self.pixelsWidthForDisplayingItem * self.itemDisplayRatio, self.pixelsWidthForDisplayingItem * self.itemDisplayRatio);
+        
+            [self.allStorageFruitsButton addObject:fruitInHand];
+            [self.storageListScrollView addSubview:fruitInHand];
+        }
     }
+    
+    for (FruitTouchButton *fruitButton in self.allStorageFruitsButton) {
+        UILabel *quantityLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
+        quantityLabel.center = CGPointMake(fruitButton.center.x, fruitButton.center.y + self.pixelsWidthForDisplayingItem * self.itemDisplayRatio);
+        quantityLabel.font = self.globalVs.font;
+        quantityLabel.textAlignment = NSTextAlignmentCenter;
+        quantityLabel.textColor = self.globalVs.softWhiteColor;
+        quantityLabel.text = [NSString stringWithFormat:@"%d", fruitButton.numberOfFruits];
+        [self.storageListScrollView addSubview:quantityLabel];
+        [self.allQuantityLabels addObject:quantityLabel];
+    }
+    
     // Resize the scroll board size according to the item size
-    self.storageListScrollView.contentSize = CGSizeMake(([fruitsInStorage count] + 1) *pixelsWidthForDisplayingItem, self.frame.size.height / 5);
+    self.storageListScrollView.contentSize = CGSizeMake(([self.allStorageFruitsButton count] + 1) *self.pixelsWidthForDisplayingItem, self.frame.size.height / 5);
     
 }
 
@@ -135,17 +166,16 @@
         //[self performSelector:@selector(animationAfterDiDChew) withObject:nil afterDelay:self.animationChewingImageViewBottom.animationDuration];
         [self.animationChewingImageViewBottom startAnimating];
         
-        
-        
-        // Delete the pressed item in the database
+        // Eat the pressed item in the database
         [self.superViewDelegate eatFruitItemWithID:inputFruit.fruitItem.ID];
                 
         // Reload the view that display storage list
         [self loadDisplayStorageBottomView];
     }
     else {
-        inputFruit.frame = CGRectMake((float)20 + inputFruit.tag * self.frame.size.width / 5, 30, (float) self.frame.size.width / 5 * 2 / 3, (float) self.frame.size.width / 5 * 2 / 3);
-        //[self.animationMouthOpeningImageViewBottom setImage:[UIImage imageNamed:@"monsterChew0.png"]];
+        // If the fruit is not eaten, put the fruit button back to where it was
+        unsigned long indexOfFruit = [self.allStorageFruitsButton indexOfObject:inputFruit];
+        inputFruit.frame = CGRectMake(20 + indexOfFruit * self.pixelsWidthForDisplayingItem, 30, self.pixelsWidthForDisplayingItem * self.itemDisplayRatio, self.pixelsWidthForDisplayingItem * self.itemDisplayRatio);
     }
 }
 

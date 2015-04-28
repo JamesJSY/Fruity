@@ -115,6 +115,57 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AB82C6EA1AF0127C00F8A951 /* StartingUI */ = {
+			isa = PBXGroup;
+			children = (
+				ABC4289E1AD6E49100BDA15D /* AddDeleteFruitsViewController.h */,
+				ABC4289F1AD6E49100BDA15D /* AddDeleteFruitsViewController.m */,
+				ABC7A1331AE5AA2500F08733 /* DisplaySearchBarView.h */,
+				ABC7A1341AE5AA2500F08733 /* DisplaySearchBarView.m */,
+				ABAF884B1AE32744008FE837 /* DisplayStorageBottomView.h */,
+				ABAF884C1AE32744008FE837 /* DisplayStorageBottomView.m */,
+				ABAF88481AE30B57008FE837 /* AddFruitBottomView.h */,
+				ABAF88491AE30B57008FE837 /* AddFruitBottomView.m */,
+				ABAF88421AE2DEAF008FE837 /* DisplaySeasonalFruitsScrollView.h */,
+				ABAF88431AE2DEAF008FE837 /* DisplaySeasonalFruitsScrollView.m */,
+			);
+			name = StartingUI;
+			sourceTree = "<group>";
+		};
+		AB82C6EB1AF012C200F8A951 /* SettingsUI */ = {
+			isa = PBXGroup;
+			children = (
+				ABC428D71AD9AB1700BDA15D /* SettingsViewController.h */,
+				ABC428D81AD9AB1700BDA15D /* SettingsViewController.m */,
+				ABAF88391ADDF3A7008FE837 /* AddReminderViewController.h */,
+				ABAF883A1ADDF3A7008FE837 /* AddReminderViewController.m */,
+			);
+			name = SettingsUI;
+			sourceTree = "<group>";
+		};
+		AB82C6EC1AF012FB00F8A951 /* DataBaseInterface */ = {
+			isa = PBXGroup;
+			children = (
+				ABC428BE1AD712E800BDA15D /* DBManager.h */,
+				ABC428BF1AD712E800BDA15D /* DBManager.m */,
+				AB82C6E71AEEF52400F8A951 /* FruityDB.db */,
+				ABC428C61AD72AAA00BDA15D /* FruitItemDBHelper.h */,
+				ABC428C71AD72AAA00BDA15D /* FruitItemDBHelper.m */,
+			);
+			name = DataBaseInterface;
+			sourceTree = "<group>";
+		};
+		AB82C6ED1AF0132100F8A951 /* CalendarUI */ = {
+			isa = PBXGroup;
+			children = (
+				ABAF88301ADC9609008FE837 /* CalendarViewController.h */,
+				ABAF88311ADC9609008FE837 /* CalendarViewController.m */,
+				AB82C6E41AEEB92700F8A951 /* DisplayCalendarMonthView.h */,
+				AB82C6E51AEEB92700F8A951 /* DisplayCalendarMonthView.m */,
+			);
+			name = CalendarUI;
+			sourceTree = "<group>";
+		};
 		ABC428621AD2335D00BDA15D = {
 			isa = PBXGroup;
 			children = (
@@ -137,41 +188,22 @@
 		ABC4286D1AD2335D00BDA15D /* Fruity */ = {
 			isa = PBXGroup;
 			children = (
+				AB82C6ED1AF0132100F8A951 /* CalendarUI */,
+				AB82C6EC1AF012FB00F8A951 /* DataBaseInterface */,
+				AB82C6EB1AF012C200F8A951 /* SettingsUI */,
+				AB82C6EA1AF0127C00F8A951 /* StartingUI */,
 				ABAF88281AD9F9C0008FE837 /* AvenirLTStd-Light.otf */,
 				ABC428721AD2335D00BDA15D /* AppDelegate.h */,
 				ABC428731AD2335D00BDA15D /* AppDelegate.m */,
 				ABC428781AD2335D00BDA15D /* Main.storyboard */,
-				ABAF88301ADC9609008FE837 /* CalendarViewController.h */,
-				ABAF88311ADC9609008FE837 /* CalendarViewController.m */,
-				AB82C6E41AEEB92700F8A951 /* DisplayCalendarMonthView.h */,
-				AB82C6E51AEEB92700F8A951 /* DisplayCalendarMonthView.m */,
 				ABAF88361ADC9890008FE837 /* SeguePushFromRight.h */,
 				ABAF88371ADC9890008FE837 /* SeguePushFromRight.m */,
 				ABAF88331ADC9843008FE837 /* SeguePushFromLeft.h */,
 				ABAF88341ADC9843008FE837 /* SeguePushFromLeft.m */,
-				ABC428D71AD9AB1700BDA15D /* SettingsViewController.h */,
-				ABC428D81AD9AB1700BDA15D /* SettingsViewController.m */,
-				ABAF88391ADDF3A7008FE837 /* AddReminderViewController.h */,
-				ABAF883A1ADDF3A7008FE837 /* AddReminderViewController.m */,
-				ABC4289E1AD6E49100BDA15D /* AddDeleteFruitsViewController.h */,
-				ABC4289F1AD6E49100BDA15D /* AddDeleteFruitsViewController.m */,
-				ABC7A1331AE5AA2500F08733 /* DisplaySearchBarView.h */,
-				ABC7A1341AE5AA2500F08733 /* DisplaySearchBarView.m */,
-				ABAF884B1AE32744008FE837 /* DisplayStorageBottomView.h */,
-				ABAF884C1AE32744008FE837 /* DisplayStorageBottomView.m */,
-				ABAF88481AE30B57008FE837 /* AddFruitBottomView.h */,
-				ABAF88491AE30B57008FE837 /* AddFruitBottomView.m */,
-				ABAF88421AE2DEAF008FE837 /* DisplaySeasonalFruitsScrollView.h */,
-				ABAF88431AE2DEAF008FE837 /* DisplaySeasonalFruitsScrollView.m */,
 				ABAF88451AE2E09F008FE837 /* GlobalVariables.h */,
 				ABAF88461AE2E09F008FE837 /* GlobalVariables.m */,
 				ABC428D21AD7601200BDA15D /* FruitTouchButton.h */,
 				ABC428D31AD7601200BDA15D /* FruitTouchButton.m */,
-				ABC428BE1AD712E800BDA15D /* DBManager.h */,
-				ABC428BF1AD712E800BDA15D /* DBManager.m */,
-				AB82C6E71AEEF52400F8A951 /* FruityDB.db */,
-				ABC428C61AD72AAA00BDA15D /* FruitItemDBHelper.h */,
-				ABC428C71AD72AAA00BDA15D /* FruitItemDBHelper.m */,
 				ABC428C91AD72B0C00BDA15D /* FruitItem.h */,
 				ABC428CA1AD72B0C00BDA15D /* FruitItem.m */,
 				ABC428CC1AD72DBD00BDA15D /* FruitItemBasicInfo.h */,

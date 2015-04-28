@@ -14,6 +14,7 @@
     self = [super init];
     if (self) {
         self.fruitItem = [[FruitItem alloc] init];
+        self.numberOfFruits = 0;
     }
     return self;
 }
