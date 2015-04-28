@@ -20,6 +20,8 @@
 @synthesize darkGreyColor;
 @synthesize lightGreyColor;
 @synthesize pinkColor;
+@synthesize dbHelper;
+@synthesize userPreference;
 
 static GlobalVariables *instance = nil;
 
@@ -39,6 +41,23 @@ static GlobalVariables *instance = nil;
             instance.darkGreyColor = UIColorFromRGB(0x676f6b);
             instance.lightGreyColor = UIColorFromRGB(0xabacab);
             instance.pinkColor = UIColorFromRGB(0xd26168);
+            
+            instance.dbHelper = [[FruitItemDBHelper alloc] initDBHelper];
+            
+            // Initialize the user preference
+            instance.userPreference = [[NSUserDefaults alloc] init];
+            
+            // Record the start date of using Fruity so that no date earlier than this will be displayed in the calendar view
+            
+            NSCalendar *calendar = [NSCalendar currentCalendar];
+            NSDateComponents *comps = [calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:[NSDate date]];
+            comps.month = 1;
+            comps.day = 1;
+            NSDate *firstDayOfMonth = [calendar dateFromComponents:comps];
+            
+            //if ([instance.userPreference valueForKey:@"FruityStartDate"] == nil) {
+                [instance.userPreference setValue:firstDayOfMonth forKey:@"FruityStartDate"];
+            //}
         }
     }
     return instance;

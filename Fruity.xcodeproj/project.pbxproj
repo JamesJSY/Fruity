@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AB82C6E61AEEB92700F8A951 /* DisplayCalendarMonthView.m in Sources */ = {isa = PBXBuildFile; fileRef = AB82C6E51AEEB92700F8A951 /* DisplayCalendarMonthView.m */; };
+		AB82C6E81AEEF52400F8A951 /* FruityDB.db in Resources */ = {isa = PBXBuildFile; fileRef = AB82C6E71AEEF52400F8A951 /* FruityDB.db */; };
 		ABAF88271AD9CB86008FE837 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = ABC428C11AD7136700BDA15D /* libsqlite3.dylib */; };
 		ABAF88291AD9F9C0008FE837 /* AvenirLTStd-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = ABAF88281AD9F9C0008FE837 /* AvenirLTStd-Light.otf */; };
 		ABAF88321ADC9609008FE837 /* CalendarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ABAF88311ADC9609008FE837 /* CalendarViewController.m */; };
@@ -29,7 +31,6 @@
 		ABC428CB1AD72B0C00BDA15D /* FruitItem.m in Sources */ = {isa = PBXBuildFile; fileRef = ABC428CA1AD72B0C00BDA15D /* FruitItem.m */; };
 		ABC428CE1AD72DBD00BDA15D /* FruitItemBasicInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = ABC428CD1AD72DBD00BDA15D /* FruitItemBasicInfo.m */; };
 		ABC428D41AD7601200BDA15D /* FruitTouchButton.m in Sources */ = {isa = PBXBuildFile; fileRef = ABC428D31AD7601200BDA15D /* FruitTouchButton.m */; };
-		ABC428D61AD98B9200BDA15D /* FruityDB.db in Resources */ = {isa = PBXBuildFile; fileRef = ABC428D51AD98B9200BDA15D /* FruityDB.db */; };
 		ABC428D91AD9AB1700BDA15D /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ABC428D81AD9AB1700BDA15D /* SettingsViewController.m */; };
 		ABC7A1351AE5AA2500F08733 /* DisplaySearchBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = ABC7A1341AE5AA2500F08733 /* DisplaySearchBarView.m */; };
 /* End PBXBuildFile section */
@@ -45,6 +46,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		AB82C6E41AEEB92700F8A951 /* DisplayCalendarMonthView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisplayCalendarMonthView.h; sourceTree = "<group>"; };
+		AB82C6E51AEEB92700F8A951 /* DisplayCalendarMonthView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DisplayCalendarMonthView.m; sourceTree = "<group>"; };
+		AB82C6E71AEEF52400F8A951 /* FruityDB.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = FruityDB.db; sourceTree = "<group>"; };
 		ABAF88281AD9F9C0008FE837 /* AvenirLTStd-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "AvenirLTStd-Light.otf"; path = "../../../Downloads/avenir-lt-std/AvenirLTStd-Light.otf"; sourceTree = "<group>"; };
 		ABAF88301ADC9609008FE837 /* CalendarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalendarViewController.h; sourceTree = "<group>"; };
 		ABAF88311ADC9609008FE837 /* CalendarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalendarViewController.m; sourceTree = "<group>"; };
@@ -86,7 +90,6 @@
 		ABC428CD1AD72DBD00BDA15D /* FruitItemBasicInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FruitItemBasicInfo.m; sourceTree = "<group>"; };
 		ABC428D21AD7601200BDA15D /* FruitTouchButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FruitTouchButton.h; sourceTree = "<group>"; };
 		ABC428D31AD7601200BDA15D /* FruitTouchButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FruitTouchButton.m; sourceTree = "<group>"; };
-		ABC428D51AD98B9200BDA15D /* FruityDB.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = FruityDB.db; sourceTree = "<group>"; };
 		ABC428D71AD9AB1700BDA15D /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		ABC428D81AD9AB1700BDA15D /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		ABC7A1331AE5AA2500F08733 /* DisplaySearchBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisplaySearchBarView.h; sourceTree = "<group>"; };
@@ -140,6 +143,8 @@
 				ABC428781AD2335D00BDA15D /* Main.storyboard */,
 				ABAF88301ADC9609008FE837 /* CalendarViewController.h */,
 				ABAF88311ADC9609008FE837 /* CalendarViewController.m */,
+				AB82C6E41AEEB92700F8A951 /* DisplayCalendarMonthView.h */,
+				AB82C6E51AEEB92700F8A951 /* DisplayCalendarMonthView.m */,
 				ABAF88361ADC9890008FE837 /* SeguePushFromRight.h */,
 				ABAF88371ADC9890008FE837 /* SeguePushFromRight.m */,
 				ABAF88331ADC9843008FE837 /* SeguePushFromLeft.h */,
@@ -164,11 +169,11 @@
 				ABC428D31AD7601200BDA15D /* FruitTouchButton.m */,
 				ABC428BE1AD712E800BDA15D /* DBManager.h */,
 				ABC428BF1AD712E800BDA15D /* DBManager.m */,
+				AB82C6E71AEEF52400F8A951 /* FruityDB.db */,
 				ABC428C61AD72AAA00BDA15D /* FruitItemDBHelper.h */,
 				ABC428C71AD72AAA00BDA15D /* FruitItemDBHelper.m */,
 				ABC428C91AD72B0C00BDA15D /* FruitItem.h */,
 				ABC428CA1AD72B0C00BDA15D /* FruitItem.m */,
-				ABC428D51AD98B9200BDA15D /* FruityDB.db */,
 				ABC428CC1AD72DBD00BDA15D /* FruitItemBasicInfo.h */,
 				ABC428CD1AD72DBD00BDA15D /* FruitItemBasicInfo.m */,
 				ABC4287B1AD2335D00BDA15D /* Images.xcassets */,
@@ -285,11 +290,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ABC428D61AD98B9200BDA15D /* FruityDB.db in Resources */,
 				ABC4287A1AD2335D00BDA15D /* Main.storyboard in Resources */,
 				ABAF88291AD9F9C0008FE837 /* AvenirLTStd-Light.otf in Resources */,
 				ABC428BD1AD710FC00BDA15D /* LaunchScreen.xib in Resources */,
 				ABC4287C1AD2335D00BDA15D /* Images.xcassets in Resources */,
+				AB82C6E81AEEF52400F8A951 /* FruityDB.db in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -309,6 +314,7 @@
 			files = (
 				ABAF883B1ADDF3A7008FE837 /* AddReminderViewController.m in Sources */,
 				ABC7A1351AE5AA2500F08733 /* DisplaySearchBarView.m in Sources */,
+				AB82C6E61AEEB92700F8A951 /* DisplayCalendarMonthView.m in Sources */,
 				ABC428CB1AD72B0C00BDA15D /* FruitItem.m in Sources */,
 				ABAF884A1AE30B57008FE837 /* AddFruitBottomView.m in Sources */,
 				ABAF88441AE2DEAF008FE837 /* DisplaySeasonalFruitsScrollView.m in Sources */,

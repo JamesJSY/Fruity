@@ -25,9 +25,6 @@
 @property (nonatomic) UIButton *calendarButton;
 @property (nonatomic) UIButton *settingsButton;
 
-@property (nonatomic) FruitItemDBHelper *dbHelper;
-@property (nonatomic) NSString *dataBaseName;
-
 @property (nonatomic) UIView *mainView;
 @property (nonatomic) DisplaySearchBarView *displaySearchBarView;
 @property (nonatomic) DisplaySeasonalFruitsScrollView *displaySeasonalFruitsView;
@@ -42,6 +39,7 @@
 @property (nonatomic) bool canScrollDown;
 @property (nonatomic) bool isInAddingStatus;
 
+@property NSDateFormatter *formatter;
 
 @end
 
@@ -53,12 +51,12 @@
     
     self.globalVs = [GlobalVariables getInstance];
     
+    // Set the date formatter
+    self.formatter = [[NSDateFormatter alloc] init];
+    [self.formatter setDateFormat:@"yyyy-MM-dd"];
+    
     // Initialize all fruits' basic information, like the seasonal property
     [self initAllFruitsBasicInfo];
-    
-    // Initialize _DBHelper
-    self.dbHelper = [[FruitItemDBHelper alloc] initDBHelper];
-    self.dataBaseName = @"FRUITITEMINFO";
     
     self.canScrollDown = NO;
     self.isInAddingStatus = NO;
@@ -191,17 +189,14 @@
     
     self.isInAddingStatus = NO;
     
-    // Get the current date
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"yyyy-MM-dd"];
-    
     // Prepare for the new item to be inserted into the database
     FruitItem *item = [[FruitItem alloc] init];
     item.name = self.addFruitButton.fruitItem.name;
-    item.purchaseDate = [formatter stringFromDate:[NSDate date]];
+    item.purchaseDate = [self.formatter stringFromDate:[NSDate date]];
     item.startStatus = 10;
     item.statusChangeThreshold = 1;
     item.isEaten = NO;
+    item.eatDate = @"";
     
     // Get the current location of the addFruitButton
     CGRect currentFrameInWindow = [self.addFruitButton convertRect:self.addFruitButton.bounds toView:nil];
@@ -210,7 +205,7 @@
     
     for (int i = 0; i <inputQuantityButton.tag + 1; i++) {
         // Insert the new item into the database
-        [self.dbHelper insertFruitItemIntoDB:item];
+        [self.globalVs.dbHelper insertFruitItemIntoDB:item];
         
         // Create new addFruitButton with related image and do an animation to move it to the eat button
         FruitTouchButton *tempFruitButton = [[FruitTouchButton alloc] initWithFrame:currentFrameInWindow];;
@@ -295,16 +290,16 @@
 }
 
 - (NSArray *) loadAllFruitsInStorageFromDB {
-    self.fruitsInStorage = [[NSArray alloc] initWithArray:[self.dbHelper loadAllFruitItemsNotEatenFromDB]];
+    self.fruitsInStorage = [[NSArray alloc] initWithArray:[self.globalVs.dbHelper loadAllFruitItemsNotEatenFromDB]];
     return self.fruitsInStorage;
 }
 
 - (void) eatFruitItemWithID:(int) ID {
-    [self.dbHelper eatFruitItemFromDB:ID];
+    [self.globalVs.dbHelper eatFruitItemFromDB:ID date:[self.formatter stringFromDate:[NSDate date]]];
 }
 
 - (void) deleteFruitItemWithID:(int) ID {
-    [self.dbHelper deleteFruitItemsFromDB:ID];
+    [self.globalVs.dbHelper deleteFruitItemsFromDB:ID];
 }
 
 - (void)showStorageBottomView:(UIButton *)eatButton {
@@ -324,7 +319,7 @@
                          self.displayStorageBottomView.frame = CGRectOffset(self.displayStorageBottomView.frame, 0, -self.globalVs.screenHeight / 4);
                      }
                      completion:^(BOOL finished) {
-                         
+                         [self.displayStorageBottomView showMouth];
                      }];
 }
 

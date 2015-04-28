@@ -8,17 +8,23 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "FruitItemDBHelper.h"
 
 @interface GlobalVariables : NSObject
 {
     int screenWidth;
     int screenHeight;
+    
     UIFont *font;
     UIColor *blueColor;
     UIColor *softWhiteColor;
     UIColor *darkGreyColor;
     UIColor *lightGreyColor;
     UIColor *pinkColor;
+    
+    FruitItemDBHelper *dbHelper;
+    
+    NSUserDefaults *userPreference;
 }
 
 @property (nonatomic) int screenWidth;
@@ -29,6 +35,8 @@
 @property (nonatomic) UIColor *darkGreyColor;
 @property (nonatomic) UIColor *lightGreyColor;
 @property (nonatomic) UIColor *pinkColor;
+@property (nonatomic) FruitItemDBHelper *dbHelper;
+@property (nonatomic) NSUserDefaults *userPreference;
 
 + (GlobalVariables *)getInstance;
 

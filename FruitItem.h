@@ -13,6 +13,7 @@
 @property int ID;
 @property NSString* name;
 @property NSString* purchaseDate;
+@property NSString* eatDate;
 @property float startStatus;
 @property float statusChangeThreshold;
 @property bool isEaten;

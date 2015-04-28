@@ -27,4 +27,6 @@
 - (void)loadDisplayStorageBottomView;
 - (void)mainViewDidMoveDown;
 
+- (void)showMouth;
+
 @end

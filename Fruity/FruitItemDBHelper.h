@@ -16,11 +16,12 @@
 -(void)insertFruitItemIntoDB:(FruitItem *) item;
 
 -(NSArray *)loadAllFruitItemsNotEatenFromDB;
+-(NSArray *)loadAllFruitItemsEatenFromDBInYear:(int)inputYear month:(int)inputMonth day:(int)inputDay;
 
 -(void)deleteFruitItemsFromDB:(int) ID;
 
 -(void)updateFruitItemsFromDB:(FruitItem *) item;
 
--(void)eatFruitItemFromDB:(int) ID;
+-(void)eatFruitItemFromDB:(int) ID date:(NSString*) eatDate;
 
 @end

@@ -9,10 +9,12 @@
 #import "DisplayStorageBottomView.h"
 #import "FruitItem.h"
 #import "FruitTouchButton.h"
+#import "GlobalVariables.h"
 
-#define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 @interface DisplayStorageBottomView ()
+
+@property GlobalVariables *globalVs;
 
 @property (nonatomic) NSMutableArray *allStorageFruitsButton;
 
@@ -29,7 +31,9 @@
     self = [super initWithFrame:frame];
     if (self) {
         
-        self.backgroundColor = UIColorFromRGB(0xadd9c2);
+        self.globalVs = [GlobalVariables getInstance];
+        
+        self.backgroundColor = self.globalVs.blueColor;
         self.clipsToBounds = NO;
         
         self.storageListScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 30, self.frame.size.width, self.frame.size.height / 3)];
@@ -89,7 +93,7 @@
         FruitItem *item = fruitsInStorage[i];
         
         FruitTouchButton *fruitInHand = [[FruitTouchButton alloc] init];
-        [fruitInHand addTarget:self action:@selector(showMouth:) forControlEvents:UIControlEventTouchDown];
+        //[fruitInHand addTarget:self action:@selector(showMouth:) forControlEvents:UIControlEventTouchDown];
         [fruitInHand addTarget:self action:@selector(dragFruitButton:withEvent:) forControlEvents:UIControlEventTouchDragInside];
         [fruitInHand addTarget:self action:@selector(releaseFruitButton:withEvent:) forControlEvents:UIControlEventTouchUpInside];
         
@@ -108,12 +112,14 @@
     
 }
 
-- (void)showMouth:(FruitTouchButton *)inputFruit {
+
+- (void)showMouth{
     //[self.animationMouthOpeningImageViewBottom setImage:[UIImage imageNamed:@"monsterChew3.png"]];
     [self.animationMouthOpeningImageViewBottom startAnimating];
     [self performSelector:@selector(animationAfterMouthDidShow) withObject:nil
                afterDelay:self.animationMouthOpeningImageViewBottom.animationDuration - 0.1];
 }
+
 
 - (void)dragFruitButton:(FruitTouchButton*)inputFruit withEvent:(UIEvent*) event{
     inputFruit.center = [[[event allTouches] anyObject] locationInView:self.storageListScrollView];

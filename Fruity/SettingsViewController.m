@@ -15,13 +15,12 @@
 @interface SettingsViewController ()
 
 @property (nonatomic) UIView *displayReminderView;
-@property UIButton *addReminderButton;
+@property (nonatomic) UIButton *addReminderButton;
 
 @property GlobalVariables *globalVs;
 
 //@property (nonatomic) NSMutableArray *reminderTimes;
 @property (nonatomic) NSMutableArray *allLocalNotificationTimes;
-@property (nonatomic) NSUserDefaults *userPreference;
 
 @property (nonatomic) UITextView *notificationTipTextView;
 @property (nonatomic) UITextView *notificationTextView;
@@ -60,9 +59,6 @@
     self.dateFormatter = [[NSDateFormatter alloc] init];
     [self.dateFormatter setDateFormat:@"hh:mm a"];
     
-    // Initialize the user preference
-    self.userPreference = [[NSUserDefaults alloc] init];
-    
     // Load data from userDefaults
     [self loadUserPreference];
     
@@ -87,13 +83,13 @@
     
     // Load all reminders
     //self.reminderTimes = [[NSMutableArray alloc] initWithArray:[self.userPreference objectForKey:@"notificationRemindTimes"]];
-    self.allLocalNotificationTimes = [[NSMutableArray alloc] initWithArray:[self.userPreference objectForKey:@"allLocalNotificationTimes"]];
+    self.allLocalNotificationTimes = [[NSMutableArray alloc] initWithArray:[self.globalVs.userPreference objectForKey:@"allLocalNotificationTimes"]];
     
     // Set notification on the first time launching the view controller
-    if ([self.userPreference objectForKey:@"isNotificationOn"] == nil) {
-        [self.userPreference setBool:YES forKey:@"isNotificationOn"];
+    if ([self.globalVs.userPreference objectForKey:@"isNotificationOn"] == nil) {
+        [self.globalVs.userPreference setBool:YES forKey:@"isNotificationOn"];
     }
-    self.isNotificationOn = [self.userPreference boolForKey:@"isNotificationOn"];
+    self.isNotificationOn = [self.globalVs.userPreference boolForKey:@"isNotificationOn"];
 }
 
 - (void)displayReminders {
@@ -234,7 +230,7 @@
     
     // Reverse notification on/off and save it to the user preference
     self.isNotificationOn = !self.isNotificationOn;
-    [self.userPreference setBool:self.isNotificationOn forKey:@"isNotificationOn"];
+    [self.globalVs.userPreference setBool:self.isNotificationOn forKey:@"isNotificationOn"];
     
     if (self.isNotificationOn) {
         // Change the switch notification button to on
@@ -390,7 +386,7 @@
             
     
             // Update stored object in the userPreference
-            [self.userPreference setObject:self.allLocalNotificationTimes forKey:@"allLocalNotificationTimes"];
+            [self.globalVs.userPreference setObject:self.allLocalNotificationTimes forKey:@"allLocalNotificationTimes"];
             //[self.userPreference setValue:[NSString stringWithFormat:@"%d", self.lastNotificationID]  forKey:@"lastNotificationID"];
     
             // Reload all reminders
@@ -422,7 +418,7 @@
             [self.allLocalNotificationTimes removeObjectAtIndex:self.pressButtonTag];
             
             // Update stored object in the userPreference
-            [self.userPreference setObject:self.allLocalNotificationTimes forKey:@"allLocalNotificationTimes"];
+            [self.globalVs.userPreference setObject:self.allLocalNotificationTimes forKey:@"allLocalNotificationTimes"];
             //[self.userPreference setValue:[NSString stringWithFormat:@"%d", self.lastNotificationID]  forKey:@"lastNotificationID"];
             
             // Reload all reminders
@@ -462,7 +458,7 @@
             [self.allLocalNotificationTimes replaceObjectAtIndex:self.pressButtonTag withObject:sourceViewController.date];
         
             // Update the stored object in the userPreference
-            [self.userPreference setObject:self.allLocalNotificationTimes forKey:@"allLocalNotificationTimes"];
+            [self.globalVs.userPreference setObject:self.allLocalNotificationTimes forKey:@"allLocalNotificationTimes"];
             //[self.userPreference setValue:[NSString stringWithFormat:@"%d", self.lastNotificationID]  forKey:@"lastNotificationID"];
         
             // Reload all reminders
