@@ -631,7 +631,7 @@
     NSDateComponents *dateComponents = [gregorian components:(NSCalendarUnitDay|NSCalendarUnitMonth|NSCalendarUnitYear) fromDate:date];
     NSInteger month = [dateComponents month];
     
-    [self.displaySeasonalFruitsView loadViewWithSeasonalFruitsBasicInfo:self.allFruitsBasicInfo withMonth:month];
+    [self.displaySeasonalFruitsView loadViewWithSeasonalFruitsBasicInfo:self.allFruitsBasicInfo withMonth:(int)month];
 }
 
 - (void)didReceiveMemoryWarning {
