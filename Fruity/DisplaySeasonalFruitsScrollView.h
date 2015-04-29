@@ -33,4 +33,6 @@
 - (void) disableAllFruitTouchButtonsInteraction;
 - (void) enableAllFruitTouchButtonsInteraction;
 
+@property (nonatomic) int monthForDisplaying;
+
 @end

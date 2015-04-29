@@ -12,9 +12,6 @@
 #import "FruitTouchButton.h"
 #import "FruitItemDBHelper.h"
 
-
-#define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
-
 @interface AddDeleteFruitsViewController ()
 
 @property GlobalVariables *globalVs;
@@ -40,7 +37,10 @@
 @property (nonatomic) bool canScrollDown;
 @property (nonatomic) bool isInAddingStatus;
 
-@property NSDateFormatter *formatter;
+@property (nonatomic) NSDateFormatter *formatter;
+
+@property (nonatomic) UISwipeGestureRecognizer *swipeLeftGestureRecognizer;
+@property (nonatomic) UISwipeGestureRecognizer *swipeRightGestureRecognizer;
 
 @end
 
@@ -101,6 +101,16 @@
                                                            action:@selector(gestureRecognition)];
     tapToAct.cancelsTouchesInView = NO;
     [self.mainView addGestureRecognizer:tapToAct];
+    
+    self.swipeLeftGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(seasonalFruitsViewDidSwipeLeft)];
+    self.swipeLeftGestureRecognizer.direction = UISwipeGestureRecognizerDirectionLeft;
+    
+    self.swipeRightGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(seasonalFruitsViewDidSwipeRight)];
+    self.swipeRightGestureRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
+    
+    [self.displaySeasonalFruitsView addGestureRecognizer:self.swipeLeftGestureRecognizer];
+    [self.displaySeasonalFruitsView addGestureRecognizer:self.swipeRightGestureRecognizer];
+
 }
 
 -(void)goToSettingsView:(UIButton*)settingsButton {
@@ -117,7 +127,7 @@
     
     // set up the main view
     self.mainView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.globalVs.screenWidth, self.globalVs.screenHeight)];
-    self.mainView.backgroundColor = UIColorFromRGB(0xf4f4cd);
+    self.mainView.backgroundColor = self.globalVs.softWhiteColor;
     [self.view addSubview:self.mainView];
     
     
@@ -140,7 +150,7 @@
     [self.eatButton addTarget:self action:@selector(showStorageBottomView:) forControlEvents:UIControlEventTouchUpInside];
     [self.eatButton setTitle:@"EAT" forState:UIControlStateNormal];
     self.eatButton.titleLabel.font = self.globalVs.font;
-    self.eatButton.titleLabel.textColor = UIColorFromRGB(0x676f6b);
+    self.eatButton.titleLabel.textColor = self.globalVs.darkGreyColor;
     [self.eatButton setTitleEdgeInsets: UIEdgeInsetsMake(75,0,0,0)];
     [self.mainView addSubview:self.eatButton];
     
@@ -160,6 +170,18 @@
 - (void)addFruitsToDatabase:(FruitTouchButton*)inputFruit {
     NSLog(@"%@ is pressed in add view!", inputFruit.fruitItem.name);
     self.isInAddingStatus = YES;
+    
+    if ([inputFruit.fruitItem.name isEqualToString:@"raspberry"] ||
+        [inputFruit.fruitItem.name isEqualToString:@"strawberry"] ||
+        [inputFruit.fruitItem.name isEqualToString:@"blackberry"] ||
+        [inputFruit.fruitItem.name isEqualToString:@"blueberry"] ||
+        [inputFruit.fruitItem.name isEqualToString:@"cherry"] ||
+        [inputFruit.fruitItem.name isEqualToString:@"grape"]) {
+        [self.addFruitBottomView setUpQuantitiesWithQuantityBase:10];
+    }
+    else {
+        [self.addFruitBottomView setUpQuantitiesWithQuantityBase:1];
+    }
     
     [self.addFruitBottomView setHidden:NO];
     [self.eatButton setHidden:YES];
@@ -209,15 +231,28 @@
     [self.mainView addSubview:self.tempFruitButton];
     
     // Set the fruit quantity label
-    self.fruitQuantityLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.addFruitButton.frame.size.width * 2 / 3, self.addFruitButton.frame.size.width * 2 / 3)];
+    self.fruitQuantityLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.addFruitButton.frame.size.width * 4 / 5, self.addFruitButton.frame.size.width * 4 / 5)];
     self.fruitQuantityLabel.layer.cornerRadius = self.fruitQuantityLabel.frame.size.width / 2;
     self.fruitQuantityLabel.center = CGPointMake(self.addFruitButton.frame.size.width / 2, self.addFruitButton.frame.size.height / 2);
     self.fruitQuantityLabel.clipsToBounds = YES;
-    self.fruitQuantityLabel.font = self.globalVs.font;
+    self.fruitQuantityLabel.font = [UIFont fontWithName:@"AvenirLTStd-Light" size:13];
     self.fruitQuantityLabel.textColor = self.globalVs.softWhiteColor;
     self.fruitQuantityLabel.backgroundColor = self.globalVs.pinkColor;
     self.fruitQuantityLabel.textAlignment = NSTextAlignmentCenter;
-    self.fruitQuantityLabel.text = [NSString stringWithFormat:@"x %d", (int)inputQuantityButton.tag + 1];
+    
+    if ([self.addFruitButton.fruitItem.name isEqualToString:@"raspberry"] ||
+        [self.addFruitButton.fruitItem.name isEqualToString:@"strawberry"] ||
+        [self.addFruitButton.fruitItem.name isEqualToString:@"blackberry"] ||
+        [self.addFruitButton.fruitItem.name isEqualToString:@"blueberry"] ||
+        [self.addFruitButton.fruitItem.name isEqualToString:@"cherry"] ||
+        [self.addFruitButton.fruitItem.name isEqualToString:@"grape"]) {
+        self.fruitQuantityLabel.text = [NSString stringWithFormat:@"x %d+", (int)(inputQuantityButton.tag + 1) * 10];
+    }
+    else {
+        self.fruitQuantityLabel.text = [NSString stringWithFormat:@"x %d", (int)inputQuantityButton.tag + 1];
+    }
+    
+    
     [self.tempFruitButton addSubview:self.fruitQuantityLabel];
 
     
@@ -284,7 +319,7 @@
                                               [self.fruitQuantityLabel removeFromSuperview];
                                               [self.tempFruitButton removeFromSuperview];
                                               
-                                              self.mainView.backgroundColor = UIColorFromRGB(0xf4f4cd);
+                                              self.mainView.backgroundColor = self.globalVs.softWhiteColor;
                                               
                                               [self.calendarButton setUserInteractionEnabled:YES];
                                               [self.calendarButton setAlpha:1];
@@ -354,7 +389,7 @@
                          }
                          completion:^(BOOL finished) {
                              
-                             self.mainView.backgroundColor = UIColorFromRGB(0xf4f4cd);
+                             self.mainView.backgroundColor = self.globalVs.softWhiteColor;
                              
                              [self.calendarButton setUserInteractionEnabled:YES];
                              [self.calendarButton setAlpha:1];
@@ -393,7 +428,59 @@
     }
 }
 
+- (void)seasonalFruitsViewDidSwipeLeft {
+    if (!self.isInAddingStatus && !self.canScrollDown) {
+        int month = self.displaySeasonalFruitsView.monthForDisplaying == 12 ? 1 : self.displaySeasonalFruitsView.monthForDisplaying + 1;
+    
+        // Load new seasonal fruits to the right of the middle of the mainView
+        DisplaySeasonalFruitsScrollView *newView = [[DisplaySeasonalFruitsScrollView alloc] initWithFrame:CGRectMake(self.globalVs.screenWidth, self.globalVs.screenHeight / 4, self.globalVs.screenWidth, self.globalVs.screenHeight * 3 / 5)];
+        newView.superViewDelegate = self;
+        [newView loadViewWithSeasonalFruitsBasicInfo:self.allFruitsBasicInfo withMonth:(int)month];
+        [self.mainView addSubview:newView];
+        [self.displaySeasonalFruitsView removeGestureRecognizer:self.swipeLeftGestureRecognizer];
+        [self.displaySeasonalFruitsView removeGestureRecognizer:self.swipeRightGestureRecognizer];
+        [newView addGestureRecognizer:self.swipeLeftGestureRecognizer];
+        [newView addGestureRecognizer:self.swipeRightGestureRecognizer];
+    
+        [UIView animateWithDuration:0.3
+                              delay:0
+                            options:0
+                         animations:^{
+                             self.displaySeasonalFruitsView.frame = CGRectOffset(self.displaySeasonalFruitsView.frame, -self.globalVs.screenWidth, 0);
+                             newView.frame = CGRectOffset(newView.frame, -self.globalVs.screenWidth, 0);
+                         }
+                         completion:^(BOOL finished) {
+                             self.displaySeasonalFruitsView = newView;
+                         }];
+    }
+}
 
+- (void)seasonalFruitsViewDidSwipeRight {
+    if (!self.isInAddingStatus && !self.canScrollDown) {
+        int month = self.displaySeasonalFruitsView.monthForDisplaying == 1 ? 12 : self.displaySeasonalFruitsView.monthForDisplaying - 1;
+    
+        // Load new seasonal fruits to the right of the middle of the mainView
+        DisplaySeasonalFruitsScrollView *newView = [[DisplaySeasonalFruitsScrollView alloc] initWithFrame:CGRectMake(-self.globalVs.screenWidth, self.globalVs.screenHeight / 4, self.globalVs.screenWidth, self.globalVs.screenHeight * 3 / 5)];
+        newView.superViewDelegate = self;
+        [newView loadViewWithSeasonalFruitsBasicInfo:self.allFruitsBasicInfo withMonth:(int)month];
+        [self.mainView addSubview:newView];
+        [self.displaySeasonalFruitsView removeGestureRecognizer:self.swipeLeftGestureRecognizer];
+        [self.displaySeasonalFruitsView removeGestureRecognizer:self.swipeRightGestureRecognizer];
+        [newView addGestureRecognizer:self.swipeLeftGestureRecognizer];
+        [newView addGestureRecognizer:self.swipeRightGestureRecognizer];
+    
+        [UIView animateWithDuration:0.3
+                              delay:0
+                            options:0
+                         animations:^{
+                             self.displaySeasonalFruitsView.frame = CGRectOffset(self.displaySeasonalFruitsView.frame, self.globalVs.screenWidth, 0);
+                             newView.frame = CGRectOffset(newView.frame, self.globalVs.screenWidth, 0);
+                         }
+                         completion:^(BOOL finished) {
+                             self.displaySeasonalFruitsView = newView;
+                         }];
+    }
+}
 
 -(void)initAllFruitsBasicInfo {
     self.allFruitsBasicInfo = [[NSMutableArray alloc] init];
@@ -530,9 +617,21 @@
 }*/
 
 - (IBAction)unwindFromSettingsView:(UIStoryboardSegue *)segue {
+    [self resetDisplaySeasonalFruitsView];
 }
 
 - (IBAction)unwindFromCalendarView:(UIStoryboardSegue *)segue {
+    [self resetDisplaySeasonalFruitsView];
+}
+
+- (void)resetDisplaySeasonalFruitsView {
+    // Get the current month.
+    NSDate *date = [NSDate date];
+    NSCalendar *gregorian = [NSCalendar currentCalendar];
+    NSDateComponents *dateComponents = [gregorian components:(NSCalendarUnitDay|NSCalendarUnitMonth|NSCalendarUnitYear) fromDate:date];
+    NSInteger month = [dateComponents month];
+    
+    [self.displaySeasonalFruitsView loadViewWithSeasonalFruitsBasicInfo:self.allFruitsBasicInfo withMonth:month];
 }
 
 - (void)didReceiveMemoryWarning {

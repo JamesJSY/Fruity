@@ -133,7 +133,19 @@
         quantityLabel.font = self.globalVs.font;
         quantityLabel.textAlignment = NSTextAlignmentCenter;
         quantityLabel.textColor = self.globalVs.softWhiteColor;
-        quantityLabel.text = [NSString stringWithFormat:@"%d", fruitButton.numberOfFruits];
+        
+        if ([fruitButton.fruitItem.name isEqualToString:@"raspberry"] ||
+            [fruitButton.fruitItem.name isEqualToString:@"strawberry"] ||
+            [fruitButton.fruitItem.name isEqualToString:@"blackberry"] ||
+            [fruitButton.fruitItem.name isEqualToString:@"blueberry"] ||
+            [fruitButton.fruitItem.name isEqualToString:@"cherry"] ||
+            [fruitButton.fruitItem.name isEqualToString:@"grape"]) {
+            quantityLabel.text = [NSString stringWithFormat:@"%d+", fruitButton.numberOfFruits * 10];
+        }
+        else {
+            quantityLabel.text = [NSString stringWithFormat:@"%d", fruitButton.numberOfFruits];
+        }
+        
         [self.storageListScrollView addSubview:quantityLabel];
         [self.allQuantityLabels addObject:quantityLabel];
     }

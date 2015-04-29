@@ -10,12 +10,9 @@
 #import "GlobalVariables.h"
 #import "FruitItemBasicInfo.h"
 
-
-#define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
-
 @interface DisplaySeasonalFruitsScrollView ()
 
-//@property GlobalVariables *globalVs;
+@property GlobalVariables *globalVs;
 
 @property NSMutableArray *seasonalFruits;
 
@@ -23,6 +20,7 @@
 @property UITextView *monthTextView;
 
 @property NSMutableArray *allSeasonalFruitsButton;
+@property NSMutableArray *allFruitsBasicInfo;
 
 @end
 
@@ -31,7 +29,7 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        //self.globalVs = [GlobalVariables getInstance];
+        self.globalVs = [GlobalVariables getInstance];
         self.seasonalFruitTextView = [[UITextView alloc] init];
         self.monthTextView = [[UITextView alloc] init];
         
@@ -39,7 +37,7 @@
         self.seasonalFruitTextView.text = @"Seasonal Fruits in";
         self.seasonalFruitTextView.font = [UIFont fontWithName:@"AvenirLTStd-Light" size:14];
         self.seasonalFruitTextView.backgroundColor = [UIColor clearColor];
-        self.seasonalFruitTextView.textColor = UIColorFromRGB(0xabacab);
+        self.seasonalFruitTextView.textColor = self.globalVs.lightGreyColor;
         self.seasonalFruitTextView.frame = CGRectMake(0, 0, 110, 50);
         self.seasonalFruitTextView.textAlignment = NSTextAlignmentCenter;
         self.seasonalFruitTextView.center = CGPointMake(self.frame.size.width / 2, self.frame.size.height / 2 - 20);
@@ -48,17 +46,21 @@
         
         self.monthTextView.font = [UIFont fontWithName:@"AvenirLTStd-Light" size:40];
         self.monthTextView.backgroundColor = [UIColor clearColor];
-        self.monthTextView.textColor = UIColorFromRGB(0x676f6b);
+        self.monthTextView.textColor = self.globalVs.darkGreyColor;
         self.monthTextView.textAlignment = NSTextAlignmentCenter;
         self.monthTextView.frame = CGRectMake(0, 0, 100, 50);
         self.monthTextView.center = CGPointMake(self.frame.size.width / 2, self.frame.size.height / 2 + 20);
         self.monthTextView.editable = NO;
         [self addSubview:self.monthTextView];
-    }
+        
+        }
     return (self);
 }
 
 - (void)loadViewWithSeasonalFruitsBasicInfo:(NSMutableArray *)allFruitsBasicInfo withMonth:(int) month{
+    self.monthForDisplaying = month;
+    self.allFruitsBasicInfo = allFruitsBasicInfo;
+    
     // Remove all subviews currently in the fruitsAddView
     [self.allSeasonalFruitsButton makeObjectsPerformSelector: @selector(removeFromSuperview)];
     
@@ -68,40 +70,40 @@
 
     switch (month) {
         case 1:
-            self.monthTextView.text = @"January";
+            self.monthTextView.text = @"JAN";
             break;
         case 2:
-            self.monthTextView.text = @"February";
+            self.monthTextView.text = @"FEB";
             break;
         case 3:
-            self.monthTextView.text = @"March";
+            self.monthTextView.text = @"MAR";
             break;
         case 4:
-            self.monthTextView.text = @"April";
+            self.monthTextView.text = @"APR";
             break;
         case 5:
-            self.monthTextView.text = @"May";
+            self.monthTextView.text = @"MAY";
             break;
         case 6:
-            self.monthTextView.text = @"June";
+            self.monthTextView.text = @"JUN";
             break;
         case 7:
-            self.monthTextView.text = @"July";
+            self.monthTextView.text = @"JUL";
             break;
         case 8:
-            self.monthTextView.text = @"August";
+            self.monthTextView.text = @"AUG";
             break;
         case 9:
-            self.monthTextView.text = @"September";
+            self.monthTextView.text = @"SEPT";
             break;
         case 10:
-            self.monthTextView.text = @"October";
+            self.monthTextView.text = @"OCT";
             break;
         case 11:
-            self.monthTextView.text = @"November";
+            self.monthTextView.text = @"NOV";
             break;
         case 12:
-            self.monthTextView.text = @"December";
+            self.monthTextView.text = @"DEC";
             break;
         default:
             break;
@@ -174,6 +176,8 @@
         [self.allSeasonalFruitsButton[i] setUserInteractionEnabled:YES];
     }
 }
+
+
 
 /*
 // Only override drawRect: if you perform custom drawing.

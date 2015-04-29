@@ -24,4 +24,6 @@
 
 - (void)addButtonDidFinishPressing;
 
+- (void)setUpQuantitiesWithQuantityBase:(int)base;
+
 @end
