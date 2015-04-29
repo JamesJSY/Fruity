@@ -9,11 +9,12 @@
 /* Begin PBXBuildFile section */
 		AB82C6E61AEEB92700F8A951 /* DisplayCalendarMonthView.m in Sources */ = {isa = PBXBuildFile; fileRef = AB82C6E51AEEB92700F8A951 /* DisplayCalendarMonthView.m */; };
 		AB82C6E81AEEF52400F8A951 /* FruityDB.db in Resources */ = {isa = PBXBuildFile; fileRef = AB82C6E71AEEF52400F8A951 /* FruityDB.db */; };
+		AB82C6F21AF0613900F8A951 /* FruitItem.m in Sources */ = {isa = PBXBuildFile; fileRef = AB82C6EF1AF0613900F8A951 /* FruitItem.m */; };
+		AB82C6F31AF0613900F8A951 /* SeguePushFromRight.m in Sources */ = {isa = PBXBuildFile; fileRef = AB82C6F11AF0613900F8A951 /* SeguePushFromRight.m */; };
 		ABAF88271AD9CB86008FE837 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = ABC428C11AD7136700BDA15D /* libsqlite3.dylib */; };
 		ABAF88291AD9F9C0008FE837 /* AvenirLTStd-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = ABAF88281AD9F9C0008FE837 /* AvenirLTStd-Light.otf */; };
 		ABAF88321ADC9609008FE837 /* CalendarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ABAF88311ADC9609008FE837 /* CalendarViewController.m */; };
 		ABAF88351ADC9843008FE837 /* SeguePushFromLeft.m in Sources */ = {isa = PBXBuildFile; fileRef = ABAF88341ADC9843008FE837 /* SeguePushFromLeft.m */; };
-		ABAF88381ADC9890008FE837 /* SeguePushFromRight.m in Sources */ = {isa = PBXBuildFile; fileRef = ABAF88371ADC9890008FE837 /* SeguePushFromRight.m */; };
 		ABAF883B1ADDF3A7008FE837 /* AddReminderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ABAF883A1ADDF3A7008FE837 /* AddReminderViewController.m */; };
 		ABAF88441AE2DEAF008FE837 /* DisplaySeasonalFruitsScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = ABAF88431AE2DEAF008FE837 /* DisplaySeasonalFruitsScrollView.m */; };
 		ABAF88471AE2E09F008FE837 /* GlobalVariables.m in Sources */ = {isa = PBXBuildFile; fileRef = ABAF88461AE2E09F008FE837 /* GlobalVariables.m */; };
@@ -28,7 +29,6 @@
 		ABC428BD1AD710FC00BDA15D /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = ABC428BC1AD710FC00BDA15D /* LaunchScreen.xib */; };
 		ABC428C01AD712E800BDA15D /* DBManager.m in Sources */ = {isa = PBXBuildFile; fileRef = ABC428BF1AD712E800BDA15D /* DBManager.m */; };
 		ABC428C81AD72AAA00BDA15D /* FruitItemDBHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = ABC428C71AD72AAA00BDA15D /* FruitItemDBHelper.m */; };
-		ABC428CB1AD72B0C00BDA15D /* FruitItem.m in Sources */ = {isa = PBXBuildFile; fileRef = ABC428CA1AD72B0C00BDA15D /* FruitItem.m */; };
 		ABC428CE1AD72DBD00BDA15D /* FruitItemBasicInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = ABC428CD1AD72DBD00BDA15D /* FruitItemBasicInfo.m */; };
 		ABC428D41AD7601200BDA15D /* FruitTouchButton.m in Sources */ = {isa = PBXBuildFile; fileRef = ABC428D31AD7601200BDA15D /* FruitTouchButton.m */; };
 		ABC428D91AD9AB1700BDA15D /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ABC428D81AD9AB1700BDA15D /* SettingsViewController.m */; };
@@ -49,13 +49,15 @@
 		AB82C6E41AEEB92700F8A951 /* DisplayCalendarMonthView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisplayCalendarMonthView.h; sourceTree = "<group>"; };
 		AB82C6E51AEEB92700F8A951 /* DisplayCalendarMonthView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DisplayCalendarMonthView.m; sourceTree = "<group>"; };
 		AB82C6E71AEEF52400F8A951 /* FruityDB.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = FruityDB.db; sourceTree = "<group>"; };
+		AB82C6EE1AF0613900F8A951 /* FruitItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FruitItem.h; sourceTree = "<group>"; };
+		AB82C6EF1AF0613900F8A951 /* FruitItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FruitItem.m; sourceTree = "<group>"; };
+		AB82C6F01AF0613900F8A951 /* SeguePushFromRight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SeguePushFromRight.h; sourceTree = "<group>"; };
+		AB82C6F11AF0613900F8A951 /* SeguePushFromRight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SeguePushFromRight.m; sourceTree = "<group>"; };
 		ABAF88281AD9F9C0008FE837 /* AvenirLTStd-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "AvenirLTStd-Light.otf"; path = "../../../Downloads/avenir-lt-std/AvenirLTStd-Light.otf"; sourceTree = "<group>"; };
 		ABAF88301ADC9609008FE837 /* CalendarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalendarViewController.h; sourceTree = "<group>"; };
 		ABAF88311ADC9609008FE837 /* CalendarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalendarViewController.m; sourceTree = "<group>"; };
 		ABAF88331ADC9843008FE837 /* SeguePushFromLeft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SeguePushFromLeft.h; sourceTree = "<group>"; };
 		ABAF88341ADC9843008FE837 /* SeguePushFromLeft.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SeguePushFromLeft.m; sourceTree = "<group>"; };
-		ABAF88361ADC9890008FE837 /* SeguePushFromRight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SeguePushFromRight.h; path = ../SeguePushFromRight.h; sourceTree = "<group>"; };
-		ABAF88371ADC9890008FE837 /* SeguePushFromRight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SeguePushFromRight.m; path = ../SeguePushFromRight.m; sourceTree = "<group>"; };
 		ABAF88391ADDF3A7008FE837 /* AddReminderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddReminderViewController.h; sourceTree = "<group>"; };
 		ABAF883A1ADDF3A7008FE837 /* AddReminderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddReminderViewController.m; sourceTree = "<group>"; };
 		ABAF88421AE2DEAF008FE837 /* DisplaySeasonalFruitsScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisplaySeasonalFruitsScrollView.h; sourceTree = "<group>"; };
@@ -84,8 +86,6 @@
 		ABC428C11AD7136700BDA15D /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		ABC428C61AD72AAA00BDA15D /* FruitItemDBHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FruitItemDBHelper.h; sourceTree = "<group>"; };
 		ABC428C71AD72AAA00BDA15D /* FruitItemDBHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FruitItemDBHelper.m; sourceTree = "<group>"; };
-		ABC428C91AD72B0C00BDA15D /* FruitItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FruitItem.h; path = ../FruitItem.h; sourceTree = "<group>"; };
-		ABC428CA1AD72B0C00BDA15D /* FruitItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FruitItem.m; path = ../FruitItem.m; sourceTree = "<group>"; };
 		ABC428CC1AD72DBD00BDA15D /* FruitItemBasicInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FruitItemBasicInfo.h; sourceTree = "<group>"; };
 		ABC428CD1AD72DBD00BDA15D /* FruitItemBasicInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FruitItemBasicInfo.m; sourceTree = "<group>"; };
 		ABC428D21AD7601200BDA15D /* FruitTouchButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FruitTouchButton.h; sourceTree = "<group>"; };
@@ -196,16 +196,16 @@
 				ABC428721AD2335D00BDA15D /* AppDelegate.h */,
 				ABC428731AD2335D00BDA15D /* AppDelegate.m */,
 				ABC428781AD2335D00BDA15D /* Main.storyboard */,
-				ABAF88361ADC9890008FE837 /* SeguePushFromRight.h */,
-				ABAF88371ADC9890008FE837 /* SeguePushFromRight.m */,
+				AB82C6EE1AF0613900F8A951 /* FruitItem.h */,
+				AB82C6EF1AF0613900F8A951 /* FruitItem.m */,
+				AB82C6F01AF0613900F8A951 /* SeguePushFromRight.h */,
+				AB82C6F11AF0613900F8A951 /* SeguePushFromRight.m */,
 				ABAF88331ADC9843008FE837 /* SeguePushFromLeft.h */,
 				ABAF88341ADC9843008FE837 /* SeguePushFromLeft.m */,
 				ABAF88451AE2E09F008FE837 /* GlobalVariables.h */,
 				ABAF88461AE2E09F008FE837 /* GlobalVariables.m */,
 				ABC428D21AD7601200BDA15D /* FruitTouchButton.h */,
 				ABC428D31AD7601200BDA15D /* FruitTouchButton.m */,
-				ABC428C91AD72B0C00BDA15D /* FruitItem.h */,
-				ABC428CA1AD72B0C00BDA15D /* FruitItem.m */,
 				ABC428CC1AD72DBD00BDA15D /* FruitItemBasicInfo.h */,
 				ABC428CD1AD72DBD00BDA15D /* FruitItemBasicInfo.m */,
 				ABC4287B1AD2335D00BDA15D /* Images.xcassets */,
@@ -347,13 +347,13 @@
 				ABAF883B1ADDF3A7008FE837 /* AddReminderViewController.m in Sources */,
 				ABC7A1351AE5AA2500F08733 /* DisplaySearchBarView.m in Sources */,
 				AB82C6E61AEEB92700F8A951 /* DisplayCalendarMonthView.m in Sources */,
-				ABC428CB1AD72B0C00BDA15D /* FruitItem.m in Sources */,
+				AB82C6F21AF0613900F8A951 /* FruitItem.m in Sources */,
 				ABAF884A1AE30B57008FE837 /* AddFruitBottomView.m in Sources */,
 				ABAF88441AE2DEAF008FE837 /* DisplaySeasonalFruitsScrollView.m in Sources */,
 				ABAF88471AE2E09F008FE837 /* GlobalVariables.m in Sources */,
 				ABC428741AD2335D00BDA15D /* AppDelegate.m in Sources */,
 				ABC428A01AD6E49100BDA15D /* AddDeleteFruitsViewController.m in Sources */,
-				ABAF88381ADC9890008FE837 /* SeguePushFromRight.m in Sources */,
+				AB82C6F31AF0613900F8A951 /* SeguePushFromRight.m in Sources */,
 				ABAF88321ADC9609008FE837 /* CalendarViewController.m in Sources */,
 				ABC428D91AD9AB1700BDA15D /* SettingsViewController.m in Sources */,
 				ABC428C81AD72AAA00BDA15D /* FruitItemDBHelper.m in Sources */,

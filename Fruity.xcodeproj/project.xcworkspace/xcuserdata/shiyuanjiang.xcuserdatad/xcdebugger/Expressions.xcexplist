@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "-[SettingsViewController reminderTimeTextFieldDidChange:]:SettingsViewController.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[SettingsViewController viewDidLoad]:SettingsViewController.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[DisplaySearchBarView tableView:numberOfRowsInSection:]:DisplaySearchBarView.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[SettingsViewController unwindFromAddReminderView:]:SettingsViewController.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.allLocalNotificationTimes[self.pressButtonTag]">
+            </PersistentString>
+            <PersistentString
+               value = "localNotification.fireDate">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[AddDeleteFruitsViewController loadDisplayStorageBottomView]:AddDeleteFruitsViewController.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[DisplaySearchBarView textField:shouldChangeCharactersInRange:replacementString:]:DisplaySearchBarView.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[AddDeleteFruitsViewController addFruitsToDatabaseWithQuantity:]:AddDeleteFruitsViewController.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "item.name">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[AddDeleteFruitsViewController loadFruitsAddViewWitnSeasonalFruits]:AddDeleteFruitsViewController.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "item.seasons">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[SettingsViewController displayNotifications]:SettingsViewController.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[DisplayCalendarMonthView initWithFrame:date:]:DisplayCalendarMonthView.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[SettingsViewController loadUserPreference]:SettingsViewController.m">
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>
