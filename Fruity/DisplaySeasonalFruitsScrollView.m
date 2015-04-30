@@ -129,14 +129,33 @@
             NSString *imageFileName = [item.fruitName stringByAppendingString:@".png"];
             [seasonalFruit setImage:[UIImage imageNamed:imageFileName] forState:UIControlStateNormal];
             seasonalFruit.fruitItem.name = [[NSString alloc] initWithString:item.fruitName];
-            seasonalFruit.frame = CGRectMake(0, 0, self.frame.size.width / 7, self.frame.size.width / 7);
+            
             
             [self.allSeasonalFruitsButton addObject:seasonalFruit];
             [self addSubview:seasonalFruit];
         }
     }
     
-    double radius = (double) self.frame.size.width / 3;
+    // Fruits display radius is determined by the number of season fruits
+    double radius;
+    if ([self.allSeasonalFruitsButton count] <= 6) {
+        radius = (double) self.frame.size.width / 3;
+        for (FruitTouchButton *fruitButton in self.allSeasonalFruitsButton) {
+            fruitButton.frame = CGRectMake(0, 0, self.frame.size.width / 7, self.frame.size.width / 7);
+        }
+    }
+    else if ([self.allSeasonalFruitsButton count] <= 12) {
+        radius = (double) self.frame.size.width / 2.7;
+        for (FruitTouchButton *fruitButton in self.allSeasonalFruitsButton) {
+            fruitButton.frame = CGRectMake(0, 0, self.frame.size.width / 8, self.frame.size.width / 8);
+        }
+    }
+    else {
+        radius = (double) self.frame.size.width / 2.4;
+        for (FruitTouchButton *fruitButton in self.allSeasonalFruitsButton) {
+            fruitButton.frame = CGRectMake(0, 0, self.frame.size.width / 9, self.frame.size.width / 9);
+        }
+    }
     double degreePerButton = (double) 2 * M_PI / [self.allSeasonalFruitsButton count];
     
     for (int i = 0; i < [self.allSeasonalFruitsButton count]; i++) {

@@ -60,6 +60,8 @@
         self.searchBarTextField.placeholder = @"fruit name";
         self.searchBarTextField.delegate = self;
         
+        [self.searchBarTextField addTarget:self action:@selector(searchBarDidTouchDown) forControlEvents:UIControlEventTouchDown];
+        
         // Set a space view to the left of the text in the text field so that the text would not be too close to the left edge of the text field
         UIView *spacerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.height / 6, self.frame.size.height / 6)];
         [self.searchBarTextField setLeftViewMode:UITextFieldViewModeAlways];
@@ -102,6 +104,10 @@
     }
 }
 
+- (void) searchBarDidTouchDown{
+    self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, 4 * self.frameHeight);
+}
+
 - (void)searchAutocompleteEntriesWithSubstring:(NSString *)substring {
     
     // Put anything that starts with this substring into the autocompleteUrls array
@@ -128,7 +134,7 @@
     self.displayAutoCompletedItemsTableView.hidden = NO;
     
     [self searchAutocompleteEntriesWithSubstring:substring];
-    self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, 4 * self.frameHeight);
+    //self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, 4 * self.frameHeight);
     
     return YES;
 }

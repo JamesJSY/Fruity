@@ -436,7 +436,7 @@
         DisplaySeasonalFruitsScrollView *newView = [[DisplaySeasonalFruitsScrollView alloc] initWithFrame:CGRectMake(self.globalVs.screenWidth, self.globalVs.screenHeight / 4, self.globalVs.screenWidth, self.globalVs.screenHeight * 3 / 5)];
         newView.superViewDelegate = self;
         [newView loadViewWithSeasonalFruitsBasicInfo:self.allFruitsBasicInfo withMonth:(int)month];
-        [self.mainView addSubview:newView];
+        [self.mainView insertSubview:newView belowSubview:self.displaySearchBarView];
         [self.displaySeasonalFruitsView removeGestureRecognizer:self.swipeLeftGestureRecognizer];
         [self.displaySeasonalFruitsView removeGestureRecognizer:self.swipeRightGestureRecognizer];
         [newView addGestureRecognizer:self.swipeLeftGestureRecognizer];
@@ -463,7 +463,7 @@
         DisplaySeasonalFruitsScrollView *newView = [[DisplaySeasonalFruitsScrollView alloc] initWithFrame:CGRectMake(-self.globalVs.screenWidth, self.globalVs.screenHeight / 4, self.globalVs.screenWidth, self.globalVs.screenHeight * 3 / 5)];
         newView.superViewDelegate = self;
         [newView loadViewWithSeasonalFruitsBasicInfo:self.allFruitsBasicInfo withMonth:(int)month];
-        [self.mainView addSubview:newView];
+        [self.mainView insertSubview:newView belowSubview:self.displaySearchBarView];
         [self.displaySeasonalFruitsView removeGestureRecognizer:self.swipeLeftGestureRecognizer];
         [self.displaySeasonalFruitsView removeGestureRecognizer:self.swipeRightGestureRecognizer];
         [newView addGestureRecognizer:self.swipeLeftGestureRecognizer];
