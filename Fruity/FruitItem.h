@@ -20,4 +20,6 @@
 
 -(instancetype)initWithFruitItem:(FruitItem *) item;
 
++ (bool) isGroupFruitItem:(NSString *) fruitName;
+
 @end

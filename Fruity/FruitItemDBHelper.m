@@ -37,10 +37,10 @@
     
     // If the query was successfully executed then pop the view controller.
     if (self.dbManager.affectedRows != 0) {
-        NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
+        NSLog(@"Insert query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
     }
     else{
-        NSLog(@"Could not execute the query.");
+        NSLog(@"Could not execute the insert query.");
     }
 }
 
@@ -134,19 +134,19 @@
     return (NSArray *)self.fruitItems;
 }
 
--(void)deleteFruitItemsFromDB:(int) ID {
+-(void)deleteNotEatenFruitItemsFromDB:(NSString *)fruitName {
     // Prepare the query.
-    NSString *query = [NSString stringWithFormat:@"DELETE FROM '%@' WHERE ID = %d", self.dabaBaseName, ID];
+    NSString *query = [NSString stringWithFormat:@"DELETE FROM '%@' WHERE NAME = '%@' AND ISEATEN = 0", self.dabaBaseName, fruitName];
     
     // Execute the query.
     [self.dbManager executeQuery:query];
     
     // If the query was successfully executed then pop the view controller.
     if (self.dbManager.affectedRows != 0) {
-        NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
+        NSLog(@"Delete query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
     }
     else{
-        NSLog(@"Could not execute the query.");
+        NSLog(@"Could not execute delete the query.");
     }
 }
 
@@ -159,10 +159,10 @@
     
     // If the query was successfully executed then pop the view controller.
     if (self.dbManager.affectedRows != 0) {
-        NSLog(@"Query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
+        NSLog(@"Update eat query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
     }
     else{
-        NSLog(@"Could not execute the query.");
+        NSLog(@"Could not execute the eat fruit query.");
     }
 }
 

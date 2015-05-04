@@ -13,7 +13,7 @@
 
 @property GlobalVariables *globalVs;
 
-@property UITextView *displayFunctionTextView;
+@property UILabel *displayFunctionLabel;
 @property UITextField *searchBarTextField;
 @property UITableView *displayAutoCompletedItemsTableView;
 
@@ -40,16 +40,15 @@
         
         self.globalVs = [GlobalVariables getInstance];
         
-        self.displayFunctionTextView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height / 3)];
-        self.displayFunctionTextView.center = CGPointMake(self.frame.size.width / 2, self.frame.size.height / 3);
-        self.displayFunctionTextView.font = self.globalVs.font;
-        self.displayFunctionTextView.textColor = self.globalVs.lightGreyColor;
-        self.displayFunctionTextView.backgroundColor = [UIColor clearColor];
-        self.displayFunctionTextView.text = @"Your fruits are not seasonal?";
-        self.displayFunctionTextView.textAlignment = NSTextAlignmentCenter;
-        self.displayFunctionTextView.editable = NO;
+        self.displayFunctionLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height / 3)];
+        self.displayFunctionLabel.center = CGPointMake(self.frame.size.width / 2, self.frame.size.height / 3);
+        self.displayFunctionLabel.font = self.globalVs.font;
+        self.displayFunctionLabel.textColor = self.globalVs.lightGreyColor;
+        self.displayFunctionLabel.backgroundColor = [UIColor clearColor];
+        self.displayFunctionLabel.text = @"Your fruits are not seasonal?";
+        self.displayFunctionLabel.textAlignment = NSTextAlignmentCenter;
         
-        [self addSubview:self.displayFunctionTextView];
+        [self addSubview:self.displayFunctionLabel];
         
         self.searchBarTextField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width * 2 / 3, self.frame.size.height / 3)];
         self.searchBarTextField.center = CGPointMake(self.frame.size.width / 2, self.frame.size.height * 2 / 3);

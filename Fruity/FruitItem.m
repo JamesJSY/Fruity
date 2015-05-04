@@ -23,4 +23,14 @@
     return self;
 }
 
++ (bool) isGroupFruitItem:(NSString *)fruitName {
+    return  [fruitName isEqualToString:@"raspberry"] ||
+            [fruitName isEqualToString:@"strawberry"] ||
+            [fruitName isEqualToString:@"blackberry"] ||
+            [fruitName isEqualToString:@"blueberry"] ||
+            [fruitName isEqualToString:@"cherry"] ||
+            [fruitName isEqualToString:@"grape"] ||
+            [fruitName isEqualToString:@"Boysenberry"];
+}
+
 @end

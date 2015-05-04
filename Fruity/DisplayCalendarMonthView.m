@@ -165,14 +165,23 @@
 }
 
 - (void)monthButtonDidPress:(UIButton*) monthButton {
-    if (self.willDisplayDays) {
-        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, self.originalFrameHeight / 5);
-    }
-    else {
-        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, self.originalFrameHeight);
-    }
+    [UIView animateWithDuration:0.5
+                          delay:0
+                        options:0
+                     animations:^{
+                         if (self.willDisplayDays) {
+                             self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, self.originalFrameHeight / 5);
+                         }
+                         else {
+                             self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, self.originalFrameHeight);
+                         }
+                         [self.delegate reloadSuperView:self];
+                     }
+                     completion:^(BOOL finished) {
+    
+                     }];
+    
     self.willDisplayDays = !self.willDisplayDays;
-    [self.delegate reloadSuperView:self];
 }
 
 - (void)setWillDisplayDaysToNO {

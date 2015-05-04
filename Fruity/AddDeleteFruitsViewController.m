@@ -66,7 +66,7 @@
     [self loadStaticSubviews];
     
     // Load the view that displays storage list at the bottom
-    self.displayStorageBottomView = [[DisplayStorageBottomView alloc] initWithFrame:CGRectMake(0, self.globalVs.screenHeight, self.globalVs.screenWidth, self.globalVs.screenHeight)];
+    self.displayStorageBottomView = [[DisplayStorageBottomView alloc] initWithFrame:CGRectMake(0, self.globalVs.screenHeight, self.globalVs.screenWidth, self.globalVs.screenHeight / 3)];
     self.displayStorageBottomView.superViewDelegate = self;
     [self.displayStorageBottomView loadDisplayStorageBottomView];
     [self.displayStorageBottomView setHidden:YES];
@@ -240,12 +240,7 @@
     self.fruitQuantityLabel.backgroundColor = self.globalVs.pinkColor;
     self.fruitQuantityLabel.textAlignment = NSTextAlignmentCenter;
     
-    if ([self.addFruitButton.fruitItem.name isEqualToString:@"raspberry"] ||
-        [self.addFruitButton.fruitItem.name isEqualToString:@"strawberry"] ||
-        [self.addFruitButton.fruitItem.name isEqualToString:@"blackberry"] ||
-        [self.addFruitButton.fruitItem.name isEqualToString:@"blueberry"] ||
-        [self.addFruitButton.fruitItem.name isEqualToString:@"cherry"] ||
-        [self.addFruitButton.fruitItem.name isEqualToString:@"grape"]) {
+    if ([FruitItem isGroupFruitItem:self.addFruitButton.fruitItem.name]) {
         self.fruitQuantityLabel.text = [NSString stringWithFormat:@"x %d+", (int)(inputQuantityButton.tag + 1) * 10];
     }
     else {
@@ -259,18 +254,6 @@
     for (int i = 0; i <inputQuantityButton.tag + 1; i++) {
         // Insert the new item into the database
         [self.globalVs.dbHelper insertFruitItemIntoDB:item];
-        /*
-        // Create new addFruitButton with related image and do an animation to move it to the eat button
-        FruitTouchButton *tempFruitButton = [[FruitTouchButton alloc] initWithFrame:currentFrameInWindow];;
-        NSString *imageFileName = [self.addFruitButton.fruitItem.name stringByAppendingString:@".png"];
-        [tempFruitButton setImage:[UIImage imageNamed:imageFileName] forState:UIControlStateNormal];
-        currentFrameInWindow.origin.x += inputQuantityButton.frame.size.width;
-        if (i % 3 == 2) {
-            currentFrameInWindow.origin.y += inputQuantityButton.frame.size.height;
-            currentFrameInWindow.origin.x -= 3 *inputQuantityButton.frame.size.width;
-        }
-        [self.mainView addSubview:tempFruitButton];
-        [self.tempFruitButtons addObject:tempFruitButton];*/
     }
     
     // Reload the view that displays fruits in storage
@@ -341,24 +324,25 @@
 
 }
 
-- (NSArray *) loadAllFruitsInStorageFromDB {
+- (NSArray *)loadAllFruitsInStorageFromDB {
     self.fruitsInStorage = [[NSArray alloc] initWithArray:[self.globalVs.dbHelper loadAllFruitItemsNotEatenFromDB]];
     return self.fruitsInStorage;
 }
 
-- (void) eatFruitItemWithID:(int) ID {
+- (void)eatFruitItemWithID:(int) ID {
     [self.globalVs.dbHelper eatFruitItemFromDB:ID date:[self.formatter stringFromDate:[NSDate date]]];
 }
 
-- (void) deleteFruitItemWithID:(int) ID {
-    [self.globalVs.dbHelper deleteFruitItemsFromDB:ID];
+- (void)deleteNotEatenFruitItemWithName:(NSString *) fruitName{
+    [self.globalVs.dbHelper deleteNotEatenFruitItemsFromDB:fruitName];
 }
 
 - (void)showStorageBottomView:(UIButton *)eatButton {
     [self.displayStorageBottomView setHidden:NO];
     self.canScrollDown = YES;
     [self.eatButton setHidden:YES];
-    [self.mainView bringSubviewToFront:self.eatButton];
+    
+    //[self.mainView bringSubviewToFront:self.eatButton];
     
     //[self.eatButton setUserInteractionEnabled:NO];
     
@@ -367,10 +351,12 @@
                           delay:0
                         options:0
                      animations:^{
-                         self.mainView.frame = CGRectOffset(self.mainView.frame, 0, -self.globalVs.screenHeight / 4);
-                         self.displayStorageBottomView.frame = CGRectOffset(self.displayStorageBottomView.frame, 0, -self.globalVs.screenHeight / 4);
+                         self.mainView.frame = CGRectOffset(self.mainView.frame, 0, -self.globalVs.screenHeight / 3);
+                         self.displayStorageBottomView.frame = CGRectOffset(self.displayStorageBottomView.frame, 0, -self.globalVs.screenHeight / 3);
                      }
                      completion:^(BOOL finished) {
+                         self.displaySearchBarView.hidden = YES;
+                         self.displaySeasonalFruitsView.hidden = YES;
                          [self.displayStorageBottomView showMouth];
                      }];
 }
@@ -414,14 +400,17 @@
                               delay:0
                             options:0
                          animations:^{
-                             self.mainView.frame = CGRectOffset(self.mainView.frame, 0, self.globalVs.screenHeight / 4);
-                             self.displayStorageBottomView.frame = CGRectOffset(self.displayStorageBottomView.frame, 0, self.globalVs.screenHeight / 4);
+                             self.mainView.frame = CGRectOffset(self.mainView.frame, 0, self.globalVs.screenHeight / 3);
+                             self.displayStorageBottomView.frame = CGRectOffset(self.displayStorageBottomView.frame, 0, self.globalVs.screenHeight / 3);
                          }
                          completion:^(BOOL finished) {
                              [self.displayStorageBottomView mainViewDidMoveDown];
                              [self.displayStorageBottomView setHidden:YES];
                              
                              [self.displaySeasonalFruitsView enableAllFruitTouchButtonsInteraction];
+                             
+                             self.displaySearchBarView.hidden = NO;
+                             self.displaySeasonalFruitsView.hidden = NO;
                              
                              [self.eatButton setHidden:NO];
                          }];

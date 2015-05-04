@@ -16,8 +16,8 @@
 
 @property NSMutableArray *seasonalFruits;
 
-@property UITextView *seasonalFruitTextView;
-@property UITextView *monthTextView;
+@property UILabel *seasonalFruitLabel;
+@property UILabel *monthLabel;
 
 @property NSMutableArray *allSeasonalFruitsButton;
 @property NSMutableArray *allFruitsBasicInfo;
@@ -30,28 +30,26 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.globalVs = [GlobalVariables getInstance];
-        self.seasonalFruitTextView = [[UITextView alloc] init];
-        self.monthTextView = [[UITextView alloc] init];
+        self.seasonalFruitLabel = [[UILabel alloc] init];
+        self.monthLabel = [[UILabel alloc] init];
         
         // Set up the two textViews in the middle
-        self.seasonalFruitTextView.text = @"Seasonal Fruits in";
-        self.seasonalFruitTextView.font = [UIFont fontWithName:@"AvenirLTStd-Light" size:14];
-        self.seasonalFruitTextView.backgroundColor = [UIColor clearColor];
-        self.seasonalFruitTextView.textColor = self.globalVs.lightGreyColor;
-        self.seasonalFruitTextView.frame = CGRectMake(0, 0, 110, 50);
-        self.seasonalFruitTextView.textAlignment = NSTextAlignmentCenter;
-        self.seasonalFruitTextView.center = CGPointMake(self.frame.size.width / 2, self.frame.size.height / 2 - 20);
-        self.seasonalFruitTextView.editable = NO;
-        [self addSubview:self.seasonalFruitTextView];
+        self.seasonalFruitLabel.text = @"Seasonal Fruits in";
+        self.seasonalFruitLabel.font = [UIFont fontWithName:@"AvenirLTStd-Light" size:14];
+        self.seasonalFruitLabel.backgroundColor = [UIColor clearColor];
+        self.seasonalFruitLabel.textColor = self.globalVs.lightGreyColor;
+        self.seasonalFruitLabel.frame = CGRectMake(0, 0, 110, 50);
+        self.seasonalFruitLabel.textAlignment = NSTextAlignmentCenter;
+        self.seasonalFruitLabel.center = CGPointMake(self.frame.size.width / 2, self.frame.size.height / 2 - 20);
+        [self addSubview:self.seasonalFruitLabel];
         
-        self.monthTextView.font = [UIFont fontWithName:@"AvenirLTStd-Light" size:40];
-        self.monthTextView.backgroundColor = [UIColor clearColor];
-        self.monthTextView.textColor = self.globalVs.darkGreyColor;
-        self.monthTextView.textAlignment = NSTextAlignmentCenter;
-        self.monthTextView.frame = CGRectMake(0, 0, 100, 50);
-        self.monthTextView.center = CGPointMake(self.frame.size.width / 2, self.frame.size.height / 2 + 20);
-        self.monthTextView.editable = NO;
-        [self addSubview:self.monthTextView];
+        self.monthLabel.font = [UIFont fontWithName:@"AvenirLTStd-Light" size:40];
+        self.monthLabel.backgroundColor = [UIColor clearColor];
+        self.monthLabel.textColor = self.globalVs.darkGreyColor;
+        self.monthLabel.textAlignment = NSTextAlignmentCenter;
+        self.monthLabel.frame = CGRectMake(0, 0, 100, 50);
+        self.monthLabel.center = CGPointMake(self.frame.size.width / 2, self.frame.size.height / 2 + 20);
+        [self addSubview:self.monthLabel];
         
         }
     return (self);
@@ -70,40 +68,40 @@
 
     switch (month) {
         case 1:
-            self.monthTextView.text = @"JAN";
+            self.monthLabel.text = @"JAN";
             break;
         case 2:
-            self.monthTextView.text = @"FEB";
+            self.monthLabel.text = @"FEB";
             break;
         case 3:
-            self.monthTextView.text = @"MAR";
+            self.monthLabel.text = @"MAR";
             break;
         case 4:
-            self.monthTextView.text = @"APR";
+            self.monthLabel.text = @"APR";
             break;
         case 5:
-            self.monthTextView.text = @"MAY";
+            self.monthLabel.text = @"MAY";
             break;
         case 6:
-            self.monthTextView.text = @"JUN";
+            self.monthLabel.text = @"JUN";
             break;
         case 7:
-            self.monthTextView.text = @"JUL";
+            self.monthLabel.text = @"JUL";
             break;
         case 8:
-            self.monthTextView.text = @"AUG";
+            self.monthLabel.text = @"AUG";
             break;
         case 9:
-            self.monthTextView.text = @"SEPT";
+            self.monthLabel.text = @"SEPT";
             break;
         case 10:
-            self.monthTextView.text = @"OCT";
+            self.monthLabel.text = @"OCT";
             break;
         case 11:
-            self.monthTextView.text = @"NOV";
+            self.monthLabel.text = @"NOV";
             break;
         case 12:
-            self.monthTextView.text = @"DEC";
+            self.monthLabel.text = @"DEC";
             break;
         default:
             break;
@@ -166,8 +164,8 @@
 }
 
 - (void) highlightOneFruitTouchButton:(FruitTouchButton *)fruitButton {
-    [self.seasonalFruitTextView setAlpha:0.3];
-    [self.monthTextView setAlpha:0.3];
+    [self.seasonalFruitLabel setAlpha:0.3];
+    [self.monthLabel setAlpha:0.3];
     for (int i = 0; i < [self.allSeasonalFruitsButton count]; i++) {
         [self.allSeasonalFruitsButton[i] setUserInteractionEnabled:NO];
         if (self.allSeasonalFruitsButton[i] != fruitButton)
@@ -176,8 +174,8 @@
 }
 
 - (void) deHighlightFruitTouchButton {
-    [self.seasonalFruitTextView setAlpha:1];
-    [self.monthTextView setAlpha:1];
+    [self.seasonalFruitLabel setAlpha:1];
+    [self.monthLabel setAlpha:1];
     for (int i = 0; i < [self.allSeasonalFruitsButton count]; i++) {
         [self.allSeasonalFruitsButton[i] setUserInteractionEnabled:YES];
         [self.allSeasonalFruitsButton[i] setAlpha:1];
