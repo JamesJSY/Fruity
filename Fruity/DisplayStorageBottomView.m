@@ -24,7 +24,7 @@
 @property (nonatomic) UIImageView *animationMouthOpeningImageViewBottom;
 @property (nonatomic) UIImageView *animationChewingImageViewBottom;
 @property (nonatomic) UIImageView *dustbinImageView;
-@property (nonatomic) UIImageView *tipsImageView;
+@property (nonatomic) UIButton *tipsButton;
 
 @property (nonatomic) float pixelsWidthForDisplayingItem;
 @property (nonatomic) float itemDisplayRatio;
@@ -32,6 +32,7 @@
 @property (nonatomic) NSTimer *longPressRecognizerTimer;
 
 @property (nonatomic) bool isShowingDustbin;
+@property (nonatomic) bool isTipsOn;
 //@property (nonatomic) UILongPressGestureRecognizer *longPressGesture;
 
 @end
@@ -44,6 +45,7 @@
         
         self.globalVs = [GlobalVariables getInstance];
         self.isShowingDustbin = NO;
+        self.isTipsOn = NO;
         
         // Set the display mode
         self.pixelsWidthForDisplayingItem = self.frame.size.width / 4;
@@ -94,16 +96,11 @@
         [self addSubview:self.dustbinImageView];
         
         // Initialize the tips image view
-        self.tipsImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width / 10, self.frame.size.width / 10)];
-        self.tipsImageView.center = CGPointMake(self.frame.size.width / 2, - self.animationChewingImageViewBottom.frame.size.height * 4 / 5);
-        self.tipsImageView.image = [UIImage imageNamed:@"balloon.png"];
-        [self addSubview:self.tipsImageView];
-        
-        /*
-        // Set up a long press gesture recognizer for every fruit in storage to enter edit mode
-        self.longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(enterEditMode)];
-        self.longPressGesture.minimumPressDuration = 1.0f;
-        self.longPressGesture.allowableMovement = 100.0f;*/
+        self.tipsButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width / 10, self.frame.size.width / 10)];
+        self.tipsButton.center = CGPointMake(self.frame.size.width / 2, - self.animationChewingImageViewBottom.frame.size.height * 4 / 5);
+        [self.tipsButton setImage:[UIImage imageNamed:@"balloon.png"] forState:UIControlStateNormal];
+        [self.tipsButton addTarget:self action:@selector(switchTipsButtonView) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:self.tipsButton];
         
     }
     return self;
@@ -190,11 +187,9 @@
     CGPoint point = [[[event allTouches] anyObject] locationInView:self];
     if ( point.y > self.frame.size.height * 3 / 5 && self.isShowingDustbin == NO) {
         [self showDustbin];
-        self.isShowingDustbin = YES;
     }
     else if (point.y <= self.frame.size.height * 3 / 5 && self.isShowingDustbin == YES) {
         [self hideDustbin];
-        self.isShowingDustbin = NO;
     }
 }
 
@@ -249,7 +244,7 @@
 
     }
     // If the user drags the fruit in the dustbin area
-    else if (point.y > self.frame.size.height * 2 / 3) {
+    else if (point.y > self.dustbinImageView.frame.origin.y) {
         // Delete the selected fruit that is not eaten in the
         [self.superViewDelegate deleteNotEatenFruitItemWithName:inputFruit.fruitItem.name];
         
@@ -260,6 +255,10 @@
         // If the fruit is not eaten nor deleted, put the fruit button back to where it was
         unsigned long indexOfFruit = [self.allStorageFruitsButton indexOfObject:inputFruit];
         inputFruit.frame = CGRectMake(20 + indexOfFruit * self.pixelsWidthForDisplayingItem, 30, self.pixelsWidthForDisplayingItem * self.itemDisplayRatio, self.pixelsWidthForDisplayingItem * self.itemDisplayRatio);
+    }
+    
+    if ( self.isShowingDustbin ) {
+        [self hideDustbin];
     }
 }
 
@@ -306,6 +305,8 @@
     shape.path = path.CGPath;
     self.dustbinImageView.layer.mask = shape;*/
     
+    self.isShowingDustbin = YES;
+    
     self.animationChewingImageViewBottom.image = [UIImage imageNamed:@"unhappy-face.png"];
     
     [UIView animateWithDuration:0.5
@@ -314,8 +315,7 @@
                      animations:^{
                          self.dustbinImageView.frame = CGRectMake(0, self.frame.size.height * 5 / 6, self.frame.size.width, self.frame.size.height / 6);
                          
-                         self.tipsImageView.frame = CGRectMake(0, 0, self.frame.size.width * 2 / 3, self.frame.size.width * 2 / 3);
-                         self.tipsImageView.center = CGPointMake(self.frame.size.width / 2, - self.frame.size.height);
+                         [self turnOnTipsImageView];
                      }
                      completion:^(BOOL finished) {
                          
@@ -328,6 +328,8 @@
 
 - (void)hideDustbin {
     
+    self.isShowingDustbin = NO;
+    
     self.animationChewingImageViewBottom.image = [UIImage imageNamed:@"monsterChew3.png"];
     self.animationChewingImageViewBottom.hidden = YES;
     
@@ -336,14 +338,36 @@
                         options:0
                      animations:^{
                          self.dustbinImageView.frame = CGRectMake(0, self.frame.size.height, self.frame.size.width, 0);
-                         self.tipsImageView.frame = CGRectMake(0, 0, self.frame.size.width / 10, self.frame.size.width / 10);
-                         self.tipsImageView.center = CGPointMake(self.frame.size.width / 2, - self.animationChewingImageViewBottom.frame.size.height * 4 / 5);
                          
-
+                         [self turnOffTipsImageView];
                      }
                      completion:^(BOOL finished) {
                          [self showMouth];
                      }];
+}
+
+- (void)switchTipsButtonView {
+    NSLog(@"Tips button is tapped.");
+    if (self.isTipsOn) {
+        [self turnOffTipsImageView];
+    }
+    else {
+        [self turnOnTipsImageView];
+    }
+}
+
+- (void)turnOffTipsImageView {
+    self.isTipsOn = NO;
+    
+    self.tipsButton.frame = CGRectMake(0, 0, self.frame.size.width / 10, self.frame.size.width / 10);
+    self.tipsButton.center = CGPointMake(self.frame.size.width / 2, - self.animationChewingImageViewBottom.frame.size.height * 4 / 5);
+}
+
+- (void)turnOnTipsImageView {
+    self.isTipsOn = YES;
+    
+    self.tipsButton.frame = CGRectMake(0, 0, self.frame.size.width * 2 / 3, self.frame.size.width * 2 / 3);
+    self.tipsButton.center = CGPointMake(self.frame.size.width / 2, - self.frame.size.height);
 }
 
 /*

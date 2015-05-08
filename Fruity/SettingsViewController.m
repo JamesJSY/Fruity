@@ -9,8 +9,8 @@
 #import "SettingsViewController.h"
 #import "AddReminderViewController.h"
 #import "GlobalVariables.h"
+#import <pop/POP.h>
 
-#define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 @interface SettingsViewController ()
 
@@ -109,7 +109,7 @@
         reminderDisplayButton.titleLabel.font = self.globalVs.font;
         reminderDisplayButton.titleLabel.textColor = [UIColor blackColor];
         [reminderDisplayButton setTitle:[self.dateFormatter stringFromDate:self.allLocalNotificationTimes[i]] forState:UIControlStateNormal];
-        reminderDisplayButton.backgroundColor = UIColorFromRGB(0xd26168);
+        reminderDisplayButton.backgroundColor = self.globalVs.pinkColor;
         
         reminderDisplayButton.frame = CGRectMake(0, 0, self.globalVs.screenWidth / 5, self.globalVs.screenWidth / 5);
         reminderDisplayButton.center = CGPointMake(self.globalVs.screenWidth / 6 + i % remindersPerRow * self.globalVs.screenWidth / 3, self.globalVs.screenWidth / 6 + i / remindersPerRow * self.globalVs.screenWidth / 3);
@@ -151,7 +151,7 @@
     
     self.notificationTextView = [[UITextView alloc] init];
     self.notificationTextView.text = @"Notification";
-    self.notificationTextView.textColor = UIColorFromRGB(0xabacab);
+    self.notificationTextView.textColor = self.globalVs.lightGreyColor;
     self.notificationTextView.font = self.globalVs.font;
     self.notificationTextView.frame = CGRectMake(0, 0, self.globalVs.screenWidth / 2, 30);
     self.notificationTextView.textAlignment = NSTextAlignmentCenter;
@@ -176,12 +176,12 @@
     
     self.notificationTipTextView = [[UITextView alloc] init];
     self.notificationTipTextView.text = @"Send Notification to remind you of fruits time";
-    self.notificationTipTextView.textColor = UIColorFromRGB(0xf4f4cd);
+    self.notificationTipTextView.textColor = self.globalVs.softWhiteColor;
     self.notificationTipTextView.font = self.globalVs.font;
     self.notificationTipTextView.frame = CGRectMake(0, 0, self.globalVs.screenWidth * 5 / 6, self.globalVs.screenHeight / 12);
     self.notificationTipTextView.textAlignment = NSTextAlignmentCenter;
     self.notificationTipTextView.layer.cornerRadius = 5;
-    self.notificationTipTextView.backgroundColor = UIColorFromRGB(0xd26168);
+    self.notificationTipTextView.backgroundColor = self.globalVs.pinkColor;
     self.notificationTipTextView.center = CGPointMake(self.globalVs.screenWidth / 2, self.globalVs.screenHeight * 2 / 5);
     self.notificationTipTextView.editable = NO;
     [self.notificationTipTextView setHidden:YES];
@@ -335,8 +335,6 @@
                                                   [self.notificationTipButton setHidden:NO];
                                               }];
                          }];
-        
-
         
             
         // Set the notification service off

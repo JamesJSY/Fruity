@@ -32,7 +32,7 @@
 @property (nonatomic) UILabel *fruitQuantityLabel;
 @property (nonatomic) UIButton *tempFruitButton;
 @property (nonatomic) UIButton *quantityButton;
-@property (nonatomic) UIButton *eatButton;
+@property (nonatomic) UIButton *storageButton;
 
 @property (nonatomic) bool canScrollDown;
 @property (nonatomic) bool isInAddingStatus;
@@ -79,7 +79,7 @@
     NSInteger month = [dateComponents month];
     
     // Load seasonal fruits to the middle of the mainView
-    self.displaySeasonalFruitsView = [[DisplaySeasonalFruitsScrollView alloc] initWithFrame:CGRectMake(0, self.globalVs.screenHeight / 4, self.globalVs.screenWidth, self.globalVs.screenHeight * 3 / 5)];
+    self.displaySeasonalFruitsView = [[DisplaySeasonalFruitsScrollView alloc] initWithFrame:CGRectMake(0, self.globalVs.screenHeight * 7 / 24, self.globalVs.screenWidth, self.globalVs.screenHeight * 3 / 5)];
     self.displaySeasonalFruitsView.superViewDelegate = self;
     [self.displaySeasonalFruitsView loadViewWithSeasonalFruitsBasicInfo:self.allFruitsBasicInfo withMonth:(int)month];
     [self.mainView addSubview:self.displaySeasonalFruitsView];
@@ -144,15 +144,15 @@
     
     
     
-    self.eatButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.globalVs.screenWidth / 3, self.globalVs.screenWidth / 6)];
-    self.eatButton.center = CGPointMake(self.globalVs.screenWidth / 2, self.globalVs.screenHeight - self.globalVs.screenWidth / 12);
-    [self.eatButton setImage:[UIImage imageNamed:@"eat-button.png"] forState:UIControlStateNormal];
-    [self.eatButton addTarget:self action:@selector(showStorageBottomView:) forControlEvents:UIControlEventTouchUpInside];
-    [self.eatButton setTitle:@"EAT" forState:UIControlStateNormal];
-    self.eatButton.titleLabel.font = self.globalVs.font;
-    self.eatButton.titleLabel.textColor = self.globalVs.darkGreyColor;
-    [self.eatButton setTitleEdgeInsets: UIEdgeInsetsMake(75,0,0,0)];
-    [self.mainView addSubview:self.eatButton];
+    self.storageButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.globalVs.screenWidth / 3, self.globalVs.screenWidth / 6)];
+    self.storageButton.center = CGPointMake(self.globalVs.screenWidth / 2, self.globalVs.screenHeight - self.globalVs.screenWidth / 12);
+    [self.storageButton setImage:[UIImage imageNamed:@"storage.png"] forState:UIControlStateNormal];
+    [self.storageButton addTarget:self action:@selector(showStorageBottomView:) forControlEvents:UIControlEventTouchUpInside];
+    [self.storageButton setTitle:@"EAT" forState:UIControlStateNormal];
+    self.storageButton.titleLabel.font = self.globalVs.font;
+    self.storageButton.titleLabel.textColor = self.globalVs.darkGreyColor;
+    [self.storageButton setTitleEdgeInsets: UIEdgeInsetsMake(75,0,0,0)];
+    [self.mainView addSubview:self.storageButton];
     
 }
 
@@ -171,12 +171,7 @@
     NSLog(@"%@ is pressed in add view!", inputFruit.fruitItem.name);
     self.isInAddingStatus = YES;
     
-    if ([inputFruit.fruitItem.name isEqualToString:@"raspberry"] ||
-        [inputFruit.fruitItem.name isEqualToString:@"strawberry"] ||
-        [inputFruit.fruitItem.name isEqualToString:@"blackberry"] ||
-        [inputFruit.fruitItem.name isEqualToString:@"blueberry"] ||
-        [inputFruit.fruitItem.name isEqualToString:@"cherry"] ||
-        [inputFruit.fruitItem.name isEqualToString:@"grape"]) {
+    if ([FruitItem isGroupFruitItem:inputFruit.fruitItem.name]) {
         [self.addFruitBottomView setUpQuantitiesWithQuantityBase:10];
     }
     else {
@@ -184,7 +179,7 @@
     }
     
     [self.addFruitBottomView setHidden:NO];
-    [self.eatButton setHidden:YES];
+    [self.storageButton setHidden:YES];
     
     self.mainView.backgroundColor = [self.mainView.backgroundColor colorWithAlphaComponent:0.3];
     [self.calendarButton setUserInteractionEnabled:NO];
@@ -235,16 +230,16 @@
     self.fruitQuantityLabel.layer.cornerRadius = self.fruitQuantityLabel.frame.size.width / 2;
     self.fruitQuantityLabel.center = CGPointMake(self.addFruitButton.frame.size.width / 2, self.addFruitButton.frame.size.height / 2);
     self.fruitQuantityLabel.clipsToBounds = YES;
-    self.fruitQuantityLabel.font = [UIFont fontWithName:@"AvenirLTStd-Light" size:13];
+    self.fruitQuantityLabel.font = [UIFont fontWithName:@"AvenirLTStd-Light" size:16];
     self.fruitQuantityLabel.textColor = self.globalVs.softWhiteColor;
     self.fruitQuantityLabel.backgroundColor = self.globalVs.pinkColor;
     self.fruitQuantityLabel.textAlignment = NSTextAlignmentCenter;
     
     if ([FruitItem isGroupFruitItem:self.addFruitButton.fruitItem.name]) {
-        self.fruitQuantityLabel.text = [NSString stringWithFormat:@"x %d+", (int)(inputQuantityButton.tag + 1) * 10];
+        self.fruitQuantityLabel.text = [NSString stringWithFormat:@"%d+", (int)(inputQuantityButton.tag + 1) * 10];
     }
     else {
-        self.fruitQuantityLabel.text = [NSString stringWithFormat:@"x %d", (int)inputQuantityButton.tag + 1];
+        self.fruitQuantityLabel.text = [NSString stringWithFormat:@"%d", (int)inputQuantityButton.tag + 1];
     }
     
     
@@ -267,7 +262,7 @@
     self.quantityButton = inputQuantityButton;
     
     // Set eat button not visible
-    [self.eatButton setHidden:NO];
+    [self.storageButton setHidden:NO];
     
     // Highlight the press button for one second
     [self performSelector:@selector(quantityButtonDidPressAfterSeveralSeconds) withObject:nil afterDelay:0.5];
@@ -294,7 +289,7 @@
                                                delay:0
                                              options:0
                                           animations:^{
-                                              self.tempFruitButton.center = self.eatButton.center;
+                                              self.tempFruitButton.center = self.storageButton.center;
                                               self.fruitQuantityLabel.center = CGPointMake(self.addFruitButton.frame.size.width / 2, self.addFruitButton.frame.size.height / 2);
                                           }
                                           completion:^(BOOL finished) {
@@ -337,15 +332,17 @@
     [self.globalVs.dbHelper deleteNotEatenFruitItemsFromDB:fruitName];
 }
 
-- (void)showStorageBottomView:(UIButton *)eatButton {
+- (void)showStorageBottomView:(UIButton *)storageButton {
     [self.displayStorageBottomView setHidden:NO];
     self.canScrollDown = YES;
-    [self.eatButton setHidden:YES];
+    [self.storageButton setHidden:YES];
     
-    //[self.mainView bringSubviewToFront:self.eatButton];
+    //[self.mainView bringSubviewToFront:self.storageButton];
     
-    //[self.eatButton setUserInteractionEnabled:NO];
-    
+    //[self.storageButton setUserInteractionEnabled:NO];
+    [self.displaySeasonalFruitsView highlightOneFruitTouchButton:nil];
+    [self.displaySearchBarView setAlpha:0.3];
+    self.displaySearchBarView.userInteractionEnabled = NO;
     
     [UIView animateWithDuration:0.3
                           delay:0
@@ -355,8 +352,8 @@
                          self.displayStorageBottomView.frame = CGRectOffset(self.displayStorageBottomView.frame, 0, -self.globalVs.screenHeight / 3);
                      }
                      completion:^(BOOL finished) {
-                         self.displaySearchBarView.hidden = YES;
-                         self.displaySeasonalFruitsView.hidden = YES;
+                         //self.displaySearchBarView.hidden = YES;
+                         //self.displaySeasonalFruitsView.hidden = YES;
                          [self.displayStorageBottomView showMouth];
                      }];
 }
@@ -386,7 +383,7 @@
                              [self.displaySearchBarView mainViewDidFinishAddingFruitToDB];
                              [self.displaySearchBarView setAlpha:1];
                              
-                             [self.eatButton setHidden:NO];
+                             [self.storageButton setHidden:NO];
                              [self.addFruitBottomView setHidden:YES];
                              [self.addFruitBottomView addButtonDidFinishPressing];
                              
@@ -404,15 +401,20 @@
                              self.displayStorageBottomView.frame = CGRectOffset(self.displayStorageBottomView.frame, 0, self.globalVs.screenHeight / 3);
                          }
                          completion:^(BOOL finished) {
+                             
+                             [self.displaySeasonalFruitsView deHighlightFruitTouchButton];
+                             [self.displaySearchBarView setAlpha:1];
+                             [self.displaySearchBarView mainViewDidFinishAddingFruitToDB];
+                             
                              [self.displayStorageBottomView mainViewDidMoveDown];
                              [self.displayStorageBottomView setHidden:YES];
                              
                              [self.displaySeasonalFruitsView enableAllFruitTouchButtonsInteraction];
                              
-                             self.displaySearchBarView.hidden = NO;
-                             self.displaySeasonalFruitsView.hidden = NO;
+                             //self.displaySearchBarView.hidden = NO;
+                             //self.displaySeasonalFruitsView.hidden = NO;
                              
-                             [self.eatButton setHidden:NO];
+                             [self.storageButton setHidden:NO];
                          }];
     }
 }
@@ -422,7 +424,7 @@
         int month = self.displaySeasonalFruitsView.monthForDisplaying == 12 ? 1 : self.displaySeasonalFruitsView.monthForDisplaying + 1;
     
         // Load new seasonal fruits to the right of the middle of the mainView
-        DisplaySeasonalFruitsScrollView *newView = [[DisplaySeasonalFruitsScrollView alloc] initWithFrame:CGRectMake(self.globalVs.screenWidth, self.globalVs.screenHeight / 4, self.globalVs.screenWidth, self.globalVs.screenHeight * 3 / 5)];
+        DisplaySeasonalFruitsScrollView *newView = [[DisplaySeasonalFruitsScrollView alloc] initWithFrame:CGRectMake(self.globalVs.screenWidth, self.displaySeasonalFruitsView.frame.origin.y, self.displaySeasonalFruitsView.frame.size.width, self.displaySeasonalFruitsView.frame.size.height)];
         newView.superViewDelegate = self;
         [newView loadViewWithSeasonalFruitsBasicInfo:self.allFruitsBasicInfo withMonth:(int)month];
         [self.mainView insertSubview:newView belowSubview:self.displaySearchBarView];
@@ -449,7 +451,7 @@
         int month = self.displaySeasonalFruitsView.monthForDisplaying == 1 ? 12 : self.displaySeasonalFruitsView.monthForDisplaying - 1;
     
         // Load new seasonal fruits to the right of the middle of the mainView
-        DisplaySeasonalFruitsScrollView *newView = [[DisplaySeasonalFruitsScrollView alloc] initWithFrame:CGRectMake(-self.globalVs.screenWidth, self.globalVs.screenHeight / 4, self.globalVs.screenWidth, self.globalVs.screenHeight * 3 / 5)];
+        DisplaySeasonalFruitsScrollView *newView = [[DisplaySeasonalFruitsScrollView alloc] initWithFrame:CGRectMake(-self.globalVs.screenWidth, self.displaySeasonalFruitsView.frame.origin.y, self.displaySeasonalFruitsView.frame.size.width, self.displaySeasonalFruitsView.frame.size.height)];
         newView.superViewDelegate = self;
         [newView loadViewWithSeasonalFruitsBasicInfo:self.allFruitsBasicInfo withMonth:(int)month];
         [self.mainView insertSubview:newView belowSubview:self.displaySearchBarView];

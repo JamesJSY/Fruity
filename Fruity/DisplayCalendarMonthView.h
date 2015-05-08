@@ -10,7 +10,7 @@
 
 @protocol DisplayCalendarMonthViewDelegate
 
-- (void)reloadSuperView:(id)DisplayCalendarMonthView;
+- (void)reloadSuperViewWithChangeOfMonthView:(id)view willDisplayDays:(bool)isDisplayingDays;
 
 @end
 

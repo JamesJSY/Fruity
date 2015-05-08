@@ -46,9 +46,10 @@
     textLabel.textColor = self.globalVs.darkGreyColor;
     textLabel.text = @"Congrats! You just started your journey!";
     [bottomView addSubview:textLabel];
+    [self.view addSubview:bottomView];
     
     [self.view addSubview:self.calendarView];
-    [self.view addSubview:bottomView];
+    
     
     int numberOfPastMonths = 0;
     NSDate *currentDate = [NSDate date];
@@ -89,15 +90,18 @@
     
 }
 
-- (void) reloadSuperView:(id)view {
+- (void)reloadSuperViewWithChangeOfMonthView:(id)view willDisplayDays:(bool)isDisplayingDays; {
     float lastHeight = 0.0;
     for (DisplayCalendarMonthView *monthView in self.allMonthViews) {
-        if (monthView != view) {
-            [monthView setWillDisplayDaysToNO];
+        if (monthView == view) {
+            // Resize the monthView frame size
+            isDisplayingDays == NO ? [monthView setWillDisplayDaysToNO] : [monthView setWillDisplayDaysToYES];
+            
+            // Refocus the starting point of the scroll view
+            self.calendarView.contentOffset = CGPointMake(0, lastHeight);
         }
         else {
-            [monthView setWillDisplayDaysToYES];
-            self.calendarView.contentOffset = CGPointMake(0, lastHeight);
+            [monthView setWillDisplayDaysToNO];
         }
         monthView.frame = CGRectMake(0, lastHeight, monthView.frame.size.width, monthView.frame.size.height);
         lastHeight += monthView.frame.size.height;

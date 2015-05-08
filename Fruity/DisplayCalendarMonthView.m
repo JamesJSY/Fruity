@@ -91,7 +91,7 @@
         self.displayMonthButton.backgroundColor = self.globalVs.darkGreyColor;
         self.displayMonthButton.layer.cornerRadius = self.displayMonthButton.frame.size.width / 2;
         self.displayMonthButton.titleLabel.font = self.globalVs.font;
-        self.displayMonthButton.titleLabel.textColor = self.globalVs.lightGreyColor;
+        self.displayMonthButton.titleLabel.textColor = self.globalVs.softWhiteColor;
         [self.displayMonthButton setTitle:monthText forState:UIControlStateNormal];
         [self.displayMonthButton addTarget:self action:@selector(monthButtonDidPress:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:self.displayMonthButton];
@@ -165,23 +165,25 @@
 }
 
 - (void)monthButtonDidPress:(UIButton*) monthButton {
+    self.willDisplayDays = !self.willDisplayDays;
+    
     [UIView animateWithDuration:0.5
                           delay:0
                         options:0
                      animations:^{
                          if (self.willDisplayDays) {
-                             self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, self.originalFrameHeight / 5);
-                         }
-                         else {
                              self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, self.originalFrameHeight);
                          }
-                         [self.delegate reloadSuperView:self];
+                         else {
+                             self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, self.originalFrameHeight / 5);
+                         }
+                         [self.delegate reloadSuperViewWithChangeOfMonthView:self willDisplayDays:self.willDisplayDays];
                      }
                      completion:^(BOOL finished) {
     
                      }];
     
-    self.willDisplayDays = !self.willDisplayDays;
+    
 }
 
 - (void)setWillDisplayDaysToNO {

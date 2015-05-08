@@ -41,8 +41,8 @@
         self.globalVs = [GlobalVariables getInstance];
         
         self.displayFunctionLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height / 3)];
-        self.displayFunctionLabel.center = CGPointMake(self.frame.size.width / 2, self.frame.size.height / 3);
-        self.displayFunctionLabel.font = self.globalVs.font;
+        self.displayFunctionLabel.center = CGPointMake(self.frame.size.width / 2, self.frame.size.height / 4);
+        self.displayFunctionLabel.font = [UIFont fontWithName:@"AvenirLTStd-Light" size:20];
         self.displayFunctionLabel.textColor = self.globalVs.lightGreyColor;
         self.displayFunctionLabel.backgroundColor = [UIColor clearColor];
         self.displayFunctionLabel.text = @"Your fruits are not seasonal?";
@@ -50,10 +50,10 @@
         
         [self addSubview:self.displayFunctionLabel];
         
-        self.searchBarTextField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width * 2 / 3, self.frame.size.height / 3)];
+        self.searchBarTextField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width * 2 / 3, self.frame.size.height / 2)];
         self.searchBarTextField.center = CGPointMake(self.frame.size.width / 2, self.frame.size.height * 2 / 3);
         self.searchBarTextField.layer.cornerRadius = self.frame.size.height / 6;
-        self.searchBarTextField.font  = self.globalVs.font;
+        self.searchBarTextField.font  = [UIFont fontWithName:@"AvenirLTStd-Light" size:20];
         self.searchBarTextField.textColor = self.globalVs.darkGreyColor;
         self.searchBarTextField.backgroundColor = self.globalVs.blueColor;
         self.searchBarTextField.placeholder = @"fruit name";
@@ -70,7 +70,7 @@
         [self addSubview:self.searchBarTextField];
         
         self.displayAutoCompletedItemsTableView = [[UITableView alloc] initWithFrame:
-                                 CGRectMake(self.frame.size.width / 6 + self.frame.size.height / 6, self.frame.size.height * 5 / 6 , self.frame.size.width * 2 / 3 - self.frame.size.height / 3, self.frame.size.height) style:UITableViewStylePlain];
+                                 CGRectMake(self.frame.size.width / 6 + self.frame.size.height / 6, self.searchBarTextField.frame.origin.y + self.searchBarTextField.frame.size.height , self.frame.size.width * 2 / 3 - self.frame.size.height / 3, self.frame.size.height) style:UITableViewStylePlain];
         self.displayAutoCompletedItemsTableView.delegate = self;
         self.displayAutoCompletedItemsTableView.dataSource = self;
         self.displayAutoCompletedItemsTableView.scrollEnabled = YES;

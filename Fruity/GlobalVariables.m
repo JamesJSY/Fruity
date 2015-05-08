@@ -47,17 +47,18 @@ static GlobalVariables *instance = nil;
             // Initialize the user preference
             instance.userPreference = [[NSUserDefaults alloc] init];
             
+            /*
             // Record the start date of using Fruity so that no date earlier than this will be displayed in the calendar view
             
             NSCalendar *calendar = [NSCalendar currentCalendar];
             NSDateComponents *comps = [calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:[NSDate date]];
             comps.month = 1;
             comps.day = 1;
-            NSDate *firstDayOfMonth = [calendar dateFromComponents:comps];
+            NSDate *firstDayOfMonth = [calendar dateFromComponents:comps];*/
             
-            //if ([instance.userPreference valueForKey:@"FruityStartDate"] == nil) {
-                [instance.userPreference setValue:firstDayOfMonth forKey:@"FruityStartDate"];
-            //}
+            if ([instance.userPreference valueForKey:@"FruityStartDate"] == nil) {
+                [instance.userPreference setValue:[NSDate date] forKey:@"FruityStartDate"];
+            }
         }
     }
     return instance;
