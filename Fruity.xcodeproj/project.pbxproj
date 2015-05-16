@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		9B750357887B605FB26D85EA /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4053F22538E80102ECC233CF /* libPods.a */; };
+		AB153F6D1B01BCCB00FFE017 /* DisplayCalendarHistoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = AB153F6C1B01BCCB00FFE017 /* DisplayCalendarHistoryView.m */; };
 		AB82C6E61AEEB92700F8A951 /* DisplayCalendarMonthView.m in Sources */ = {isa = PBXBuildFile; fileRef = AB82C6E51AEEB92700F8A951 /* DisplayCalendarMonthView.m */; };
 		AB82C6E81AEEF52400F8A951 /* FruityDB.db in Resources */ = {isa = PBXBuildFile; fileRef = AB82C6E71AEEF52400F8A951 /* FruityDB.db */; };
 		AB82C6F21AF0613900F8A951 /* FruitItem.m in Sources */ = {isa = PBXBuildFile; fileRef = AB82C6EF1AF0613900F8A951 /* FruitItem.m */; };
@@ -49,6 +50,8 @@
 /* Begin PBXFileReference section */
 		3B6C978E83B49146BF8A0154 /* Pods.ad-hoc profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods.ad-hoc profile.xcconfig"; path = "Pods/Target Support Files/Pods/Pods.ad-hoc profile.xcconfig"; sourceTree = "<group>"; };
 		4053F22538E80102ECC233CF /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		AB153F6B1B01BCCB00FFE017 /* DisplayCalendarHistoryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisplayCalendarHistoryView.h; sourceTree = "<group>"; };
+		AB153F6C1B01BCCB00FFE017 /* DisplayCalendarHistoryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DisplayCalendarHistoryView.m; sourceTree = "<group>"; };
 		AB82C6E41AEEB92700F8A951 /* DisplayCalendarMonthView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisplayCalendarMonthView.h; sourceTree = "<group>"; };
 		AB82C6E51AEEB92700F8A951 /* DisplayCalendarMonthView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DisplayCalendarMonthView.m; sourceTree = "<group>"; };
 		AB82C6E71AEEF52400F8A951 /* FruityDB.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = FruityDB.db; sourceTree = "<group>"; };
@@ -134,6 +137,8 @@
 			children = (
 				ABC4289E1AD6E49100BDA15D /* AddDeleteFruitsViewController.h */,
 				ABC4289F1AD6E49100BDA15D /* AddDeleteFruitsViewController.m */,
+				AB153F6B1B01BCCB00FFE017 /* DisplayCalendarHistoryView.h */,
+				AB153F6C1B01BCCB00FFE017 /* DisplayCalendarHistoryView.m */,
 				ABC7A1331AE5AA2500F08733 /* DisplaySearchBarView.h */,
 				ABC7A1341AE5AA2500F08733 /* DisplaySearchBarView.m */,
 				ABAF884B1AE32744008FE837 /* DisplayStorageBottomView.h */,
@@ -405,6 +410,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AB153F6D1B01BCCB00FFE017 /* DisplayCalendarHistoryView.m in Sources */,
 				ABAF883B1ADDF3A7008FE837 /* AddReminderViewController.m in Sources */,
 				ABC7A1351AE5AA2500F08733 /* DisplaySearchBarView.m in Sources */,
 				AB82C6E61AEEB92700F8A951 /* DisplayCalendarMonthView.m in Sources */,

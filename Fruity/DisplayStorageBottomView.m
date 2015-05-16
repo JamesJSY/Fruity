@@ -24,12 +24,12 @@
 @property (nonatomic) UIImageView *animationMouthOpeningImageViewBottom;
 @property (nonatomic) UIImageView *animationChewingImageViewBottom;
 @property (nonatomic) UIImageView *dustbinImageView;
-@property (nonatomic) UIButton *tipsButton;
+//@property (nonatomic) UIButton *tipsButton;
 
 @property (nonatomic) float pixelsWidthForDisplayingItem;
 @property (nonatomic) float itemDisplayRatio;
 
-@property (nonatomic) NSTimer *longPressRecognizerTimer;
+//@property (nonatomic) NSTimer *longPressRecognizerTimer;
 
 @property (nonatomic) bool isShowingDustbin;
 @property (nonatomic) bool isTipsOn;
@@ -49,7 +49,7 @@
         
         // Set the display mode
         self.pixelsWidthForDisplayingItem = self.frame.size.width / 4;
-        self.itemDisplayRatio = (float) 2 / 3;
+        self.itemDisplayRatio = (float) 1 / 2;
         
         self.backgroundColor = self.globalVs.blueColor;
         self.clipsToBounds = NO;
@@ -95,12 +95,13 @@
         //self.dustbinImageView.hidden = YES;
         [self addSubview:self.dustbinImageView];
         
+        /*
         // Initialize the tips image view
         self.tipsButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width / 10, self.frame.size.width / 10)];
         self.tipsButton.center = CGPointMake(self.frame.size.width / 2, - self.animationChewingImageViewBottom.frame.size.height * 4 / 5);
         [self.tipsButton setImage:[UIImage imageNamed:@"balloon.png"] forState:UIControlStateNormal];
         [self.tipsButton addTarget:self action:@selector(switchTipsButtonView) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:self.tipsButton];
+        [self addSubview:self.tipsButton];*/
         
     }
     return self;
@@ -153,7 +154,7 @@
     for (FruitTouchButton *fruitButton in self.allStorageFruitsButton) {
         UILabel *quantityLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.pixelsWidthForDisplayingItem, 30)];
         quantityLabel.center = CGPointMake(fruitButton.center.x, fruitButton.center.y + self.pixelsWidthForDisplayingItem * self.itemDisplayRatio);
-        quantityLabel.font = [UIFont fontWithName:@"AvenirLTStd-Light" size:22];
+        quantityLabel.font = [UIFont fontWithName:@"AvenirLTStd-Light" size:16];
         quantityLabel.textAlignment = NSTextAlignmentCenter;
         quantityLabel.textColor = self.globalVs.softWhiteColor;
         quantityLabel.tag = fruitButton.tag;
@@ -359,15 +360,17 @@
 - (void)turnOffTipsImageView {
     self.isTipsOn = NO;
     
+    /*
     self.tipsButton.frame = CGRectMake(0, 0, self.frame.size.width / 10, self.frame.size.width / 10);
-    self.tipsButton.center = CGPointMake(self.frame.size.width / 2, - self.animationChewingImageViewBottom.frame.size.height * 4 / 5);
+    self.tipsButton.center = CGPointMake(self.frame.size.width / 2, - self.animationChewingImageViewBottom.frame.size.height * 4 / 5);*/
 }
 
 - (void)turnOnTipsImageView {
     self.isTipsOn = YES;
     
-    self.tipsButton.frame = CGRectMake(0, 0, self.frame.size.width * 2 / 3, self.frame.size.width * 2 / 3);
-    self.tipsButton.center = CGPointMake(self.frame.size.width / 2, - self.frame.size.height);
+    /*
+    self.tipsButton.frame = CGRectMake(0, 0, self.frame.size.width * 3 / 5, self.frame.size.width * 3 / 5);
+    self.tipsButton.center = CGPointMake(self.frame.size.width / 2, - self.frame.size.height);*/
 }
 
 /*

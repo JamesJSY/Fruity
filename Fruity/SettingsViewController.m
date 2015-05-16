@@ -22,8 +22,8 @@
 //@property (nonatomic) NSMutableArray *reminderTimes;
 @property (nonatomic) NSMutableArray *allLocalNotificationTimes;
 
-@property (nonatomic) UITextView *notificationTipTextView;
-@property (nonatomic) UITextView *notificationTextView;
+@property (nonatomic) UILabel *notificationTipTextView;
+@property (nonatomic) UILabel *notificationTextView;
 
 @property (nonatomic) UIButton *switchNotificationButton;
 @property (nonatomic) UIButton *notificationTipButton;
@@ -149,7 +149,7 @@
     self.addReminderButton.center = CGPointMake(self.globalVs.screenWidth / 2, self.globalVs.screenHeight * 2 / 3);
     [self.addReminderButton addTarget:self action:@selector(addReminder:) forControlEvents:UIControlEventTouchUpInside];
     
-    self.notificationTextView = [[UITextView alloc] init];
+    self.notificationTextView = [[UILabel alloc] init];
     self.notificationTextView.text = @"Notification";
     self.notificationTextView.textColor = self.globalVs.lightGreyColor;
     self.notificationTextView.font = self.globalVs.font;
@@ -157,7 +157,6 @@
     self.notificationTextView.textAlignment = NSTextAlignmentCenter;
     self.notificationTextView.backgroundColor = self.view.backgroundColor;
     self.notificationTextView.center = CGPointMake(self.globalVs.screenWidth / 2, self.addReminderButton.center.y + self.globalVs.screenHeight / 5);
-    self.notificationTextView.editable = NO;
     
     self.switchNotificationButton = [[UIButton alloc] init];
     if (self.isNotificationOn)
@@ -174,16 +173,18 @@
     [self.notificationTipButton addTarget:self action:@selector(showTipForNotification:) forControlEvents:UIControlEventTouchUpInside];
     [self.notificationTipButton setHidden:YES];
     
-    self.notificationTipTextView = [[UITextView alloc] init];
-    self.notificationTipTextView.text = @"Send Notification to remind you of fruits time";
+    self.notificationTipTextView = [[UILabel alloc] init];
+    self.notificationTipTextView.text = @"Send notification to remind you of fruits time";
+    self.notificationTipTextView.lineBreakMode = NSLineBreakByWordWrapping;
+    self.notificationTipTextView.numberOfLines = 0;
     self.notificationTipTextView.textColor = self.globalVs.softWhiteColor;
     self.notificationTipTextView.font = self.globalVs.font;
     self.notificationTipTextView.frame = CGRectMake(0, 0, self.globalVs.screenWidth * 5 / 6, self.globalVs.screenHeight / 12);
     self.notificationTipTextView.textAlignment = NSTextAlignmentCenter;
     self.notificationTipTextView.layer.cornerRadius = 5;
+    self.notificationTipTextView.clipsToBounds = YES;
     self.notificationTipTextView.backgroundColor = self.globalVs.pinkColor;
     self.notificationTipTextView.center = CGPointMake(self.globalVs.screenWidth / 2, self.globalVs.screenHeight * 2 / 5);
-    self.notificationTipTextView.editable = NO;
     [self.notificationTipTextView setHidden:YES];
     
     [self.view addSubview:self.addReminderButton];

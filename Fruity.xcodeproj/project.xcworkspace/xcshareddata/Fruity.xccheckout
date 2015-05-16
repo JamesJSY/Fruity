@@ -7,22 +7,18 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>D0EF5946-28D5-4FE7-BA49-9E6CA934D708</string>
 	<key>IDESourceControlProjectName</key>
-	<string>project</string>
+	<string>Fruity</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>02EB3F53B74E27B11A406203184B40CB2AC69497</key>
 		<string>https://github.com/JamesJSY/Fruity.git</string>
-		<key>F2FE0AAE95F0B87896F2BEE0B176D4FC32D691A3</key>
-		<string>https://github.com/JamesJSY/pop.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>Fruity.xcodeproj/project.xcworkspace</string>
+	<string>Fruity.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>02EB3F53B74E27B11A406203184B40CB2AC69497</key>
 		<string>../..</string>
-		<key>F2FE0AAE95F0B87896F2BEE0B176D4FC32D691A3</key>
-		<string>../../../../GitHub/pop</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/JamesJSY/Fruity.git</string>
@@ -39,14 +35,6 @@
 			<string>02EB3F53B74E27B11A406203184B40CB2AC69497</string>
 			<key>IDESourceControlWCCName</key>
 			<string>Fruity</string>
-		</dict>
-		<dict>
-			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
-			<string>public.vcs.git</string>
-			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>F2FE0AAE95F0B87896F2BEE0B176D4FC32D691A3</string>
-			<key>IDESourceControlWCCName</key>
-			<string>pop</string>
 		</dict>
 	</array>
 </dict>

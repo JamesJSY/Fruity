@@ -20,6 +20,8 @@
 @property NSMutableArray *allFruitNames;
 @property NSMutableArray *autoCompletedFruitNames;
 
+@property int cellFrameHeight;
+
 // Used to enlarge the current view height so that user is able to choose the nth row in the table view
 @property float frameHeight;
 
@@ -33,7 +35,7 @@
         
         self.allFruitNames = [[NSMutableArray alloc] initWithObjects:@"apple", @"apricot", @"avocado", @"banana", @"blackberry", @"blueberry", @"boysenberry", @"cherry", @"fig", @"grape", @"grapefruit", @"guava", @"kiwi", @"lemon", @"lime", @"melon", @"orange", @"pear", @"plum", @"pomegranate", @"raspberry", @"strawberry", nil];
         self.autoCompletedFruitNames = [[NSMutableArray alloc] init];
-        
+        self.cellFrameHeight = 50;
         self.frameHeight = self.frame.size.height;
         
         self.clipsToBounds = NO;
@@ -42,7 +44,7 @@
         
         self.displayFunctionLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height / 3)];
         self.displayFunctionLabel.center = CGPointMake(self.frame.size.width / 2, self.frame.size.height / 4);
-        self.displayFunctionLabel.font = [UIFont fontWithName:@"AvenirLTStd-Light" size:20];
+        self.displayFunctionLabel.font = self.globalVs.font;
         self.displayFunctionLabel.textColor = self.globalVs.lightGreyColor;
         self.displayFunctionLabel.backgroundColor = [UIColor clearColor];
         self.displayFunctionLabel.text = @"Your fruits are not seasonal?";
@@ -50,10 +52,10 @@
         
         [self addSubview:self.displayFunctionLabel];
         
-        self.searchBarTextField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width * 2 / 3, self.frame.size.height / 2)];
+        self.searchBarTextField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width * 2 / 3, self.frame.size.height / 3)];
         self.searchBarTextField.center = CGPointMake(self.frame.size.width / 2, self.frame.size.height * 2 / 3);
         self.searchBarTextField.layer.cornerRadius = self.frame.size.height / 6;
-        self.searchBarTextField.font  = [UIFont fontWithName:@"AvenirLTStd-Light" size:20];
+        self.searchBarTextField.font = self.globalVs.font;
         self.searchBarTextField.textColor = self.globalVs.darkGreyColor;
         self.searchBarTextField.backgroundColor = self.globalVs.blueColor;
         self.searchBarTextField.placeholder = @"fruit name";
@@ -70,12 +72,13 @@
         [self addSubview:self.searchBarTextField];
         
         self.displayAutoCompletedItemsTableView = [[UITableView alloc] initWithFrame:
-                                 CGRectMake(self.frame.size.width / 6 + self.frame.size.height / 6, self.searchBarTextField.frame.origin.y + self.searchBarTextField.frame.size.height , self.frame.size.width * 2 / 3 - self.frame.size.height / 3, self.frame.size.height) style:UITableViewStylePlain];
+                                 CGRectMake(self.frame.size.width / 6 + self.frame.size.height / 6, self.searchBarTextField.frame.origin.y + self.searchBarTextField.frame.size.height , self.frame.size.width * 2 / 3 - self.frame.size.height / 3, 3 * self.cellFrameHeight) style:UITableViewStylePlain];
         self.displayAutoCompletedItemsTableView.delegate = self;
         self.displayAutoCompletedItemsTableView.dataSource = self;
         self.displayAutoCompletedItemsTableView.scrollEnabled = YES;
         self.displayAutoCompletedItemsTableView.hidden = YES;
         self.displayAutoCompletedItemsTableView.backgroundColor = self.searchBarTextField.backgroundColor;
+        self.displayAutoCompletedItemsTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         [self.displayAutoCompletedItemsTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
         [self addSubview:self.displayAutoCompletedItemsTableView];
         
@@ -159,7 +162,7 @@
     cell.textLabel.text = [self.autoCompletedFruitNames objectAtIndex:indexPath.row];
     NSString *imageName = [[NSString alloc] initWithFormat:@"%@.png", cell.textLabel.text];
     cell.imageView.image = [UIImage imageNamed:imageName];
-    cell.frame = CGRectMake(0, 0, 200, 50);
+    cell.frame = CGRectMake(0, 0, 200, self.cellFrameHeight);
     cell.backgroundColor = self.searchBarTextField.backgroundColor;
     cell.textLabel.font = self.globalVs.font;
     cell.textLabel.textColor = self.searchBarTextField.textColor;

@@ -118,7 +118,7 @@
             int col = (i + weekday) % daysPerWeek;
             NSArray *eatFruitsArray = [self.globalVs.dbHelper loadAllFruitItemsEatenFromDBInYear:(int)comps.year month:(int)comps.month day:(int)comps.day + i];
             
-            UILabel *day = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width / 6 + col * self.frame.size.width / 10, self.frame.size.height / 5 + row * self.frame.size.width / 10, self.frame.size.width / 10, self.frame.size.width / 10)];
+            UILabel *day = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width / 6 + col * self.frame.size.width / 9, self.frame.size.height / 5 + row * self.frame.size.width / 9, self.frame.size.width / 11, self.frame.size.width / 11)];
             day.textAlignment = NSTextAlignmentCenter;
             day.text = [NSString stringWithFormat:@"%d", i + 1];
             day.clipsToBounds = YES;

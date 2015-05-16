@@ -14,6 +14,7 @@
 
 @property GlobalVariables *globalVs;
 @property (nonatomic) NSMutableArray *allMonthViews;
+@property (nonatomic) UIButton *bananaButton;
 
 @property (nonatomic) UIScrollView *calendarView;
 
@@ -31,7 +32,7 @@
     NSDate *date = [self.globalVs.userPreference valueForKey:@"FruityStartDate"];
     
     // Initialize the calendar view
-    self.calendarView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.globalVs.screenHeight / 6, self.globalVs.screenWidth, self.globalVs.screenHeight / 2)];
+    self.calendarView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 60, self.globalVs.screenWidth, self.globalVs.screenHeight * 2 / 3 - 60)];
     self.calendarView.contentSize = CGSizeMake(self.globalVs.screenWidth, self.globalVs.screenHeight);
     self.calendarView.scrollEnabled = YES;
     self.calendarView.backgroundColor = self.view.backgroundColor;
@@ -39,12 +40,19 @@
     // Initialize the bottom view
     UIView *bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, self.globalVs.screenHeight * 2 / 3, self.globalVs.screenWidth, self.globalVs.screenHeight / 3)];
     bottomView.backgroundColor = self.globalVs.softWhiteColor;
-    UILabel *textLabel = [[UILabel alloc] initWithFrame:CGRectMake(bottomView.frame.size.width / 8, 0, bottomView.frame.size.width * 3 / 4, bottomView.frame.size.height * 4 / 5)];
+    UILabel *textLabel = [[UILabel alloc] initWithFrame:CGRectMake(bottomView.frame.size.width / 12, bottomView.frame.size.height / 8, bottomView.frame.size.width * 5 / 6, bottomView.frame.size.height / 4)];
     textLabel.lineBreakMode = NSLineBreakByWordWrapping;
     textLabel.numberOfLines = 0;
     textLabel.font = self.globalVs.font;
     textLabel.textColor = self.globalVs.darkGreyColor;
-    textLabel.text = @"Congrats! You just started your journey!";
+    textLabel.text = @"Congrats! You have eaten 15 bananas in this month.";
+    
+    self.bananaButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.globalVs.screenWidth / 8, self.globalVs.screenWidth / 8)];
+    self.bananaButton.center = CGPointMake(self.globalVs.screenWidth - bottomView.frame.size.height  / 6, bottomView.frame.size.height * 5 / 6);
+    self.bananaButton.userInteractionEnabled = NO;
+    [self.bananaButton setImage:[UIImage imageNamed:@"banana_badge.png"] forState:UIControlStateNormal];
+    [bottomView addSubview:self.bananaButton];
+    
     [bottomView addSubview:textLabel];
     [self.view addSubview:bottomView];
     
