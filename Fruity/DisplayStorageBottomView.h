@@ -11,6 +11,7 @@
 @protocol DisplayStorageBottomViewDelegate
 
 - (NSArray *) loadAllFruitsInStorageFromDB;
+- (void) deleteNotEatenFruitItemWithID:(int) ID;
 - (void) deleteNotEatenFruitItemWithName:(NSString *)fruitName;
 - (void) eatFruitItemWithID:(int) ID;
 

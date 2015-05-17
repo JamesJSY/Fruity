@@ -95,14 +95,6 @@
         //self.dustbinImageView.hidden = YES;
         [self addSubview:self.dustbinImageView];
         
-        /*
-        // Initialize the tips image view
-        self.tipsButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width / 10, self.frame.size.width / 10)];
-        self.tipsButton.center = CGPointMake(self.frame.size.width / 2, - self.animationChewingImageViewBottom.frame.size.height * 4 / 5);
-        [self.tipsButton setImage:[UIImage imageNamed:@"balloon.png"] forState:UIControlStateNormal];
-        [self.tipsButton addTarget:self action:@selector(switchTipsButtonView) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:self.tipsButton];*/
-        
     }
     return self;
 }
@@ -194,68 +186,68 @@
     }
 }
 
+- (void)showQuantityLabelChange:(FruitTouchButton*)inputFruit{
+    // Record the tag number of the quantity label so that we can change its color to pink and back then
+    UILabel *eatenFruitQuantityLabel = self.allQuantityLabels[inputFruit.tag];
+    
+    // Change the quantity to one less and put the fruit button back to where it was
+    if ([FruitItem isGroupFruitItem:inputFruit.fruitItem.name]) {
+        eatenFruitQuantityLabel.text = [NSString stringWithFormat:@"%d+", (int)([eatenFruitQuantityLabel.text integerValue] / 10 - 1 )* 10];
+    }
+    else {
+        eatenFruitQuantityLabel.text = [NSString stringWithFormat:@"%d", (int)[eatenFruitQuantityLabel.text integerValue] - 1];
+    }
+    
+    // Change the quantity label to pink and back then to let the user know which fruit is eaten
+    [UIView transitionWithView:eatenFruitQuantityLabel
+                      duration:0.25
+                       options:UIViewAnimationOptionTransitionCrossDissolve
+                    animations:^{
+                        eatenFruitQuantityLabel.textColor = self.globalVs.pinkColor;
+                    }
+                    completion:^(BOOL finished) {
+                        [UIView transitionWithView:eatenFruitQuantityLabel
+                                          duration:1.0
+                                           options:UIViewAnimationOptionTransitionCrossDissolve
+                                        animations:^{
+                                            eatenFruitQuantityLabel.textColor = self.globalVs.softWhiteColor;
+                                        }
+                                        completion:^(BOOL finished) {
+                                            // Reload the view that display storage list
+                                            [self loadDisplayStorageBottomView];
+                                        }];
+                    }];
+}
+
+- (void) putFruitBack:(FruitTouchButton*)inputFruit{
+    inputFruit.frame = CGRectMake(20 + inputFruit.tag * self.pixelsWidthForDisplayingItem, 30, self.pixelsWidthForDisplayingItem * self.itemDisplayRatio, self.pixelsWidthForDisplayingItem * self.itemDisplayRatio);
+}
+
 - (void)releaseFruitButton:(FruitTouchButton*)inputFruit withEvent:(UIEvent*) event{
     CGPoint point = [[[event allTouches] anyObject] locationInView:self];
     
+    // Move the dragging fruit back to the scroll view
+    [self putFruitBack:inputFruit];
+    
     // If the user drags the fruit into the little blue's mouth and release it
     if ( CGRectContainsPoint(self.animationMouthOpeningImageViewBottom.frame, point)) {
-        
-        //[self.animationMouthOpeningImageViewBottom setHidden:YES];
-        //[self.animationChewingImageViewBottom setHidden:NO];
-        //[self performSelector:@selector(animationAfterDiDChew) withObject:nil afterDelay:self.animationChewingImageViewBottom.animationDuration];
-        
-        // Record the tag number of the quantity label so that we can change its color to pink and back then
-        UILabel *eatenFruitQuantityLabel = self.allQuantityLabels[inputFruit.tag];
-        
-        // Change the quantity to one less and put the fruit button back to where it was
-        if ([FruitItem isGroupFruitItem:inputFruit.fruitItem.name]) {
-            eatenFruitQuantityLabel.text = [NSString stringWithFormat:@"%d+", (int)([eatenFruitQuantityLabel.text integerValue] / 10 - 1 )* 10];
-        }
-        else {
-            eatenFruitQuantityLabel.text = [NSString stringWithFormat:@"%d", (int)[eatenFruitQuantityLabel.text integerValue] - 1];
-        }
-        inputFruit.frame = CGRectMake(20 + inputFruit.tag * self.pixelsWidthForDisplayingItem, 30, self.pixelsWidthForDisplayingItem * self.itemDisplayRatio, self.pixelsWidthForDisplayingItem * self.itemDisplayRatio);
-        
         // Start chewing animation
         [self.animationChewingImageViewBottom startAnimating];
         
         // Eat the pressed item in the database
         [self.superViewDelegate eatFruitItemWithID:inputFruit.fruitItem.ID];
         
-        // Change the quantity label to pink and back then to let the user know which fruit is eaten
-        [UIView transitionWithView:eatenFruitQuantityLabel
-                          duration:0.25
-                           options:UIViewAnimationOptionTransitionCrossDissolve
-                        animations:^{
-                            eatenFruitQuantityLabel.textColor = self.globalVs.pinkColor;
-                        }
-                        completion:^(BOOL finished) {
-                            [UIView transitionWithView:eatenFruitQuantityLabel
-                                              duration:1.0
-                                               options:UIViewAnimationOptionTransitionCrossDissolve
-                                            animations:^{
-                                                eatenFruitQuantityLabel.textColor = self.globalVs.softWhiteColor;
-                                            }
-                                            completion:^(BOOL finished) {
-                                                // Reload the view that display storage list
-                                                [self loadDisplayStorageBottomView];
-                                            }];
-                        }];
+        // Show animation of changing quantity label and reload the view
+        [self showQuantityLabelChange:inputFruit];
         
-
     }
     // If the user drags the fruit in the dustbin area
     else if (point.y > self.dustbinImageView.frame.origin.y) {
         // Delete the selected fruit that is not eaten in the
-        [self.superViewDelegate deleteNotEatenFruitItemWithName:inputFruit.fruitItem.name];
+        [self.superViewDelegate deleteNotEatenFruitItemWithID:inputFruit.fruitItem.ID];
         
-        // Reload the view that display storage list
-        [self loadDisplayStorageBottomView];
-    }
-    else {
-        // If the fruit is not eaten nor deleted, put the fruit button back to where it was
-        unsigned long indexOfFruit = [self.allStorageFruitsButton indexOfObject:inputFruit];
-        inputFruit.frame = CGRectMake(20 + indexOfFruit * self.pixelsWidthForDisplayingItem, 30, self.pixelsWidthForDisplayingItem * self.itemDisplayRatio, self.pixelsWidthForDisplayingItem * self.itemDisplayRatio);
+        // Show animation of changing quantity label and reload the view
+        [self showQuantityLabelChange:inputFruit];
     }
     
     if ( self.isShowingDustbin ) {

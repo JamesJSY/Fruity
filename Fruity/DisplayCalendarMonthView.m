@@ -17,6 +17,9 @@
 @property (nonatomic) UIButton *displayMonthButton;
 @property (nonatomic) UILabel *displayDaysDidEatFruitLabel;
 
+@property (nonatomic) NSMutableArray *allDayButtons;
+
+@property (nonatomic) NSDateComponents *dateComponents;
 @property (nonatomic) bool willDisplayDays;
 @property (nonatomic) float originalFrameHeight;
 
@@ -32,12 +35,14 @@
         self.clipsToBounds = YES;
         self.originalFrameHeight = self.frame.size.height;
         
+        self.allDayButtons = [[NSMutableArray alloc] init];
+        
         // Get the weekday of the first day in the current month
         NSCalendar *calendar = [NSCalendar currentCalendar];
         int daysPerWeek = 7;
-        NSDateComponents *comps = [calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:currDate];
-        comps.day = 1;
-        NSDate *firstDayOfMonth = [calendar dateFromComponents:comps];
+        self.dateComponents = [calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:currDate];
+        self.dateComponents.day = 1;
+        NSDate *firstDayOfMonth = [calendar dateFromComponents:self.dateComponents];
         NSDateComponents *firstDayOfMonthComp = [calendar components:NSCalendarUnitWeekday fromDate:firstDayOfMonth];
         NSRange days = [calendar rangeOfUnit:NSCalendarUnitDay
                                       inUnit:NSCalendarUnitMonth
@@ -46,7 +51,7 @@
         int weekday = (int)firstDayOfMonthComp.weekday - 1;
         
         NSString *monthText;
-        switch (comps.month) {
+        switch (self.dateComponents.month) {
             case 1:
                 monthText = @"JAN";
                 break;
@@ -116,28 +121,50 @@
         for (int i = 0; i < days.length; i++) {
             int row = (i + weekday) / daysPerWeek;
             int col = (i + weekday) % daysPerWeek;
-            NSArray *eatFruitsArray = [self.globalVs.dbHelper loadAllFruitItemsEatenFromDBInYear:(int)comps.year month:(int)comps.month day:(int)comps.day + i];
+            NSArray *eatFruitsArray = [self.globalVs.dbHelper loadAllFruitItemsEatenFromDBInYear:(int)self.dateComponents.year month:(int)self.dateComponents.month day:(int)self.dateComponents.day + i];
             
-            UILabel *day = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width / 6 + col * self.frame.size.width / 9, self.frame.size.height / 5 + row * self.frame.size.width / 9, self.frame.size.width / 11, self.frame.size.width / 11)];
-            day.textAlignment = NSTextAlignmentCenter;
-            day.text = [NSString stringWithFormat:@"%d", i + 1];
-            day.clipsToBounds = YES;
-            day.layer.cornerRadius = day.frame.size.width / 2;
-            day.font = self.globalVs.font;
+            UIButton *day = [[UIButton alloc] initWithFrame:CGRectMake(self.frame.size.width / 6 + col * self.frame.size.width / 9, self.frame.size.height / 5 + row * self.frame.size.width / 9, self.frame.size.width / 11, self.frame.size.width / 11)];
+            day.titleLabel.textAlignment = NSTextAlignmentCenter;
+            [day setTitle:[NSString stringWithFormat:@"%d", i + 1] forState:UIControlStateNormal];
+            day.clipsToBounds = NO;
+            //day.layer.cornerRadius = day.frame.size.width / 2;
+            day.titleLabel.font = self.globalVs.font;
+            day.tag = i;
+            
             if ((i + weekday) % daysPerWeek == 6 || (i + weekday) % daysPerWeek == 0) {
-                day.textColor = self.globalVs.lightGreyColor;
+                [day setTitleColor:self.globalVs.lightGreyColor forState:UIControlStateNormal];
             }
             else {
-                day.textColor = self.globalVs.darkGreyColor;
+                [day setTitleColor:self.globalVs.darkGreyColor forState:UIControlStateNormal];
             }
+            
+            // Users can only click on days that has eaten history
             if ([eatFruitsArray count] > 0) {
-                day.backgroundColor = self.globalVs.softWhiteColor;
+                int radius = day.frame.size.height / 2;
+                CAShapeLayer *circle = [CAShapeLayer layer];
+                // Make a circular shape
+                circle.path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, 2.0*radius, 2.0*radius)
+                                                         cornerRadius:radius].CGPath;
+                
+                // Configure the apperence of the circle
+                circle.fillColor = [UIColor clearColor].CGColor;
+                circle.strokeColor = self.globalVs.softWhiteColor.CGColor;
+                circle.lineWidth = 2;
+                [day.layer addSublayer:circle];
+                
+                //day.backgroundColor = self.globalVs.softWhiteColor;
+                [day addTarget:self action:@selector(dayButtonDidClick:) forControlEvents:UIControlEventTouchUpInside];
                 daysDidEatFruit++;
             }
-            if (!(comps.year < currentDateComps.year || comps.month < currentDateComps.month || comps.day + i <= currentDateComps.day)) {
+            else {
+                day.userInteractionEnabled = NO;
+            }
+            
+            if (!(self.dateComponents.year < currentDateComps.year || self.dateComponents.month < currentDateComps.month || self.dateComponents.day + i <= currentDateComps.day)) {
                 break;
             }
-                
+            
+            [self.allDayButtons addObject:day];
             [self addSubview:day];
         }
         
@@ -194,6 +221,19 @@
 - (void)setWillDisplayDaysToYES {
     self.willDisplayDays = YES;
     self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, self.originalFrameHeight);
+}
+
+- (void)dayButtonDidClick:(UIButton*)dayButton {
+    NSLog(@"Day %d is clicked in the calendar view.", ((int)dayButton.tag) + 1);
+    
+    // Create a date component have the same date as the date clicked
+    NSDateComponents *currDateComponents = [[NSDateComponents alloc] init];
+    currDateComponents.year = self.dateComponents.year;
+    currDateComponents.month = self.dateComponents.month;
+    currDateComponents.day = dayButton.tag + 1;
+    
+    // Reload superview's fruit history display
+    [self.delegate reloadSuperViewWithFruitsHistoryInDateComponent:currDateComponents dayButtonClicked:dayButton];
 }
 
 /*

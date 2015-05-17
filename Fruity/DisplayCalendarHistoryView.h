@@ -8,8 +8,21 @@
 
 #import <UIKit/UIKit.h>
 
-@interface DisplayCalendarHistoryView : UIView
+@protocol DisplayCalendarHistoryViewDelegate
 
-- (instancetype)initWithFrame:(CGRect)frame;
+- (void) clickOnTheViewToQuitShowingStorageList;
+
+@end
+
+@interface DisplayCalendarHistoryView : UIView {
+    id <DisplayCalendarHistoryViewDelegate> _delegate;
+}
+@property (nonatomic) id <DisplayCalendarHistoryViewDelegate> delegate;
+
+- (void) reloadEatenFruitHistory;
+
+- (instancetype) initWithFrame:(CGRect)frame;
+
+- (void) superViewDidShowBottomStorageView;
 
 @end

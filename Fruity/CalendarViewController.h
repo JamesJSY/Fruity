@@ -11,4 +11,6 @@
 
 @interface CalendarViewController : UIViewController <DisplayCalendarMonthViewDelegate>
 
+- (void) showHint;
+
 @end

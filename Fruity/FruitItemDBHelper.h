@@ -18,7 +18,8 @@
 -(NSArray *)loadAllFruitItemsNotEatenFromDB;
 -(NSArray *)loadAllFruitItemsEatenFromDBInYear:(int)inputYear month:(int)inputMonth day:(int)inputDay;
 
--(void)deleteNotEatenFruitItemsFromDB:(NSString *) fruitName;
+-(void)deleteNotEatenFruitItemsFromDBWithID:(int) ID;
+-(void)deleteNotEatenFruitItemsFromDBWithName:(NSString *) fruitName;
 
 -(void)updateFruitItemsFromDB:(FruitItem *) item;
 

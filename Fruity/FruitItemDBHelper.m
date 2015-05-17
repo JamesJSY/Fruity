@@ -134,7 +134,23 @@
     return (NSArray *)self.fruitItems;
 }
 
--(void)deleteNotEatenFruitItemsFromDB:(NSString *)fruitName {
+-(void)deleteNotEatenFruitItemsFromDBWithID:(int) ID {
+    // Prepare the query.
+    NSString *query = [NSString stringWithFormat:@"DELETE FROM '%@' WHERE ID = %d AND ISEATEN = 0", self.dabaBaseName, ID];
+    
+    // Execute the query.
+    [self.dbManager executeQuery:query];
+    
+    // If the query was successfully executed then pop the view controller.
+    if (self.dbManager.affectedRows != 0) {
+        NSLog(@"Delete query was executed successfully. Affected rows = %d", self.dbManager.affectedRows);
+    }
+    else{
+        NSLog(@"Could not execute delete the query.");
+    }
+}
+
+-(void)deleteNotEatenFruitItemsFromDBWithName:(NSString *)fruitName {
     // Prepare the query.
     NSString *query = [NSString stringWithFormat:@"DELETE FROM '%@' WHERE NAME = '%@' AND ISEATEN = 0", self.dabaBaseName, fruitName];
     

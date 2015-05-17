@@ -22,6 +22,7 @@
 @synthesize pinkColor;
 @synthesize dbHelper;
 @synthesize userPreference;
+@synthesize openedFromNotification;
 
 static GlobalVariables *instance = nil;
 
@@ -47,9 +48,10 @@ static GlobalVariables *instance = nil;
             // Initialize the user preference
             instance.userPreference = [[NSUserDefaults alloc] init];
             
+            instance.openedFromNotification = NO;
+            
             /*
             // Record the start date of using Fruity so that no date earlier than this will be displayed in the calendar view
-            
             NSCalendar *calendar = [NSCalendar currentCalendar];
             NSDateComponents *comps = [calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:[NSDate date]];
             comps.month = 1;

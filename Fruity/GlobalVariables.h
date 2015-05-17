@@ -25,18 +25,21 @@
     FruitItemDBHelper *dbHelper;
     
     NSUserDefaults *userPreference;
+    
+    bool openedFromNotification;
 }
 
-@property (nonatomic) int screenWidth;
-@property (nonatomic) int screenHeight;
-@property (nonatomic) UIFont *font;
-@property (nonatomic) UIColor *blueColor;
-@property (nonatomic) UIColor *softWhiteColor;
-@property (nonatomic) UIColor *darkGreyColor;
-@property (nonatomic) UIColor *lightGreyColor;
-@property (nonatomic) UIColor *pinkColor;
-@property (nonatomic) FruitItemDBHelper *dbHelper;
-@property (nonatomic) NSUserDefaults *userPreference;
+@property int screenWidth;
+@property int screenHeight;
+@property UIFont *font;
+@property UIColor *blueColor;
+@property UIColor *softWhiteColor;
+@property UIColor *darkGreyColor;
+@property UIColor *lightGreyColor;
+@property UIColor *pinkColor;
+@property FruitItemDBHelper *dbHelper;
+@property NSUserDefaults *userPreference;
+@property bool openedFromNotification;
 
 + (GlobalVariables *)getInstance;
 

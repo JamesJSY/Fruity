@@ -27,6 +27,7 @@
 @property (nonatomic) DisplaySeasonalFruitsScrollView *displaySeasonalFruitsView;
 @property (nonatomic) AddFruitBottomView *addFruitBottomView;
 @property (nonatomic) DisplayStorageBottomView *displayStorageBottomView;
+@property (nonatomic) DisplayCalendarHistoryView *displayCalendarHistoryView;
 
 @property (nonatomic) UIImageView *openningTutorialImageView;
 @property (nonatomic) UIImageView *storageTutorialImageView;
@@ -74,7 +75,7 @@
     self.displayStorageBottomView.superViewDelegate = self;
     [self.displayStorageBottomView loadDisplayStorageBottomView];
     [self.displayStorageBottomView setHidden:YES];
-    [self.view addSubview:self.displayStorageBottomView];
+    [self.view insertSubview:self.displayStorageBottomView belowSubview:self.tipsButton];
     
     // Get the current month.
     NSDate *date = [NSDate date];
@@ -101,7 +102,7 @@
     
     // Set up openning tutorial image view
     self.openningTutorialImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.globalVs.screenWidth, self.globalVs.screenHeight)];
-    self.openningTutorialImageView.image = [UIImage imageNamed:@"instructions2.1"];
+    self.openningTutorialImageView.image = [UIImage imageNamed:@"instructions.png"];
     UITapGestureRecognizer *tapToDismissOpenningTutorialGestureRecognizer = [[UITapGestureRecognizer alloc]
                                                     initWithTarget:self
                                                     action:@selector(didTapToDismissOpenningTutorial)];
@@ -111,14 +112,20 @@
         [self.view addSubview:self.openningTutorialImageView];
     }
     
-    // Set up openning tutorial image view
+    // Set up storage tutorial image view
     self.storageTutorialImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.globalVs.screenWidth, self.globalVs.screenHeight)];
-    self.storageTutorialImageView.image = [UIImage imageNamed:@"instructions2.2"];
+    self.storageTutorialImageView.image = [UIImage imageNamed:@"instructions2.png"];
     UITapGestureRecognizer *tapToDismissStorageTutorialGestureRecognizer = [[UITapGestureRecognizer alloc]
                                                   initWithTarget:self
                                                   action:@selector(didTapToDismissStorageTutorial)];
     self.storageTutorialImageView.userInteractionEnabled = YES;
     [self.storageTutorialImageView addGestureRecognizer:tapToDismissStorageTutorialGestureRecognizer];
+    
+    // Set up display calendar history view
+    self.displayCalendarHistoryView = [[DisplayCalendarHistoryView alloc] initWithFrame:CGRectMake(0, -self.globalVs.screenHeight / 9, self.globalVs.screenWidth, self.globalVs.screenHeight - self.displayStorageBottomView.frame.size.height)];
+    self.displayCalendarHistoryView.hidden = YES;
+    self.displayCalendarHistoryView.delegate = self;
+    [self.view insertSubview:self.displayCalendarHistoryView belowSubview:self.displayStorageBottomView];
     
     // Set up tap gesture recognizer
     UITapGestureRecognizer *tapToAct = [[UITapGestureRecognizer alloc]
@@ -136,6 +143,11 @@
     
     [self.displaySeasonalFruitsView addGestureRecognizer:self.swipeLeftGestureRecognizer];
     [self.displaySeasonalFruitsView addGestureRecognizer:self.swipeRightGestureRecognizer];
+    
+    if (self.globalVs.openedFromNotification) {
+        [self showStorageBottomView:self.storageButton];
+        self.globalVs.openedFromNotification = NO;
+    }
 
 }
 
@@ -189,16 +201,25 @@
     [self.storageButton setTitleEdgeInsets: UIEdgeInsetsMake(75,0,0,0)];
     [self.mainView addSubview:self.storageButton];
     
-    // Initialize the tips image view
-    self.tipsButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.globalVs.screenWidth / 15, self.globalVs.screenWidth / 15)];
-    self.tipsButton.center = CGPointMake(self.storageButton.center.x, self.storageButton.center.y - self.storageButton.frame.size.height / 2 - 25);
-    [self.tipsButton setImage:[UIImage imageNamed:@"questionmark.png"] forState:UIControlStateNormal];
+    // Initialize the tips button
+    self.tipsButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.globalVs.screenWidth / 6, self.globalVs.screenWidth / 6)];
+    [self moveTipsButtonToRightCorner];
+    [self.tipsButton setImage:[UIImage imageNamed:@"hint.png"] forState:UIControlStateNormal];
     [self.tipsButton addTarget:self action:@selector(tipsButtonDidClick) forControlEvents:UIControlEventTouchUpInside];
-    [self.mainView addSubview:self.tipsButton];
+    [self.view addSubview:self.tipsButton];
     
 }
 
-- (void) tipsButtonDidClick{
+#pragma tipsButton function
+- (void)moveTipsButtonToRightCorner {
+    self.tipsButton.center = CGPointMake(self.mainView.frame.size.width * 9 / 10, self.mainView.frame.size.height - self.mainView.frame.size.width / 10);
+}
+
+- (void)moveTipsButtonToMiddle {
+    self.tipsButton.center = CGPointMake(self.storageButton.center.x, self.storageButton.center.y - self.storageButton.frame.size.height / 2 - 30 - self.displayStorageBottomView.frame.size.height);
+}
+
+- (void)tipsButtonDidClick{
     if (self.canScrollDown) {
         [self.view addSubview:self.storageTutorialImageView];
     }
@@ -384,10 +405,47 @@
 
 - (void)eatFruitItemWithID:(int) ID {
     [self.globalVs.dbHelper eatFruitItemFromDB:ID date:[self.formatter stringFromDate:[NSDate date]]];
+    
+    [self.displayCalendarHistoryView reloadEatenFruitHistory];
+}
+
+- (void)deleteNotEatenFruitItemWithID:(int) ID{
+    [self.globalVs.dbHelper deleteNotEatenFruitItemsFromDBWithID:ID];
 }
 
 - (void)deleteNotEatenFruitItemWithName:(NSString *) fruitName{
-    [self.globalVs.dbHelper deleteNotEatenFruitItemsFromDB:fruitName];
+    [self.globalVs.dbHelper deleteNotEatenFruitItemsFromDBWithName:fruitName];
+}
+
+- (void) clickOnTheViewToQuitShowingStorageList {
+
+        self.canScrollDown = NO;
+        [UIView animateWithDuration:0.3
+                              delay:0
+                            options:0
+                         animations:^{
+                             self.mainView.frame = CGRectOffset(self.mainView.frame, 0, self.displayStorageBottomView.frame.size.height);
+                             self.displayStorageBottomView.frame = CGRectOffset(self.displayStorageBottomView.frame, 0, self.displayStorageBottomView.frame.size.height);
+                             self.displayCalendarHistoryView.frame = CGRectOffset(self.displayCalendarHistoryView.frame, 0, -self.globalVs.screenHeight / 9);
+                             [self moveTipsButtonToRightCorner];
+                         }
+                         completion:^(BOOL finished) {
+                             
+                             //[self.displaySeasonalFruitsView deHighlightFruitTouchButton];
+                             //[self.displaySearchBarView setAlpha:1];
+                             //[self.displaySearchBarView mainViewDidFinishAddingFruitToDB];
+                             self.displaySearchBarView.userInteractionEnabled = YES;
+                             self.displaySeasonalFruitsView.hidden = NO;
+                             self.displayCalendarHistoryView.hidden = YES;
+                             
+                             [self.displayStorageBottomView mainViewDidMoveDown];
+                             [self.displayStorageBottomView setHidden:YES];
+                             
+                             [self.displaySeasonalFruitsView enableAllFruitTouchButtonsInteraction];
+                             
+                             [self.storageButton setHidden:NO];
+                         }];
+
 }
 
 - (void)showStorageBottomView:(UIButton *)storageButton {
@@ -402,7 +460,10 @@
     //[self.displaySeasonalFruitsView highlightOneFruitTouchButton:nil];
     //[self.displaySearchBarView setAlpha:0.3];
     self.displaySearchBarView.userInteractionEnabled = NO;
-    self.displaySeasonalFruitsView.userInteractionEnabled = YES;
+    self.displaySeasonalFruitsView.hidden = YES;
+    self.displayCalendarHistoryView.hidden = NO;
+    
+    [self.displayCalendarHistoryView reloadEatenFruitHistory];
     
     [UIView animateWithDuration:0.3
                           delay:0
@@ -410,12 +471,15 @@
                      animations:^{
                          self.mainView.frame = CGRectOffset(self.mainView.frame, 0, -self.displayStorageBottomView.frame.size.height);
                          self.displayStorageBottomView.frame = CGRectOffset(self.displayStorageBottomView.frame, 0, -self.displayStorageBottomView.frame.size.height);
+                         self.displayCalendarHistoryView.frame = CGRectOffset(self.displayCalendarHistoryView.frame, 0, -self.displayCalendarHistoryView.frame.origin.y);
+                         [self moveTipsButtonToMiddle];
                      }
                      completion:^(BOOL finished) {
                          //self.displaySearchBarView.hidden = YES;
                          //self.displaySeasonalFruitsView.hidden = YES;
                          
-                         
+                         [self.displayCalendarHistoryView superViewDidShowBottomStorageView];
+                         [self.displayStorageBottomView showMouth];
                          if (![@"1" isEqualToString:[self.globalVs.userPreference valueForKey:@"isFirstOpenningStorage"]]) {
                              [self.view addSubview:self.storageTutorialImageView];
                          }
@@ -455,6 +519,7 @@
                          }];
     }
     
+    /*
     CGPoint touchPoint = [sender locationInView:self.mainView];
     if (self.canScrollDown && !CGRectContainsPoint(self.tipsButton.frame, touchPoint)) {
         self.canScrollDown = NO;
@@ -464,6 +529,7 @@
                          animations:^{
                              self.mainView.frame = CGRectOffset(self.mainView.frame, 0, self.displayStorageBottomView.frame.size.height);
                              self.displayStorageBottomView.frame = CGRectOffset(self.displayStorageBottomView.frame, 0, self.displayStorageBottomView.frame.size.height);
+                             [self moveTipsButtonToRightCorner];
                          }
                          completion:^(BOOL finished) {
                              
@@ -483,7 +549,7 @@
                              
                              [self.storageButton setHidden:NO];
                          }];
-    }
+    }*/
 }
 
 - (void)seasonalFruitsViewDidSwipeLeft {

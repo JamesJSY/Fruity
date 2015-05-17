@@ -11,6 +11,7 @@
 @protocol DisplayCalendarMonthViewDelegate
 
 - (void)reloadSuperViewWithChangeOfMonthView:(id)view willDisplayDays:(bool)isDisplayingDays;
+- (void)reloadSuperViewWithFruitsHistoryInDateComponent:(NSDateComponents *)dateComponent dayButtonClicked:(UIButton *)dayButton;
 
 @end
 

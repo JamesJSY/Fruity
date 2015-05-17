@@ -11,7 +11,8 @@
 #import "AddFruitBottomView.h"
 #import "DisplayStorageBottomView.h"
 #import "DisplaySearchBarView.h"
+#import "DisplayCalendarHistoryView.h"
 
-@interface AddDeleteFruitsViewController : UIViewController <DisplaySeasonalFruitsScrollViewDelegate,AddFruitBottomViewDelegate, DisplayStorageBottomViewDelegate, DisplaySearchBarViewDelegate>
+@interface AddDeleteFruitsViewController : UIViewController <DisplaySeasonalFruitsScrollViewDelegate,AddFruitBottomViewDelegate, DisplayStorageBottomViewDelegate, DisplaySearchBarViewDelegate, DisplayCalendarHistoryViewDelegate>
 
 @end

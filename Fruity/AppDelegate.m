@@ -7,8 +7,11 @@
 //
 
 #import "AppDelegate.h"
+#import "GlobalVariables.h"
 
 @interface AppDelegate ()
+
+@property GlobalVariables *globalVs;
 
 @end
 
@@ -29,8 +32,8 @@
     // Handle launching from a notification
     UILocalNotification *locationNotification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
     if (locationNotification) {
-        // Set icon badge number to zero
-        application.applicationIconBadgeNumber = 0;
+        self.globalVs = [GlobalVariables getInstance];
+        self.globalVs.openedFromNotification = YES;
     }
     return YES;
 }

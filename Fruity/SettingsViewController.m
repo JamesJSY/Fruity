@@ -22,15 +22,17 @@
 //@property (nonatomic) NSMutableArray *reminderTimes;
 @property (nonatomic) NSMutableArray *allLocalNotificationTimes;
 
-@property (nonatomic) UILabel *notificationTipTextView;
+//@property (nonatomic) UILabel *notificationTipTextView;
 @property (nonatomic) UILabel *notificationTextView;
 
 @property (nonatomic) UIButton *switchNotificationButton;
-@property (nonatomic) UIButton *notificationTipButton;
+//@property (nonatomic) UIButton *notificationTipButton;
 @property (nonatomic) NSMutableArray *allRemindersButtons;
 
 @property (nonatomic) bool isNotificationOn;
 
+@property (nonatomic) UIButton *tipsButton;
+@property (nonatomic) UIImageView *tutorialImageView;
 
 // The tag -1 refers to the addReminderButton.
 // The tag with other number refers to the index of the reminder button
@@ -68,10 +70,46 @@
     // Display all static sub views
     [self displayStaticSubviews];
     
+    /*
     UITapGestureRecognizer *tapToHideTipForNotification = [[UITapGestureRecognizer alloc]
                                                            initWithTarget:self
                                                            action:@selector(hideTipForNotification)];
-    [self.view addGestureRecognizer:tapToHideTipForNotification];
+    [self.view addGestureRecognizer:tapToHideTipForNotification];*/
+    
+    // Initialize the tips button
+    self.tipsButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.globalVs.screenWidth / 6, self.globalVs.screenWidth / 6)];
+    self.tipsButton.center = CGPointMake(self.view.frame.size.width / 10, self.view.frame.size.width / 10);
+    [self.tipsButton setImage:[UIImage imageNamed:@"hint.png"] forState:UIControlStateNormal];
+    [self.tipsButton addTarget:self action:@selector(showHint) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.tipsButton];
+    
+    // Initialize tutorial image view
+    self.tutorialImageView = [[UIImageView alloc] initWithFrame: CGRectMake(0, 0, self.globalVs.screenWidth, self.globalVs.screenHeight)];
+    
+    UITapGestureRecognizer *tapToDismissTutorialGestureRecognizer = [[UITapGestureRecognizer alloc]
+                                                                     initWithTarget:self
+                                                                     action:@selector(didTapToDismissTutorial)];
+    self.tutorialImageView.userInteractionEnabled = YES;
+    [self.tutorialImageView addGestureRecognizer:tapToDismissTutorialGestureRecognizer];
+    if (![@"1" isEqualToString:[self.globalVs.userPreference valueForKey:@"isFirstOpenningSettingsView"]]) {
+        [self showHint];
+    }
+
+}
+
+- (void)showHint {
+    if (self.isNotificationOn) {
+        self.tutorialImageView.image = [UIImage imageNamed:@"instructions5.png"];
+    }
+    else {
+        self.tutorialImageView.image = [UIImage imageNamed:@"instructions4.png"];
+    }
+    [self.view addSubview:self.tutorialImageView];
+}
+
+- (void)didTapToDismissTutorial {
+    [self.globalVs.userPreference setValue:@"1" forKey:@"isFirstOpenningSettingsView"];
+    [self.tutorialImageView removeFromSuperview];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -164,9 +202,10 @@
     else
         [self.switchNotificationButton setImage:[UIImage imageNamed:@"off.png"] forState:UIControlStateNormal];
     self.switchNotificationButton.frame = CGRectMake(0, 0, self.globalVs.screenWidth / 9, self.globalVs.screenWidth / 9);
-    self.switchNotificationButton.center = CGPointMake(self.globalVs.screenWidth / 2, self.notificationTextView.center.y + self.globalVs.screenHeight / 16);
+    self.switchNotificationButton.center = CGPointMake(self.globalVs.screenWidth / 2, self.notificationTextView.center.y + self.globalVs.screenWidth / 9);
     [self.switchNotificationButton addTarget:self action:@selector(switchNotification:) forControlEvents:UIControlEventTouchUpInside];
     
+    /*
     self.notificationTipButton = [[UIButton alloc] init];
     [self.notificationTipButton setImage:[UIImage imageNamed:@"questionmark.png"] forState:UIControlStateNormal];
     self.notificationTipButton.frame = CGRectMake(0, 0, self.globalVs.screenWidth / 15, self.globalVs.screenWidth / 15);
@@ -186,23 +225,24 @@
     self.notificationTipTextView.backgroundColor = self.globalVs.pinkColor;
     self.notificationTipTextView.center = CGPointMake(self.globalVs.screenWidth / 2, self.globalVs.screenHeight * 2 / 5);
     [self.notificationTipTextView setHidden:YES];
+     */
     
     [self.view addSubview:self.addReminderButton];
     [self.view addSubview:self.notificationTextView];
     [self.view addSubview:self.switchNotificationButton];
-    [self.view addSubview:self.notificationTipButton];
-    [self.view addSubview:self.notificationTipTextView];
+    //[self.view addSubview:self.notificationTipButton];
+    //[self.view addSubview:self.notificationTipTextView];
     
     // Hide related sub views if the notification switch is off
     if (!self.isNotificationOn) {
         [self.addReminderButton setHidden:YES];
-        [self.notificationTipButton setHidden:NO];
+        //[self.notificationTipButton setHidden:NO];
         
         self.notificationTextView.center = CGPointMake(self.globalVs.screenWidth / 2, self.globalVs.screenHeight / 2);
         self.switchNotificationButton.center = CGPointMake(self.globalVs.screenWidth / 2, self.globalVs.screenHeight / 2 + self.globalVs.screenHeight / 16);
         
-        self.notificationTipButton.center = CGPointMake(self.globalVs.screenWidth * 3 / 4, self.globalVs.screenHeight / 2);
-        [self.notificationTipButton setHidden:NO];
+        //self.notificationTipButton.center = CGPointMake(self.globalVs.screenWidth * 3 / 4, self.globalVs.screenHeight / 2);
+        //[self.notificationTipButton setHidden:NO];
     }
 }
 
@@ -238,10 +278,10 @@
         [self.switchNotificationButton setImage:[UIImage imageNamed:@"on.png"] forState:UIControlStateNormal];
         
         // Hide the notification tip button
-        [self.notificationTipButton setHidden:YES];
+        //[self.notificationTipButton setHidden:YES];
         
         // Hide the notification tip text view if the user has not done it already
-        [self.notificationTipTextView setHidden:YES];
+        //[self.notificationTipTextView setHidden:YES];
         
         for (int i = 0; i < [self.allRemindersButtons count]; i++) {
             [self.allRemindersButtons[i] setAlpha:0.0];
@@ -258,7 +298,7 @@
                             options:0
                          animations:^{
                              self.notificationTextView.center = CGPointMake(self.globalVs.screenWidth / 2, self.addReminderButton.center.y + self.globalVs.screenHeight / 5);
-                             self.switchNotificationButton.center = CGPointMake(self.globalVs.screenWidth / 2, self.notificationTextView.center.y + self.globalVs.screenHeight / 16);
+                             self.switchNotificationButton.center = CGPointMake(self.globalVs.screenWidth / 2, self.notificationTextView.center.y + self.globalVs.screenWidth / 9);
                          }
                          completion:^(BOOL finished){
                              [UIView animateWithDuration:0.5
@@ -332,8 +372,8 @@
                                               }
                                               completion:^(BOOL finished){
                                                   // Adjust the notification tip button center and show it to the user
-                                                  self.notificationTipButton.center = CGPointMake(self.globalVs.screenWidth * 3 / 4, self.globalVs.screenHeight / 2);
-                                                  [self.notificationTipButton setHidden:NO];
+                                                  //self.notificationTipButton.center = CGPointMake(self.globalVs.screenWidth * 3 / 4, self.globalVs.screenHeight / 2);
+                                                  //[self.notificationTipButton setHidden:NO];
                                               }];
                          }];
         
@@ -351,6 +391,7 @@
     }
 }
 
+/*
 - (void)showTipForNotification:(UIButton*)tipButton {
     [self.notificationTipTextView setHidden:NO];
 }
@@ -358,6 +399,7 @@
 - (void)hideTipForNotification{
     [self.notificationTipTextView setHidden:YES];
 }
+*/
 
 - (IBAction)unwindFromAddReminderView:(UIStoryboardSegue *)segue {
     AddReminderViewController *sourceViewController = segue.sourceViewController;

@@ -9,14 +9,23 @@
 #import "CalendarViewController.h"
 #import "DisplayCalendarMonthView.h"
 #import "GlobalVariables.h"
+#import "FruitTouchButton.h"
 
 @interface CalendarViewController ()
 
 @property GlobalVariables *globalVs;
 @property (nonatomic) NSMutableArray *allMonthViews;
 @property (nonatomic) UIButton *bananaButton;
+@property (nonatomic) UIButton *tipsButton;
+@property (weak, nonatomic) UIButton *dayButton;
 
 @property (nonatomic) UIScrollView *calendarView;
+@property (nonatomic) UIScrollView *bottomScrollView;
+
+@property (nonatomic) float pixelsWidthForDisplayingItem;
+@property (nonatomic) float itemDisplayRatio;
+
+@property (nonatomic) UIImageView *tutorialImageView;
 
 @end
 
@@ -31,16 +40,28 @@
     
     NSDate *date = [self.globalVs.userPreference valueForKey:@"FruityStartDate"];
     
+    // Initialize the tips button
+    self.tipsButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.globalVs.screenWidth / 6, self.globalVs.screenWidth / 6)];
+    self.tipsButton.center = CGPointMake(self.view.frame.size.width * 9 / 10, self.view.frame.size.width / 10);
+    [self.tipsButton setImage:[UIImage imageNamed:@"hint.png"] forState:UIControlStateNormal];
+    [self.tipsButton addTarget:self action:@selector(showHint) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.tipsButton];
+    
+    // Set the display mode
+    self.pixelsWidthForDisplayingItem = self.view.frame.size.width / 4;
+    self.itemDisplayRatio = (float) 1 / 2;
+    
     // Initialize the calendar view
-    self.calendarView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 60, self.globalVs.screenWidth, self.globalVs.screenHeight * 2 / 3 - 60)];
+    self.calendarView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 60, self.globalVs.screenWidth, self.globalVs.screenHeight * 5 / 6 - 60)];
     self.calendarView.contentSize = CGSizeMake(self.globalVs.screenWidth, self.globalVs.screenHeight);
     self.calendarView.scrollEnabled = YES;
     self.calendarView.backgroundColor = self.view.backgroundColor;
     
     // Initialize the bottom view
-    UIView *bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, self.globalVs.screenHeight * 2 / 3, self.globalVs.screenWidth, self.globalVs.screenHeight / 3)];
-    bottomView.backgroundColor = self.globalVs.softWhiteColor;
-    UILabel *textLabel = [[UILabel alloc] initWithFrame:CGRectMake(bottomView.frame.size.width / 12, bottomView.frame.size.height / 8, bottomView.frame.size.width * 5 / 6, bottomView.frame.size.height / 4)];
+    self.bottomScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.calendarView.frame.size.height + self.calendarView.frame.origin.y, self.globalVs.screenWidth, self.globalVs.screenHeight - (self.calendarView.frame.size.height + self.calendarView.frame.origin.y))];
+    self.bottomScrollView.backgroundColor = self.globalVs.softWhiteColor;
+    self.bottomScrollView.showsHorizontalScrollIndicator = NO;
+    /*UILabel *textLabel = [[UILabel alloc] initWithFrame:CGRectMake(bottomView.frame.size.width / 12, bottomView.frame.size.height / 8, bottomView.frame.size.width * 5 / 6, bottomView.frame.size.height / 4)];
     textLabel.lineBreakMode = NSLineBreakByWordWrapping;
     textLabel.numberOfLines = 0;
     textLabel.font = self.globalVs.font;
@@ -52,10 +73,9 @@
     self.bananaButton.userInteractionEnabled = NO;
     [self.bananaButton setImage:[UIImage imageNamed:@"banana_badge.png"] forState:UIControlStateNormal];
     [bottomView addSubview:self.bananaButton];
+    [bottomView addSubview:textLabel];*/
     
-    [bottomView addSubview:textLabel];
-    [self.view addSubview:bottomView];
-    
+    [self.view addSubview:self.bottomScrollView];
     [self.view addSubview:self.calendarView];
     
     
@@ -93,9 +113,29 @@
     
     // Resize the scroll view and set the offset so that the current month is at the beginning of the view
     self.calendarView.contentSize = CGSizeMake(self.globalVs.screenWidth, numberOfPastMonths * self.view.frame.size.height / 10 + self.view.frame.size.height * 5 / 12 + self.view.frame.size.height / 8);
-    self.calendarView.contentOffset = CGPointMake(0, (numberOfPastMonths - 1) * self.view.frame.size.height / 10);
+    self.calendarView.contentOffset = CGPointMake(0, MAX(0, (numberOfPastMonths - 1) * self.view.frame.size.height / 10));
     
+    // Initialize tutorial image view
+    self.tutorialImageView = [[UIImageView alloc] initWithFrame: CGRectMake(0, 0, self.globalVs.screenWidth, self.globalVs.screenHeight)];
+    self.tutorialImageView.image = [UIImage imageNamed:@"instructions3.png"];
+    UITapGestureRecognizer *tapToDismissTutorialGestureRecognizer = [[UITapGestureRecognizer alloc]
+                                                                             initWithTarget:self
+                                                                             action:@selector(didTapToDismissTutorial)];
+    self.tutorialImageView.userInteractionEnabled = YES;
+    [self.tutorialImageView addGestureRecognizer:tapToDismissTutorialGestureRecognizer];
+    if (![@"1" isEqualToString:[self.globalVs.userPreference valueForKey:@"isFirstOpenningCalendarView"]]) {
+        [self.view addSubview:self.tutorialImageView];
+    }
     
+}
+
+- (void)showHint {
+    [self.view addSubview:self.tutorialImageView];
+}
+
+- (void)didTapToDismissTutorial {
+    [self.globalVs.userPreference setValue:@"1" forKey:@"isFirstOpenningCalendarView"];
+    [self.tutorialImageView removeFromSuperview];
 }
 
 - (void)reloadSuperViewWithChangeOfMonthView:(id)view willDisplayDays:(bool)isDisplayingDays; {
@@ -114,6 +154,75 @@
         monthView.frame = CGRectMake(0, lastHeight, monthView.frame.size.width, monthView.frame.size.height);
         lastHeight += monthView.frame.size.height;
     }
+}
+
+- (void)reloadSuperViewWithFruitsHistoryInDateComponent:(NSDateComponents *)dateComponent dayButtonClicked:(UIButton *)dayButton{
+    
+    [[self.bottomScrollView subviews] makeObjectsPerformSelector: @selector(removeFromSuperview)];
+    
+    if (self.dayButton != nil) {
+        self.dayButton.backgroundColor = [UIColor clearColor];
+        self.dayButton.layer.cornerRadius = 0;
+    }
+    self.dayButton = dayButton;
+    self.dayButton.layer.cornerRadius = self.dayButton.frame.size.width / 2;
+    self.dayButton.backgroundColor = self.globalVs.softWhiteColor;
+    
+    NSArray *fruitsEatenHistory = [[NSArray alloc] initWithArray:[self.globalVs.dbHelper loadAllFruitItemsEatenFromDBInYear:(int)dateComponent.year month:(int)dateComponent.month day:(int)dateComponent.day]];
+    
+    NSMutableArray *allFruitsButton = [[NSMutableArray alloc] init];
+    
+    // Display all fruits user already bought
+    for (int i = 0; i < [fruitsEatenHistory count]; i++) {
+        FruitItem *item = fruitsEatenHistory[i];
+        
+        // Check if the item is in the previous list. If it is, then add one to the quantity. If it is not, create a new button
+        bool isFound = false;
+        for (FruitTouchButton *fruitButton in allFruitsButton) {
+            if ([item.name isEqualToString:fruitButton.fruitItem.name]) {
+                isFound = true;
+                fruitButton.numberOfFruits++;
+                break;
+            }
+        }
+        
+        if (!isFound) {
+            FruitTouchButton *fruitButton = [[FruitTouchButton alloc] init];
+            fruitButton.userInteractionEnabled = NO;
+            
+            NSString *imageFileName = [item.name stringByAppendingString:@".png"];
+            [fruitButton setImage:[UIImage imageNamed:imageFileName] forState:UIControlStateNormal];
+            fruitButton.fruitItem = [[FruitItem alloc] initWithFruitItem:item];
+            fruitButton.numberOfFruits = 1;
+            fruitButton.tag = [allFruitsButton count];
+            
+            fruitButton.frame = CGRectMake(20 + [allFruitsButton count] * self.pixelsWidthForDisplayingItem, 20, self.pixelsWidthForDisplayingItem * self.itemDisplayRatio, self.pixelsWidthForDisplayingItem * self.itemDisplayRatio);
+            
+            [allFruitsButton addObject:fruitButton];
+            [self.bottomScrollView addSubview:fruitButton];
+        }
+    }
+    
+    for (FruitTouchButton *fruitButton in allFruitsButton) {
+        UILabel *quantityLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.pixelsWidthForDisplayingItem, 30)];
+        quantityLabel.center = CGPointMake(fruitButton.center.x, fruitButton.center.y + self.pixelsWidthForDisplayingItem * self.itemDisplayRatio);
+        quantityLabel.font = [UIFont fontWithName:@"AvenirLTStd-Light" size:16];
+        quantityLabel.textAlignment = NSTextAlignmentCenter;
+        quantityLabel.textColor = self.globalVs.darkGreyColor;
+        quantityLabel.tag = fruitButton.tag;
+        
+        if ([FruitItem isGroupFruitItem:fruitButton.fruitItem.name]) {
+            quantityLabel.text = [NSString stringWithFormat:@"%d+", fruitButton.numberOfFruits * 10];
+        }
+        else {
+            quantityLabel.text = [NSString stringWithFormat:@"%d", fruitButton.numberOfFruits];
+        }
+        
+        [self.bottomScrollView addSubview:quantityLabel];
+    }
+    
+    // Resize the scroll board size according to the item size
+    self.bottomScrollView.contentSize = CGSizeMake(([allFruitsButton count] + 1) *self.pixelsWidthForDisplayingItem, self.bottomScrollView.frame.size.height);
 }
 
 - (void)didReceiveMemoryWarning {
